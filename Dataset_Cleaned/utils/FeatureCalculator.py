@@ -148,8 +148,9 @@ class FeatureCalculator:
                       for i in range(ntotal))
 
             # Calculate average bulk modulus B and its standard deviation
-            B = [self.data1_ld[compo_num[i], 5] for i in range(ntotal)]
+            B = [self.data1_ld[compo_num[i]-1, 5] for i in range(ntotal)]
             B_ave = sum(ele_frac[i] * B[i] for i in range(ntotal))
+
             D_Bulk = math.sqrt(
                 sum(ele_frac[i] * (B[i] - B_ave) ** 2 for i in range(ntotal))
             )
