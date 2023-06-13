@@ -1,4 +1,5 @@
 # %%
+from utils.FeatureCalculator import FeatureCalculator
 import os
 import sys
 import numpy as np
@@ -6,14 +7,14 @@ import pandas as pd
 
 sys.path.append(os.path.dirname(os.getcwd()))
 
-from utils.FeatureCalculator import FeatureCalculator
 
 compo_elem = ["Ni", "Cr", "Mo", "Ti", "Fe"]  # Your data
 ele_frac = np.array([43.8, 38.3, 2.44, 1.04, 14.5])  # Your data
 
-# Make a dictionary with keys of compo_elem and values of ele_frac, 
+# Make a dictionary with keys of compo_elem and values of ele_frac,
 # excluding pairs where the fraction is 0, all in one line
-ele_frac_dict = {elem: frac for elem, frac in zip(compo_elem, ele_frac) if frac != 0}
+ele_frac_dict = {elem: frac for elem, frac in zip(
+    compo_elem, ele_frac) if frac != 0}
 
 # # Normalize ele_frac values
 # ele_frac_norm = np.array(list(ele_frac_dict.values()))
@@ -31,8 +32,6 @@ calculator = FeatureCalculator(compositions)
 features = calculator.calculate_features()
 
 # print(features)
-
-
 
 
 # # %%
@@ -69,7 +68,6 @@ features = calculator.calculate_features()
 # compo_elem = ["Ni", "Cr", "Mo", "Ti", "Fe"]
 # ele_frac_all = T[compo_elem].values/100
 
- 
 
 # # create a comp_elem list for each composition
 # compo_elem_all = []
@@ -79,12 +77,9 @@ features = calculator.calculate_features()
 # # print(compo_elem_all[0:5])
 
 
-# compositions = [(compo_elem, ele_frac) for compo_elem, ele_frac in zip(compo_elem_all, ele_frac_all)]   
+# compositions = [(compo_elem, ele_frac) for compo_elem, ele_frac in zip(compo_elem_all, ele_frac_all)]
 
 
-
-
- 
 # # print(compositions)
 # # use FeatureCalculator and calculate features
 # calculator = FeatureCalculator(compositions)
@@ -183,7 +178,6 @@ features = calculator.calculate_features()
 # # sns.heatmap(corr, annot=True)
 # # plt.title("Correlation Matrix for hardness Features")
 # # plt.show()
-
 
 
 # %%
