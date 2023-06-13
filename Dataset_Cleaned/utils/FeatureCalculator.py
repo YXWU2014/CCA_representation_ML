@@ -24,17 +24,31 @@ class FeatureCalculator:
     }
 
     def __init__(self, compositions):
-        # Prepare the composition data
-        # For each composition, we normalize the fractions and map the element names to atomic numbers
+        """
+        This constructor receives a list of compositions. Each composition is a tuple with two elements:
+        - a list of chemical elements, and 
+        - a corresponding list of their fractions in the composition.
+
+        For each composition, this constructor:
+        - Normalizes the fractions, making them sum up to 1. This ensures comparability across different compositions.
+        - Translates element names to atomic numbers using a pre-existing dictionary (self.atomic_numbers_dict). 
+        This is for further calculations that work with atomic numbers instead of element names.
+        - Filters out any elements with zero fraction from 'compo_elem', 'compo_num', and 'ele_frac'. 
+        This is because elements with zero fraction do not contribute to the overall properties of the composition.
+
+        The filtered and translated compositions are then stored in self.compositions for further use.
+        """
         self.compositions = [
             {
-                "compo_elem": compo_elem,
-                "compo_num": [self.atomic_numbers_dict[elem] for elem in compo_elem],
-                "ele_frac": ele_frac / sum(ele_frac),
+                "compo_elem": [elem for idx, elem in enumerate(compo_elem) if ele_frac[idx] > 0],
+                "compo_num": [self.atomic_numbers_dict[elem] for idx, elem in enumerate(compo_elem) if ele_frac[idx] > 0],
+                "ele_frac": [frac for frac in ele_frac if frac > 0],
             }
             for compo_elem, ele_frac in compositions
         ]
-        self.load_data()
+        # print(self.compositions)
+
+        self.load_data()  # Load the necessary data for further computations.
 
     def load_data(self):
         try:
