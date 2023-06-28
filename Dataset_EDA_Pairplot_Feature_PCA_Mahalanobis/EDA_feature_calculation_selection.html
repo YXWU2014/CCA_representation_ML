@@ -17550,6 +17550,19 @@ class="
 
 </div>
 
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Joint feature importance for the combined dataset</p>
+<p>after correlation analysis, remove the highly correlated features</p>
+
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17730,23 +17743,23 @@ C R^2 scores_test Mean: 0.6774450951984295, Std: 0.059524163981289346
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Display the first row of the specific data, features, and output for the corrosion and hardness datasets</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Combine relevant features and outputs into a single DataFrame for each dataset (Hardness, Corrosion, NiCrCoVFe_KW99, and NiCrMoTiFe_KW131)</span>
 <span class="n">df_H_processed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_H_compo</span><span class="p">,</span> <span class="n">df_H_specific_features</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df_H_specific_features</span><span class="o">.</span><span class="n">columns</span><span class="p">)[</span><span class="n">selected_features_mask_HC_corr</span><span class="p">]],</span> <span class="n">df_H_output</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">df_C_processed</span>  <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_C_compo</span><span class="p">,</span> <span class="n">df_C_specific_testing</span><span class="p">,</span> <span class="n">df_C_specific_features</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df_C_specific_features</span><span class="o">.</span><span class="n">columns</span><span class="p">)[</span><span class="n">selected_features_mask_HC_corr</span><span class="p">]],</span> <span class="n">df_C_output</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">df_NiCrCoVFe_KW99_processed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_NiCrCoVFe_KW99_compo</span><span class="p">,</span> <span class="n">df_NiCrCoVFe_KW99_specific_features</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df_NiCrCoVFe_KW99_specific_features</span><span class="o">.</span><span class="n">columns</span><span class="p">)[</span><span class="n">selected_features_mask_HC_corr</span><span class="p">]]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">df_NiCrMoTiFe_KW131_processed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_NiCrMoTiFe_KW131_compo</span><span class="p">,</span> <span class="n">df_NiCrMoTiFe_KW131_specific_features</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df_NiCrMoTiFe_KW131_specific_features</span><span class="o">.</span><span class="n">columns</span><span class="p">)[</span><span class="n">selected_features_mask_HC_corr</span><span class="p">]]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
  
+<span class="c1"># Display the column names and shape (number of rows and columns) of the processed DataFrames</span>
 <span class="n">display</span><span class="p">(</span><span class="n">df_H_processed</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">df_H_processed</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">df_C_processed</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">df_C_processed</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">df_NiCrCoVFe_KW99_processed</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">df_NiCrCoVFe_KW99_processed</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">df_NiCrMoTiFe_KW131_processed</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">df_NiCrMoTiFe_KW131_processed</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
-<span class="c1"># write the processed data to XLSX files</span>
+<span class="c1"># Write the processed DataFrames to .xlsx files in the specified data path</span>
 <span class="n">df_H_processed</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s1">'LiteratureDataset_Hardness_YW_v3_processed.xlsx'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">df_C_processed</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s1">'LiteratureDataset_Corrosion_YW_v3_processed.xlsx'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">df_NiCrCoVFe_KW99_processed</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s1">'MultiTaskModel_NiCrCoVFe_KW99_wt_pct_processed.xlsx'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">df_NiCrMoTiFe_KW131_processed</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s1">'MultiTaskModel_NiCrMoTiFe_KW131_wt_pct_processed.xlsx'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
- 
 </pre></div>
 
      </div>
