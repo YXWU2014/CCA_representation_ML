@@ -13,13 +13,40 @@ from sklearn.metrics import r2_score
 
 class MultiTaskNN:
 
+    """
+    This class implements a multi-task neural network architecture, including methods to create and train the network.
+    The network consists of a shared feature network (NNF), an H-specific network (NNH), and a C-specific network (NNC).
+    """
     # function for initializing the class
+
     def __init__(self,
                  NNF_num_nodes: int, NNF_num_layers: int, NNH_num_nodes: int, NNH_num_layers: int, NNC_num_nodes: int, NNC_num_layers: int,
                  mc_state: bool, act: str, NNF_dropout: float, NNH_dropout: float, NNC_dropout: float,
                  loss_func: str, learning_rate_H: float, learning_rate_C: float,
                  batch_size_H: int, N_epochs_global: int, N_epochs_local: int, model_save_flag: bool, model_path_bo: str):
+        """
+        Initialize the MultiTaskNN class with the given parameters.
 
+        :param NNF_num_nodes: Number of nodes in the NNF layers
+        :param NNF_num_layers: Number of layers in the NNF
+        :param NNH_num_nodes: Number of nodes in the NNH layers
+        :param NNH_num_layers: Number of layers in the NNH
+        :param NNC_num_nodes: Number of nodes in the NNC layers
+        :param NNC_num_layers: Number of layers in the NNC
+        :param mc_state: Dropout state for Monte Carlo dropout
+        :param act: Activation function to be used in the network
+        :param NNF_dropout: Dropout rate for the NNF
+        :param NNH_dropout: Dropout rate for the NNH
+        :param NNC_dropout: Dropout rate for the NNC
+        :param loss_func: Loss function for the network training
+        :param learning_rate_H: Learning rate for the NNH
+        :param learning_rate_C: Learning rate for the NNC
+        :param batch_size_H: Batch size for the NNH
+        :param N_epochs_global: Number of epochs for global training
+        :param N_epochs_local: Number of epochs for local training
+        :param model_save_flag: Flag to save the model after training
+        :param model_path_bo: Path to save the trained model
+        """
         # NN architecture parameters
         self.NNF_num_nodes = NNF_num_nodes
         self.NNF_num_layers = NNF_num_layers
@@ -48,8 +75,13 @@ class MultiTaskNN:
         self.model_path_bo = model_path_bo
 
     #  function for Monte Carlo dropout
-
     def get_dropout(self, input_tensor, p=0.5):
+        """
+        Apply Dropout to the given input tensor, with dropout rate `p`. 
+        :param input_tensor: The input tensor to apply Dropout to
+        :param p: The dropout rate, default is 0.5
+        :return: Tensor with Dropout applied
+        """
         if self.mc_state:
             return Dropout(p)(input_tensor, training=True)
         else:
@@ -58,6 +90,12 @@ class MultiTaskNN:
     #  function for creating shared feature network
 
     def create_NNF_model(self, input1_compo_features_shape):
+        """
+        Creates the shared feature network (NNF).
+
+        :param input1_compo_features_shape: The shape of the component features input
+        :return: The NNF model
+        """
         input1_compo_features_layer = layers.Input(
             shape=input1_compo_features_shape)
 
@@ -75,8 +113,14 @@ class MultiTaskNN:
         return models.Model(inputs=input1_compo_features_layer, outputs=NNF_l)
 
     # function for creating H-specific network
-
     def create_NNH_model(self, NNF_model, input2_H_specific_shape):
+        """
+        Creates the H-specific network (NNH), which includes the NNF and additional layers.
+
+        :param NNF_model: The shared feature network (NNF) model
+        :param input2_H_specific_shape: The shape of the H-specific input
+        :return: The NNH model
+        """
         NNF_output = NNF_model.output
         model_inputs = [NNF_model.input]
 
@@ -101,6 +145,13 @@ class MultiTaskNN:
     #  function for creating C-specific network
 
     def create_NNC_model(self, NNF_model, input3_C_specific_shape):
+        """
+        Creates the C-specific network (NNC), which includes the NNF and additional layers.
+
+        :param NNF_model: The shared feature network (NNF) model
+        :param input3_C_specific_shape: The shape of the C-specific input
+        :return: The NNC model
+        """
         NNF_output = NNF_model.output
         model_inputs = [NNF_model.input]
 
@@ -125,25 +176,43 @@ class MultiTaskNN:
     # function for creating the full model
 
     def get_NN_full_model(self, input1_compo_features_shape, input2_H_specific_shape, input3_C_specific_shape):
-        # Create and compile the NNF model
+        """
+        This function constructs the full multi-task network model. It is composed of the shared features network (NNF) 
+        and two task-specific networks (NNH and NNC). 
+
+        :param input1_compo_features_shape: Shape of the input for the shared features network (NNF).
+        :param input2_H_specific_shape: Shape of the input specific to the first task (NNH).
+        :param input3_C_specific_shape: Shape of the input specific to the second task (NNC).
+        :return: Compiled NNH and NNC models.
+        """
+
+        # Construct and compile the shared features network (NNF).
         NNF_model = self.create_NNF_model(input1_compo_features_shape)
 
-        # Create and compile the NNH model
-        NNH_model = self.create_NNH_model(
-            NNF_model, input2_H_specific_shape)
+        # Construct and compile the first task-specific network (NNH).
+        NNH_model = self.create_NNH_model(NNF_model, input2_H_specific_shape)
         NNH_model.compile(loss=self.loss_func,
                           optimizer=Adam(self.learning_rate_H))
 
-        # Create and compile the NNC model
+        # Construct and compile the second task-specific network (NNC).
         NNC_model = self.create_NNC_model(NNF_model, input3_C_specific_shape)
-        NNC_model.compile(
-            loss=self.loss_func, optimizer=Adam(self.learning_rate_C))
+        NNC_model.compile(loss=self.loss_func,
+                          optimizer=Adam(self.learning_rate_C))
 
         return NNH_model, NNC_model
 
-    # function ti train model in parallel
+    # function for train model in parallel
 
     def evaluate_NN_full_model_parallel(self, args):
+        """
+        This function trains and evaluates the full multi-task network model in parallel. It performs a number of steps 
+        including data preprocessing, model definition and compilation, model training, and model evaluation.
+
+        :param args: A tuple containing all necessary input parameters.
+        :return: Training and validation losses for NNH and NNC models, test loss and predictions for both models.
+        """
+
+        # Unpack input arguments
         (i_fold,
          X1_train_norm_temp, X1_test_norm_temp, Y1_train_norm_temp, Y1_test_norm_temp, H1_train_norm_temp, H1_test_norm_temp,
          X2_train_norm_temp, X2_test_norm_temp, Z2_train_norm_temp, Z2_test_norm_temp, W2_train_norm_temp, W2_test_norm_temp, C2_train_norm_temp, C2_test_norm_temp,
@@ -215,6 +284,7 @@ class MultiTaskNN:
             history_H.append(history_H_temp)
             history_C.append(history_C_temp)
 
+        # Extract training and validation losses
         train_loss_H_temp = np.array([a.history['loss']
                                       for a in history_H]).reshape(-1, 1)
         val_loss_H_temp = np.array([a.history['val_loss']
@@ -265,10 +335,23 @@ class MultiTaskNN:
                 NNH_test_pred_temp, NNC_test_pred_temp)
 
     # function to call the parallelized training
+
     def evaluate_NN_full_model(self, X1_train_norm_KFold, X1_test_norm_KFold, Y1_train_norm_KFold, Y1_test_norm_KFold, H1_train_norm_KFold, H1_test_norm_KFold,
                                X2_train_norm_KFold, X2_test_norm_KFold, Z2_train_norm_KFold, Z2_test_norm_KFold, W2_train_norm_KFold, W2_test_norm_KFold, C2_train_norm_KFold, C2_test_norm_KFold,
                                k_folds, n_CVrepeats):
+        """
+        Orchestrates the training and evaluation of machine learning models. It initiates parallel processes for training 
+        and evaluating the models and collects the results.
 
+        Parameters:
+        * X1_train_norm_KFold, X1_test_norm_KFold, Y1_train_norm_KFold, Y1_test_norm_KFold, H1_train_norm_KFold, H1_test_norm_KFold: training and testing data for the NNH model.
+        * X2_train_norm_KFold, X2_test_norm_KFold, Z2_train_norm_KFold, Z2_test_norm_KFold, W2_train_norm_KFold, W2_test_norm_KFold, C2_train_norm_KFold, C2_test_norm_KFold: training and testing data for the NNC model.
+        * k_folds (int): number of folds for the K-Fold cross-validation.
+        * n_CVrepeats (int): number of repetitions of the cross-validation process.
+
+        Returns:
+        tuple: Returns tuples of training and validation losses, score losses, and R2 scores for both models.
+        """
         train_loss_H, train_loss_C = [], []
         val_loss_H, val_loss_C = [], []
 
@@ -276,6 +359,7 @@ class MultiTaskNN:
         score_r2_H, score_r2_C = [], []
 
         args_list = []
+
         for i_fold in range(k_folds * n_CVrepeats):
             X1_train_norm_temp, X1_test_norm_temp = X1_train_norm_KFold[
                 i_fold], X1_test_norm_KFold[i_fold]
@@ -297,10 +381,11 @@ class MultiTaskNN:
                               X1_train_norm_temp, X1_test_norm_temp, Y1_train_norm_temp, Y1_test_norm_temp, H1_train_norm_temp, H1_test_norm_temp,
                               X2_train_norm_temp, X2_test_norm_temp, Z2_train_norm_temp, Z2_test_norm_temp, W2_train_norm_temp, W2_test_norm_temp, C2_train_norm_temp, C2_test_norm_temp,
                               ))
-
+        # Initiate parallel processes for model training and evaluation
         with Pool() as p:
             results = p.map(self.evaluate_NN_full_model_parallel, args_list)
 
+        # Collect results from parallel processes
         for i_fold in range(k_folds * n_CVrepeats):
 
             train_loss_H.append(results[i_fold][0])
