@@ -23,7 +23,7 @@ class MultiTaskNN:
                  NNF_num_nodes: int, NNF_num_layers: int, NNH_num_nodes: int, NNH_num_layers: int, NNC_num_nodes: int, NNC_num_layers: int,
                  mc_state: bool, act: str, NNF_dropout: float, NNH_dropout: float, NNC_dropout: float,
                  loss_func: str, learning_rate_H: float, learning_rate_C: float,
-                 batch_size_H: int, N_epochs_global: int, N_epochs_local: int, model_save_flag: bool, model_path_bo: str):
+                 batch_size_H: int, N_epochs_local: int, total_epochs: int, model_save_flag: bool, model_path_bo: str):
         """
         Initialize the MultiTaskNN class with the given parameters.
 
@@ -67,14 +67,16 @@ class MultiTaskNN:
         self.batch_size_H = batch_size_H
 
         # NN training parameters
-        self.N_epochs_global = N_epochs_global
+        self.total_epochs = total_epochs
         self.N_epochs_local = N_epochs_local
+        self.N_epochs_global = int(self.total_epochs/self.N_epochs_local)
 
         # NN saving parameters
         self.model_save_flag = model_save_flag
         self.model_path_bo = model_path_bo
 
     #  function for Monte Carlo dropout
+
     def get_dropout(self, input_tensor, p=0.5):
         """
         Apply Dropout to the given input tensor, with dropout rate `p`. 
@@ -113,6 +115,7 @@ class MultiTaskNN:
         return models.Model(inputs=input1_compo_features_layer, outputs=NNF_l)
 
     # function for creating H-specific network
+
     def create_NNH_model(self, NNF_model, input2_H_specific_shape):
         """
         Creates the H-specific network (NNH), which includes the NNF and additional layers.
@@ -408,6 +411,16 @@ class MultiTaskNN:
 
         # clear TensorFlow session
         tf.keras.backend.clear_session()
+
+        # return results
+        # train_loss_H: training loss history of the NNH model
+        # train_loss_C: training loss history of the NNC model
+        # val_loss_H: validation loss history of the NNH model
+        # val_loss_C: validation loss history of the NNC model
+        # score_loss_H: evaluated loss score of the NNH model
+        # score_loss_C: evaluated loss score of the NNC model
+        # score_r2_H: computed R2 score of the NNH model
+        # score_r2_C: computed R2 score of the NNC model
 
         return (train_loss_H, train_loss_C,
                 val_loss_H,   val_loss_C,
