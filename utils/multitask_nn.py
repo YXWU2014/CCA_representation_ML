@@ -1,6 +1,7 @@
 # multitask_nn.py
 import os
 import numpy as np
+import matplotlib.pyplot as plt
 from multiprocessing import Pool
 import tensorflow as tf
 from tensorflow.keras import layers
@@ -426,3 +427,52 @@ class MultiTaskNN:
                 val_loss_H,   val_loss_C,
                 score_loss_H, score_loss_C,
                 score_r2_H,   score_r2_C)
+
+
+ 
+    # plot the training and validation losses for both tasks
+    def plot_losses(self, train_loss_H, val_loss_H, train_loss_C, val_loss_C, k_folds, n_CVrepeats):
+        """
+        Plot training and validation losses for tasks H and C over multiple epochs.
+
+        Args:
+            train_loss_H (list): Training losses for task H.
+            val_loss_H (list): Validation losses for task H.
+            train_loss_C (list): Training losses for task C.
+            val_loss_C (list): Validation losses for task C.
+            k_folds (int): The number of folds used for cross-validation.
+            n_CVrepeats (int): The number of times cross-validation was repeated.
+
+        Returns:
+            None. A plot is displayed and saved to the model_path_bo directory.
+        """
+        # Initialize a new figure with two subplots side by side
+        fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(8, 3))
+
+        # For each fold in the cross-validation
+        for i in range(k_folds * n_CVrepeats):
+            # Only label the first set of plots for clarity
+            if i == 3:
+                # Plot training and validation losses for task H
+                ax[0].plot(train_loss_H[i], label=f"Train Loss_H", linewidth=1, color='steelblue', alpha=0.5)
+                ax[0].plot(val_loss_H[i], label=f"Validation Loss_H", linewidth=1, color='firebrick', alpha=0.5)
+
+                # Plot training and validation losses for task C
+                ax[1].plot(train_loss_C[i], label=f"Train Loss_C", linewidth=1, color='steelblue', alpha=0.5)
+                ax[1].plot(val_loss_C[i], label=f"Validation Loss_C", linewidth=1, color='firebrick', alpha=0.5)
+
+        # Set labels, title, legend, and grid for each subplot
+        for axi in ax.flat:
+            axi.set_xlabel("Epochs")  # x-axis label represents training epochs
+            axi.set_ylabel("Error")  # y-axis label represents the loss or error
+            axi.set_title('MSE')  # title of the plot
+            axi.legend()  # show legend on the plot
+            axi.grid()  # display gridlines on the plot
+            axi.set_box_aspect(1)  # maintain aspect ratio
+            axi.set_ylim(0, 0.02)  # set limits for y-axis
+
+        # Save the figure as a .png image in the model_path_bo directory
+        plt.savefig(self.model_path_bo + 'NN_full_RepeatedKFold_loss.png', format='png', dpi=200)
+
+        # Display the figure
+        plt.show()
