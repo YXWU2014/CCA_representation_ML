@@ -37,7 +37,7 @@ class BayesianOptimizationObjective:
                                  mc_state: bool, act: str,
                                  total_epochs: int,
                                  model_save_flag: bool, model_path_bo: str,
-                                 X1_train_norm_KFold: list, X1_test_norm_KFold: list, Y1_train_norm_KFold: list, Y1_test_norm_KFold: list, H1_train_norm_KFold: list, H1_test_norm_KFold: list,
+                                 X1_train_norm_KFold: list, X1_test_norm_KFold: list, V1_train_norm_KFold: list, V1_test_norm_KFold: list, H1_train_norm_KFold: list, H1_test_norm_KFold: list,
                                  X2_train_norm_KFold: list, X2_test_norm_KFold: list, Z2_train_norm_KFold: list, Z2_test_norm_KFold: list, W2_train_norm_KFold: list, W2_test_norm_KFold: list, C2_train_norm_KFold: list, C2_test_norm_KFold: list,
                                  k_folds: int, n_CVrepeats: int,
                                  score_r2_HC_list: list, score_loss_HC_list: list,
@@ -89,7 +89,7 @@ class BayesianOptimizationObjective:
         # Train the model and get scores
         (_, _, _, _,
          score_loss_H,  score_loss_C,
-         score_r2_H,    score_r2_C) = mt_nn_bo.evaluate_NN_full_model(X1_train_norm_KFold, X1_test_norm_KFold, Y1_train_norm_KFold, Y1_test_norm_KFold, H1_train_norm_KFold, H1_test_norm_KFold,
+         score_r2_H,    score_r2_C) = mt_nn_bo.evaluate_NN_full_model(X1_train_norm_KFold, X1_test_norm_KFold, V1_train_norm_KFold, V1_test_norm_KFold, H1_train_norm_KFold, H1_test_norm_KFold,
                                                                       X2_train_norm_KFold, X2_test_norm_KFold, Z2_train_norm_KFold, Z2_test_norm_KFold, W2_train_norm_KFold, W2_test_norm_KFold, C2_train_norm_KFold, C2_test_norm_KFold,
                                                                       k_folds, n_CVrepeats)
 

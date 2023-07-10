@@ -218,15 +218,15 @@ class MultiTaskNN:
 
         # Unpack input arguments
         (i_fold,
-         X1_train_norm_temp, X1_test_norm_temp, Y1_train_norm_temp, Y1_test_norm_temp, H1_train_norm_temp, H1_test_norm_temp,
+         X1_train_norm_temp, X1_test_norm_temp, V1_train_norm_temp, V1_test_norm_temp, H1_train_norm_temp, H1_test_norm_temp,
          X2_train_norm_temp, X2_test_norm_temp, Z2_train_norm_temp, Z2_test_norm_temp, W2_train_norm_temp, W2_test_norm_temp, C2_train_norm_temp, C2_test_norm_temp,
          ) = args
 
         # concatenate arrays for the input1_compo_features_shape
-        X1_Y1_train_norm_temp = np.concatenate(
-            [X1_train_norm_temp, Y1_train_norm_temp], axis=1)
-        X1_Y1_test_norm_temp = np.concatenate(
-            [X1_test_norm_temp, Y1_test_norm_temp], axis=1)
+        X1_V1_train_norm_temp = np.concatenate(
+            [X1_train_norm_temp, V1_train_norm_temp], axis=1)
+        X1_V1_test_norm_temp = np.concatenate(
+            [X1_test_norm_temp, V1_test_norm_temp], axis=1)
         X2_W2_train_norm_temp = np.concatenate(
             [X2_train_norm_temp, W2_train_norm_temp], axis=1)
         X2_W2_test_norm_temp = np.concatenate(
@@ -234,7 +234,7 @@ class MultiTaskNN:
 
         # dimension of input dimension
         input1_compo_features_shape = (
-            X1_Y1_train_norm_temp.shape[1],)  # or X2+W2
+            X1_V1_train_norm_temp.shape[1],)  # or X2+W2
         input2_H_specific_shape = ()  # now no H specific input
         # this is for `C_specific_testing`
         input3_C_specific_shape = (Z2_train_norm_temp.shape[1],)
@@ -261,15 +261,15 @@ class MultiTaskNN:
         for N in range(self.N_epochs_global):
 
             # NNH_model
-            X1_Y1_train_norm_concat = np.concatenate(
-                [X1_Y1_train_norm_temp[i*self.batch_size_H: (i+1)*self.batch_size_H] for i in range(N_batches)])
+            X1_V1_train_norm_concat = np.concatenate(
+                [X1_V1_train_norm_temp[i*self.batch_size_H: (i+1)*self.batch_size_H] for i in range(N_batches)])
             H1_train_norm_concat = np.concatenate(
                 [H1_train_norm_temp[i*self.batch_size_H: (i+1)*self.batch_size_H] for i in range(N_batches)])
 
             if input2_H_specific_shape == ():
-                history_H_temp = NNH_model.fit(X1_Y1_train_norm_concat, H1_train_norm_concat,
+                history_H_temp = NNH_model.fit(X1_V1_train_norm_concat, H1_train_norm_concat,
                                                validation_data=(
-                                                   X1_Y1_test_norm_temp, H1_test_norm_temp),
+                                                   X1_V1_test_norm_temp, H1_test_norm_temp),
                                                epochs=self.N_epochs_local, verbose=0)
 
             # NNC_model
@@ -311,13 +311,13 @@ class MultiTaskNN:
         # evaluate model on test set
         if input2_H_specific_shape == ():
             NNH_loss_error_temp = np.mean(np.stack([NNH_model.evaluate(
-                X1_Y1_test_norm_temp, H1_test_norm_temp, verbose=0) for _ in range(50)]))
+                X1_V1_test_norm_temp, H1_test_norm_temp, verbose=0) for _ in range(50)]))
         NNC_loss_error_temp = np.mean(np.stack([NNC_model.evaluate(
             [X2_W2_test_norm_temp, Z2_test_norm_temp], C2_test_norm_temp, verbose=0) for _ in range(50)]))
 
         if input2_H_specific_shape == ():
             NNH_pred_temp = np.mean(np.stack([NNH_model.predict(
-                X1_Y1_test_norm_temp, verbose=0) for _ in range(50)]), axis=0)
+                X1_V1_test_norm_temp, verbose=0) for _ in range(50)]), axis=0)
         NNC_pred_temp = np.mean(np.stack([NNC_model.predict(
             [X2_W2_test_norm_temp, Z2_test_norm_temp], verbose=0) for _ in range(50)]), axis=0)
 
@@ -340,7 +340,7 @@ class MultiTaskNN:
 
     # function to call the parallelized training
 
-    def evaluate_NN_full_model(self, X1_train_norm_KFold, X1_test_norm_KFold, Y1_train_norm_KFold, Y1_test_norm_KFold, H1_train_norm_KFold, H1_test_norm_KFold,
+    def evaluate_NN_full_model(self, X1_train_norm_KFold, X1_test_norm_KFold, V1_train_norm_KFold, V1_test_norm_KFold, H1_train_norm_KFold, H1_test_norm_KFold,
                                X2_train_norm_KFold, X2_test_norm_KFold, Z2_train_norm_KFold, Z2_test_norm_KFold, W2_train_norm_KFold, W2_test_norm_KFold, C2_train_norm_KFold, C2_test_norm_KFold,
                                k_folds, n_CVrepeats):
         """
@@ -348,7 +348,7 @@ class MultiTaskNN:
         and evaluating the models and collects the results.
 
         Parameters:
-        * X1_train_norm_KFold, X1_test_norm_KFold, Y1_train_norm_KFold, Y1_test_norm_KFold, H1_train_norm_KFold, H1_test_norm_KFold: training and testing data for the NNH model.
+        * X1_train_norm_KFold, X1_test_norm_KFold, V1_train_norm_KFold, V1_test_norm_KFold, H1_train_norm_KFold, H1_test_norm_KFold: training and testing data for the NNH model.
         * X2_train_norm_KFold, X2_test_norm_KFold, Z2_train_norm_KFold, Z2_test_norm_KFold, W2_train_norm_KFold, W2_test_norm_KFold, C2_train_norm_KFold, C2_test_norm_KFold: training and testing data for the NNC model.
         * k_folds (int): number of folds for the K-Fold cross-validation.
         * n_CVrepeats (int): number of repetitions of the cross-validation process.
@@ -367,8 +367,8 @@ class MultiTaskNN:
         for i_fold in range(k_folds * n_CVrepeats):
             X1_train_norm_temp, X1_test_norm_temp = X1_train_norm_KFold[
                 i_fold], X1_test_norm_KFold[i_fold]
-            Y1_train_norm_temp, Y1_test_norm_temp = Y1_train_norm_KFold[
-                i_fold], Y1_test_norm_KFold[i_fold]
+            V1_train_norm_temp, V1_test_norm_temp = V1_train_norm_KFold[
+                i_fold], V1_test_norm_KFold[i_fold]
             H1_train_norm_temp, H1_test_norm_temp = H1_train_norm_KFold[
                 i_fold], H1_test_norm_KFold[i_fold]
 
@@ -382,7 +382,7 @@ class MultiTaskNN:
                 i_fold], C2_test_norm_KFold[i_fold]
 
             args_list.append((i_fold,
-                              X1_train_norm_temp, X1_test_norm_temp, Y1_train_norm_temp, Y1_test_norm_temp, H1_train_norm_temp, H1_test_norm_temp,
+                              X1_train_norm_temp, X1_test_norm_temp, V1_train_norm_temp, V1_test_norm_temp, H1_train_norm_temp, H1_test_norm_temp,
                               X2_train_norm_temp, X2_test_norm_temp, Z2_train_norm_temp, Z2_test_norm_temp, W2_train_norm_temp, W2_test_norm_temp, C2_train_norm_temp, C2_test_norm_temp,
                               ))
         # Initiate parallel processes for model training and evaluation
@@ -428,9 +428,8 @@ class MultiTaskNN:
                 score_loss_H, score_loss_C,
                 score_r2_H,   score_r2_C)
 
-
- 
     # plot the training and validation losses for both tasks
+
     def plot_losses(self, train_loss_H, val_loss_H, train_loss_C, val_loss_C, k_folds, n_CVrepeats):
         """
         Plot training and validation losses for tasks H and C over multiple epochs.
@@ -454,17 +453,22 @@ class MultiTaskNN:
             # Only label the first set of plots for clarity
             if i == 3:
                 # Plot training and validation losses for task H
-                ax[0].plot(train_loss_H[i], label=f"Train Loss_H", linewidth=1, color='steelblue', alpha=0.5)
-                ax[0].plot(val_loss_H[i], label=f"Validation Loss_H", linewidth=1, color='firebrick', alpha=0.5)
+                ax[0].plot(train_loss_H[i], label=f"Train Loss_H",
+                           linewidth=1, color='steelblue', alpha=0.5)
+                ax[0].plot(val_loss_H[i], label=f"Validation Loss_H",
+                           linewidth=1, color='firebrick', alpha=0.5)
 
                 # Plot training and validation losses for task C
-                ax[1].plot(train_loss_C[i], label=f"Train Loss_C", linewidth=1, color='steelblue', alpha=0.5)
-                ax[1].plot(val_loss_C[i], label=f"Validation Loss_C", linewidth=1, color='firebrick', alpha=0.5)
+                ax[1].plot(train_loss_C[i], label=f"Train Loss_C",
+                           linewidth=1, color='steelblue', alpha=0.5)
+                ax[1].plot(val_loss_C[i], label=f"Validation Loss_C",
+                           linewidth=1, color='firebrick', alpha=0.5)
 
         # Set labels, title, legend, and grid for each subplot
         for axi in ax.flat:
             axi.set_xlabel("Epochs")  # x-axis label represents training epochs
-            axi.set_ylabel("Error")  # y-axis label represents the loss or error
+            # y-axis label represents the loss or error
+            axi.set_ylabel("Error")
             axi.set_title('MSE')  # title of the plot
             axi.legend()  # show legend on the plot
             axi.grid()  # display gridlines on the plot
@@ -472,7 +476,8 @@ class MultiTaskNN:
             axi.set_ylim(0, 0.02)  # set limits for y-axis
 
         # Save the figure as a .png image in the model_path_bo directory
-        plt.savefig(self.model_path_bo + 'NN_full_RepeatedKFold_loss.png', format='png', dpi=200)
+        plt.savefig(self.model_path_bo +
+                    'NN_full_RepeatedKFold_loss.png', format='png', dpi=200)
 
         # Display the figure
         plt.show()
