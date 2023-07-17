@@ -7,7 +7,7 @@ import concurrent.futures
 from matplotlib import pyplot as plt
 
 
-def read_new_data_feature_calc(data_path: str, KW_name: str, vars_ele: List[str],
+def read_new_data_feature_calc(df_new_wt: pd.DataFrame, vars_ele: List[str],
                                specific_features_sel_column: List[str] = ['delta_a', 'Tm', 'sigma_Tm',
                                                                           'Hmix', 'sigma_Hmix', 'sigma_elec_nega',
                                                                           'VEC', 'sigma_VEC'],
@@ -29,8 +29,7 @@ def read_new_data_feature_calc(data_path: str, KW_name: str, vars_ele: List[str]
     """
 
     # Load the data
-    file_name = f'{data_path}MultiTaskModel_{KW_name}_wt_pct.xlsx'
-    df_new_wt = pd.read_excel(file_name)
+    # df_new_wt = pd.read_excel(file_name)
 
     # Prepare a new dataframe for compositions
     element_columns = ['Fe', 'Cr', 'Ni', 'Mo', 'W', 'N', 'Nb', 'C', 'Si', 'Mn',
