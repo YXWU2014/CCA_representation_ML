@@ -8,31 +8,30 @@ import tensorflow as tf
 
 class BayesianOptimizationObjective:
     """
-    This class implements the objective function for Bayesian Optimization.
+    A class to define the objective function for Bayesian Optimization when optimizing 
+    hyperparameters for a MultiTask Neural Network.
     """
 
-    def __init__(self,
-                 bo_ens_num: int, model_path_bo: str):
+    def __init__(self, bo_ens_num: int, model_path_bo: str,
+                 all_hyper_names: list, search_hyper_names: list):
         """
-        Constructor to initialize the BayesianOptimizationObjective.
+        Initialize the BayesianOptimizationObjective class.
 
-        Args:
-            bo_ens_num (int): Bayesian Optimization Ensemble number.
-            model_path_bo (str): Path to save the model.
+        Parameters:
+        - bo_ens_num: Ensemble number for Bayesian Optimization.
+        - model_path_bo: Path where the trained model will be saved.
+        - all_hyper_names: List containing names of all hyperparameters.
+        - search_hyper_names: List containing names of hyperparameters that will be optimized.
         """
         self.bo_iteration = 0
         self.bo_ens_num = bo_ens_num
         self.model_path_bo = model_path_bo
+        self.all_hyper_names = all_hyper_names
+        self.search_hyper_names = search_hyper_names
         self.hypertable = pd.DataFrame(columns=['score_r2_HC', 'score_r2_HC_best', 'score_loss_HC',
-                                                'score_r2_H', 'score_r2_C', 'score_loss_H', 'score_loss_C',
-                                                'NNF_num_nodes', 'NNF_num_layers',
-                                                'NNH_num_nodes', 'NNH_num_layers',
-                                                'NNC_num_nodes', 'NNC_num_layers',
-                                                'NNF_dropout', 'NNH_NNC_dropout',
-                                                'loss_encoder', 'learning_rate_H', 'learning_rate_C',
-                                                'batch_size_H', 'N_epochs_local'])
+                                                'score_r2_H', 'score_r2_C', 'score_loss_H', 'score_loss_C'] + self.all_hyper_names)
 
-    def BO_NNF_NNH_NNC_objective(self, params,
+    def BO_NNF_NNH_NNC_objective(self, search_hyper_params, fixed_hyper_space, search_hyper_names, fixed_hyper_names,
                                  n_initial_points: int, n_iterations: int,
                                  mc_state: bool, act: str,
                                  total_epochs: int,
@@ -44,10 +43,13 @@ class BayesianOptimizationObjective:
                                  score_r2_H_list: list, score_r2_C_list: list,
                                  score_loss_H_list: list, score_loss_C_list: list):
         """
-        This function creates a MultiTaskNN model, trains it, and calculates different scores to optimize the model's performance.
+        Objective function for Bayesian Optimization: Trains a MultiTaskNN model using given hyperparameters and returns evaluation scores.
 
         Args:
-            params (list): Parameters for creating and training the model.
+            search_hyper_params (list): Hyperparameters that are subject to search.
+            fixed_hyper_space (list): Fixed hyperparameters not under search.
+            search_hyper_names (list): Names of hyperparameters under search.
+            fixed_hyper_names (list): Names of fixed hyperparameters.
             n_initial_points (int): Number of initial points.
             n_iterations (int): Number of iterations.
             mc_state (bool): The state of Monte Carlo dropout.
@@ -65,8 +67,21 @@ class BayesianOptimizationObjective:
         """
         global bo_iteration  # Global variable to keep track of iterations
 
+        # get the search space name and parameters
+        search_hyper_params = search_hyper_params[0]
+        search_hyper_dict = {key: value for key,
+                             value in zip(search_hyper_names, search_hyper_params)}
+
+        # get the fixed space name and parameters
+        fixed_hyper_params = [entry['domain'] for entry in fixed_hyper_space]
+        fixed_hyper_dict = {key: value for key,
+                            value in zip(fixed_hyper_names, fixed_hyper_params)}
+
+        # create the `all_hyper_dict` by merging `search_hyper_dict` and `fixed_hyper_dict`
+        all_hyper_dict = {**search_hyper_dict, **fixed_hyper_dict}
+
         # Convert the categorical encoding of loss function to tensorflow loss function
-        loss_encoder = int(params[0][8])
+        loss_encoder = int(all_hyper_dict['loss_encoder'])
         if loss_encoder == 0:
             loss_func = tf.keras.metrics.mean_squared_error
         elif loss_encoder == 1:
@@ -75,15 +90,17 @@ class BayesianOptimizationObjective:
             raise ValueError(f"Invalid loss function '{loss_encoder}' ")
 
         # Create a MultiTaskNN model
-        mt_nn_bo = MultiTaskNN(NNF_num_nodes=int(params[0][0]), NNF_num_layers=int(params[0][1]),
-                               NNH_num_nodes=int(params[0][2]), NNH_num_layers=int(params[0][3]),
-                               NNC_num_nodes=int(params[0][4]), NNC_num_layers=int(params[0][5]),
+        mt_nn_bo = MultiTaskNN(NNF_num_nodes=int(all_hyper_dict['NNF_num_nodes']), NNF_num_layers=int(all_hyper_dict['NNF_num_layers']),
+                               NNH_num_nodes=int(all_hyper_dict['NNH_num_nodes']), NNH_num_layers=int(all_hyper_dict['NNH_num_layers']),
+                               NNC_num_nodes=int(all_hyper_dict['NNC_num_nodes']), NNC_num_layers=int(all_hyper_dict['NNC_num_layers']),
                                mc_state=mc_state, act=act,
-                               NNF_dropout=params[0][6], NNH_dropout=params[0][7], NNC_dropout=params[0][7],
+                               NNF_dropout=all_hyper_dict['NNF_dropout'], NNH_dropout=all_hyper_dict[
+                                   'NNH_NNC_dropout'], NNC_dropout=all_hyper_dict['NNH_NNC_dropout'],
                                loss_func=loss_func,
-                               learning_rate_H=params[0][9], learning_rate_C=params[0][10],
-                               batch_size_H=int(params[0][11]),
-                               N_epochs_local=int(params[0][12]), total_epochs=total_epochs,
+                               learning_rate_H=all_hyper_dict['learning_rate_H'], learning_rate_C=all_hyper_dict['learning_rate_C'],
+                               batch_size_H=int(
+                                   all_hyper_dict['batch_size_H']),
+                               N_epochs_local=int(all_hyper_dict['N_epochs_local']), total_epochs=total_epochs,
                                model_save_flag=model_save_flag, model_path_bo=model_path_bo)
 
         # Train the model and get scores
@@ -112,7 +129,8 @@ class BayesianOptimizationObjective:
 
         return score_r2_HC, score_loss_HC
 
-    def update_hypertable(self, bo, score_r2_HC_list, score_loss_HC_list,
+    def update_hypertable(self, fixed_hyper_space,
+                          bo, score_r2_HC_list, score_loss_HC_list,
                           score_r2_H_list, score_r2_C_list, score_loss_H_list, score_loss_C_list):
         """
         This function updates the hypertable with the current Bayesian Optimization scores.
@@ -121,13 +139,18 @@ class BayesianOptimizationObjective:
             bo: The BayesianOptimization object.
             score_r2_HC_list, score_loss_HC_list, etc.: Lists to store scores for different tasks.
         """
+
+        # print(self.hypertable)
+
+        # reformat the fixed_hyper_space_dict
+        fixed_hyper_space_dict = {
+            entry['name']: entry['domain'] for entry in fixed_hyper_space}
+
         for i in range(len(bo.X)):
-            row = dict(zip(['NNF_num_nodes', 'NNF_num_layers',
-                            'NNH_num_nodes', 'NNH_num_layers',
-                            'NNC_num_nodes', 'NNC_num_layers',
-                            'NNF_dropout', 'NNH_NNC_dropout',
-                            'loss_encoder', 'learning_rate_H', 'learning_rate_C',
-                            'batch_size_H', 'N_epochs_local'], bo.X[i]))
+            row = dict(zip(self.search_hyper_names, bo.X[i]))
+
+            # adding fixed_space parameters to the row
+            row.update(fixed_hyper_space_dict)
 
             row['score_r2_HC_best'] = -bo.Y_best.flatten()[i]
             row['score_r2_HC'] = np.array(score_r2_HC_list)[i]
