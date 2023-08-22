@@ -10,6 +10,7 @@ from tensorflow.keras.layers import Dropout, BatchNormalization, Concatenate
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.utils import plot_model
 from sklearn.metrics import r2_score
+import warnings
 
 
 class MultiTaskNN:
@@ -110,7 +111,7 @@ class MultiTaskNN:
         for _ in range(self.NNF_num_layers):
             NNF_l = layers.Dense(self.NNF_num_nodes,
                                  activation=self.act)(NNF_l)
-            NNF_l = BatchNormalization()(NNF_l)
+            # NNF_l = BatchNormalization()(NNF_l)
             NNF_l = self.get_dropout(NNF_l, p=self.NNF_dropout)
 
         return models.Model(inputs=input1_compo_features_layer, outputs=NNF_l)
@@ -139,7 +140,7 @@ class MultiTaskNN:
         for _ in range(self.NNH_num_layers):
             NNH_l = layers.Dense(self.NNH_num_nodes,
                                  activation=self.act)(NNH_l)
-            NNH_l = BatchNormalization()(NNH_l)
+            # NNH_l = BatchNormalization()(NNH_l)
             NNH_l = self.get_dropout(NNH_l, p=self.NNH_dropout)
 
         NNH_output = layers.Dense(1, activation='sigmoid')(NNH_l)
@@ -170,7 +171,7 @@ class MultiTaskNN:
         for _ in range(self.NNC_num_layers):
             NNC_l = layers.Dense(self.NNC_num_nodes,
                                  activation=self.act)(NNC_l)
-            NNC_l = BatchNormalization()(NNC_l)
+            # NNC_l = BatchNormalization()(NNC_l)
             NNC_l = self.get_dropout(NNC_l, p=self.NNC_dropout)
 
         NNC_output = layers.Dense(1, activation='sigmoid')(NNC_l)
@@ -215,6 +216,7 @@ class MultiTaskNN:
         :param args: A tuple containing all necessary input parameters.
         :return: Training and validation losses for NNH and NNC models, test loss and predictions for both models.
         """
+        tf.keras.backend.clear_session()
 
         # Unpack input arguments
         (i_fold,
@@ -301,25 +303,39 @@ class MultiTaskNN:
         # ----- train model: finish ------------------------------------------
 
         # save the model
-        NNH_model_name = f'NNH_model_RepeatedKFold_{i_fold+1}.h5'
-        NNC_model_name = f'NNC_model_RepeatedKFold_{i_fold+1}.h5'
+        if self.mc_state:
+            NNH_model_name = f'NNH_model_mc_RepeatedKFold_{i_fold+1}.h5'
+            NNC_model_name = f'NNC_model_mc_RepeatedKFold_{i_fold+1}.h5'
+        else:
+            NNH_model_name = f'NNH_model_RepeatedKFold_{i_fold+1}.h5'
+            NNC_model_name = f'NNC_model_RepeatedKFold_{i_fold+1}.h5'
 
         if self.model_save_flag:
             NNH_model.save(os.path.join(self.model_path_bo, NNH_model_name))
             NNC_model.save(os.path.join(self.model_path_bo, NNC_model_name))
 
         # evaluate model on test set
-        if input2_H_specific_shape == ():
-            NNH_loss_error_temp = np.mean(np.stack([NNH_model.evaluate(
-                X1_V1_test_norm_temp, H1_test_norm_temp, verbose=0) for _ in range(50)]))
-        NNC_loss_error_temp = np.mean(np.stack([NNC_model.evaluate(
-            [X2_W2_test_norm_temp, Z2_test_norm_temp], C2_test_norm_temp, verbose=0) for _ in range(50)]))
+        def compute_loss_error(model, input_data, target_data, iterations):
+            return np.mean(np.stack([model.evaluate(input_data, target_data, verbose=0) for _ in range(iterations)]))
+
+        def compute_prediction(model, input_data, iterations):
+            return np.mean(np.stack([model.predict(input_data, verbose=0) for _ in range(iterations)]), axis=0)
 
         if input2_H_specific_shape == ():
-            NNH_pred_temp = np.mean(np.stack([NNH_model.predict(
-                X1_V1_test_norm_temp, verbose=0) for _ in range(50)]), axis=0)
-        NNC_pred_temp = np.mean(np.stack([NNC_model.predict(
-            [X2_W2_test_norm_temp, Z2_test_norm_temp], verbose=0) for _ in range(50)]), axis=0)
+            iterations = 50 if self.mc_state else 1
+
+            NNH_loss_error_temp = compute_loss_error(
+                NNH_model, X1_V1_test_norm_temp, H1_test_norm_temp, iterations)
+            NNC_loss_error_temp = compute_loss_error(
+                NNC_model, [X2_W2_test_norm_temp, Z2_test_norm_temp], C2_test_norm_temp, iterations)
+
+            NNH_pred_temp = compute_prediction(
+                NNH_model, X1_V1_test_norm_temp, iterations)
+            NNC_pred_temp = compute_prediction(
+                NNC_model, [X2_W2_test_norm_temp, Z2_test_norm_temp], iterations)
+        else:
+            warnings.warn(
+                "Input shape for 'input2_H_specific_shape' is unexpected.")
 
         NNH_test_pred_temp = np.concatenate(
             [H1_test_norm_temp, NNH_pred_temp], axis=1)
@@ -451,7 +467,7 @@ class MultiTaskNN:
         # For each fold in the cross-validation
         for i in range(k_folds * n_CVrepeats):
             # Only label the first set of plots for clarity
-            if i == 3:
+            if i == 1:
                 # Plot training and validation losses for task H
                 ax[0].plot(train_loss_H[i], label=f"Train Loss_H",
                            linewidth=1, color='steelblue', alpha=0.5)
