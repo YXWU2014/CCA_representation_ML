@@ -271,7 +271,9 @@ def predict_norm_shap_bootstrap(model_path_bo, model_name,
         # create an explainer
         if Y1_list:
             Y1_normalized = scaler_testing.transform(Y1_list[i])
-            explainer = shap.DeepExplainer(model, [input_data, Y1_normalized])
+            # print(Y1_normalized)
+            explainer = shap.DeepExplainer(
+                model, [input_data, Y1_normalized])
         else:
             explainer = shap.DeepExplainer(model, input_data)
 
@@ -295,7 +297,20 @@ def predict_norm_shap_bootstrap(model_path_bo, model_name,
     # Extract results
     predictions_list, predictions_mc_mean, predictions_mc_std = zip(
         *results_predict)
-    shap_values_list = results_shap
+
+    if Y1_list:
+        # when model contains 2 inputs, the shap_for_one_fold provides a list of 2 shap arrays
+        # so I will concatenate the 2 shap arrays into 1
+        results_shap_new = []
+
+        for i in range(len(results_shap[0])):
+            concatenated_array = np.concatenate(
+                [results_shap[i][0], results_shap[i][1]], axis=1)
+            results_shap_new.append(concatenated_array)
+
+        shap_values_list = results_shap_new
+    else:
+        shap_values_list = results_shap
 
     # Clear TensorFlow session to free resources
     tf.keras.backend.clear_session()
