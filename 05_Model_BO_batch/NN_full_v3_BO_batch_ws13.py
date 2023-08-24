@@ -1,5 +1,5 @@
 '''
-cd to the .py directory and run this script
+cd to the NN_full_v3_BO_batch_wsxx.py directory and run this script
 '''
 
 import papermill as pm
@@ -9,7 +9,7 @@ import time
 import os
 
 # Constants
-NOTEBOOK_MASTER = 'NN_full_v3_BO_Train_Eval_Pred_master'
+NOTEBOOK_MASTER = 'NN_full_v3_BO_Train_Eval_Pred_master_test'
 # dir in respect to this batch script
 MASTER_PATH = '../03_Model_Train_Evaluate_Predict/'
 MODEL_PATH = '../04_Model_Saved/'
@@ -49,7 +49,7 @@ def main():
 
     start_time = time.time()
 
-    file_nums = np.array([6])
+    file_nums = np.array([9])
     cpu_count = os.cpu_count()
     cpu_count_use = max(1, cpu_count // len(file_nums)
                         )  # Avoid dividing by zero
