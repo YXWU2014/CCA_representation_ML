@@ -6,10 +6,11 @@ from tabulate import tabulate
 from joblib import Parallel, delayed
 import tensorflow as tf
 from tensorflow import keras
+import re
 import shap
 
 
-def display_saved_models(model_path_bo, mc_state=True):
+def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name, mc_state=True):
     """
     This function displays the saved NNH and NNC models in a tabular format.
 
@@ -27,18 +28,27 @@ def display_saved_models(model_path_bo, mc_state=True):
     # Separate NNH and NNC model files
     if mc_state:
         nnh_files = [f for f in files if f.startswith(
-            'NNH_model_mc_RepeatedKFold')]
+            NNH_model_name) and f.endswith('_mc.h5')]
         nnc_files = [f for f in files if f.startswith(
-            'NNC_model_mc_RepeatedKFold')]
+            NNC_model_name) and f.endswith('_mc.h5')]
     else:
         nnh_files = [f for f in files if f.startswith(
-            'NNH_model_RepeatedKFold')]
+            NNH_model_name) and not f.endswith('_mc.h5')]
         nnc_files = [f for f in files if f.startswith(
-            'NNC_model_RepeatedKFold')]
+            NNC_model_name) and not f.endswith('_mc.h5')]
 
-    # Sort model files based on the index present in the filename
-    nnh_files.sort(key=lambda x: int(x.split("_")[-1].split(".")[0]))
-    nnc_files.sort(key=lambda x: int(x.split("_")[-1].split(".")[0]))
+    # print(nnh_files)
+
+    def extract_number_from_filename(filename):
+        match = re.search(r'_(\d+)', filename)
+        return int(match.group(1)) if match else 0
+
+    nnh_files.sort(key=extract_number_from_filename)
+    nnc_files.sort(key=extract_number_from_filename)
+
+    # # Sort model files based on the index present in the filename
+    # nnh_files.sort(key=lambda x: int(x.split("_")[-1].split(".")[0]))
+    # nnc_files.sort(key=lambda x: int(x.split("_")[-1].split(".")[0]))
 
     # Prepare the table data with model filenames
     if mc_state:

@@ -11,6 +11,22 @@ import shap
 import seaborn as sns
 
 
+def softplus_activation(beta=1.0):
+    """
+    Returns a callable function
+    representing softplus activation
+    with beta smoothing.
+
+    Args:
+        beta: The smoothing parameter. Smaller means smoother.
+    """
+    def softplus(batch_x):
+        return (1.0 / beta) * tf.keras.backend.log(1.0 +
+                                                   tf.keras.backend.exp(-1.0 * tf.keras.backend.abs(beta * batch_x))) + \
+            tf.keras.backend.maximum(batch_x, 0)
+    return softplus
+
+
 def predict_norm_shap_bootstrap(model_path_bo, model_name,
                                 X1_base_list, Y1_base_list, V1_base_list,
                                 X1_shap_list, Y1_shap_list, V1_shap_list,
@@ -160,21 +176,75 @@ def process_predict_norm_shap_data(pred_norm_base_stack, pred_norm_shap_stack, s
     return (pred_norm_base_mean, pred_norm_base_std, pred_norm_shap_mean, pred_norm_shap_std, shap_mean, shap_std)
 
 
+# def plot_shap_force(X1_shap_data, Y1_shap_data, V1_shap_data,
+#                     compo_column, C_specific_testing_column, specific_features_sel_column,
+#                     pred_norm_base_KFold_mean, pred_norm_shap_KFold_mean, shap_KFold_mean,
+#                     sample_index=1):
+#     """
+#     Plots a SHAP force plot for a specific sample from the dataset.
+#     """
+#     shap.initjs()
+
+#     if len(Y1_shap_data) > 0:
+#         sample_dataset = np.hstack((X1_shap_data, Y1_shap_data, V1_shap_data))
+#     else:
+#         sample_dataset = np.hstack((X1_shap_data, V1_shap_data))
+
+#     sample_index = sample_index-1
+
+#     # Adjust for 0-indexing
+#     columns = compo_column + \
+#         (C_specific_testing_column if len(Y1_shap_data) > 0 else []) + \
+#         specific_features_sel_column
+
+#     # Display sample features
+#     sample_feature_values = sample_dataset[sample_index, :]
+#     sample_feature_values_df = pd.DataFrame(
+#         data=[sample_feature_values], columns=columns)
+#     display(sample_feature_values_df)
+
+#     print('Pred calculated from model:',
+#           pred_norm_shap_KFold_mean[sample_index])
+
+#     # Display SHAP values for the sample
+#     sample_shap_values = shap_KFold_mean[sample_index, :].reshape(-1)
+#     sample_shap_values_df = pd.DataFrame(
+#         data=[sample_shap_values], columns=columns)
+#     display(sample_shap_values_df)
+
+#     # Validate the predicted value for the selected sample
+#     pred_norm_base_KFold_mean_AVG = pred_norm_base_KFold_mean.mean()
+#     # print('Validate the pred calculated using SHAP values: ',
+#     #       pred_norm_base_KFold_mean_AVG)
+#     predicted_value_sample = pred_norm_base_KFold_mean_AVG + sample_shap_values.sum()
+#     print('Validate the pred calculated using SHAP values: ', predicted_value_sample)
+
+#     # Visualize SHAP force plot
+#     shap.force_plot(
+#         pred_norm_base_KFold_mean_AVG,
+#         sample_shap_values,
+#         columns,
+#         link='identity',
+#         matplotlib=False,
+#         figsize=(25, 3),
+#         text_rotation=45,
+#         contribution_threshold=0.000
+#     )
+
 def plot_shap_force(X1_shap_data, Y1_shap_data, V1_shap_data,
                     compo_column, C_specific_testing_column, specific_features_sel_column,
                     pred_norm_base_KFold_mean, pred_norm_shap_KFold_mean, shap_KFold_mean,
-                    sample_index=1):
+                    sample_index=[0, 1]):
     """
     Plots a SHAP force plot for a specific sample from the dataset.
     """
-    shap.initjs()
 
     if len(Y1_shap_data) > 0:
         sample_dataset = np.hstack((X1_shap_data, Y1_shap_data, V1_shap_data))
     else:
         sample_dataset = np.hstack((X1_shap_data, V1_shap_data))
 
-    sample_index = sample_index-1
+    # sample_index = sample_index-1
 
     # Adjust for 0-indexing
     columns = compo_column + \
@@ -182,38 +252,48 @@ def plot_shap_force(X1_shap_data, Y1_shap_data, V1_shap_data,
         specific_features_sel_column
 
     # Display sample features
+    print(sample_dataset.shape)
     sample_feature_values = sample_dataset[sample_index, :]
     sample_feature_values_df = pd.DataFrame(
-        data=[sample_feature_values], columns=columns)
+        data=sample_feature_values, columns=columns)
     display(sample_feature_values_df)
 
     print('Pred calculated from model:',
           pred_norm_shap_KFold_mean[sample_index])
 
     # Display SHAP values for the sample
-    sample_shap_values = shap_KFold_mean[sample_index, :].reshape(-1)
+    sample_shap_values = shap_KFold_mean[sample_index, :]
     sample_shap_values_df = pd.DataFrame(
-        data=[sample_shap_values], columns=columns)
+        data=sample_shap_values, columns=columns)
     display(sample_shap_values_df)
 
     # Validate the predicted value for the selected sample
     pred_norm_base_KFold_mean_AVG = pred_norm_base_KFold_mean.mean()
     # print('Validate the pred calculated using SHAP values: ',
     #       pred_norm_base_KFold_mean_AVG)
-    predicted_value_sample = pred_norm_base_KFold_mean_AVG + sample_shap_values.sum()
+    predicted_value_sample = pred_norm_base_KFold_mean_AVG + \
+        sample_shap_values.sum(axis=1)
     print('Validate the pred calculated using SHAP values: ', predicted_value_sample)
 
+    print(pred_norm_base_KFold_mean_AVG)
+    print(sample_shap_values.shape)
+
     # Visualize SHAP force plot
-    shap.force_plot(
-        pred_norm_base_KFold_mean_AVG,
-        sample_shap_values,
-        columns,
-        link='identity',
-        matplotlib=True,
-        figsize=(25, 3),
-        text_rotation=45,
-        contribution_threshold=0.000
-    )
+    # shap.initjs()
+    # print("before_plot")
+    # shap.force_plot(
+    #     pred_norm_base_KFold_mean_AVG,
+    #     sample_shap_values,
+    #     columns,
+    #     link='identity',
+    #     matplotlib=True,
+    #     figsize=(25, 3),
+    #     text_rotation=45,
+    #     contribution_threshold=0.000
+    # )
+    # print("after_plot")
+
+    return pred_norm_base_KFold_mean_AVG, sample_shap_values, columns
 
 
 def plot_shap_summary(shap_KFold_mean, feature_names,

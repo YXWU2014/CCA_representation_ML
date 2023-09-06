@@ -39,6 +39,14 @@ def kfold_split_and_normalize(data_list, scalers_list, n_splits=2, n_repeats=6, 
         # split is based on the first data set
         for _, (train_ix, test_ix) in enumerate(cv.split(data_list[0])):
 
+            # prepare that Y1 can be empty np array
+            if data.size == 0:  # Check if the array is empty
+                temp_train_KFold.append(data)
+                temp_test_KFold.append(data)
+                temp_train_norm_KFold.append(data)
+                temp_test_norm_KFold.append(data)
+                continue  # Skip the rest of the loop for this empty array
+
             # split data set
             train_array, test_array = data[train_ix], data[test_ix]
 
@@ -61,22 +69,9 @@ def kfold_split_and_normalize(data_list, scalers_list, n_splits=2, n_repeats=6, 
     return train_KFold_list, test_KFold_list, train_norm_KFold_list, test_norm_KFold_list
 
 
-def kfold_with_norm_H(X, V, H,
-                      scaler_compo, scaler_features, scaler_output,
-                      n_splits, n_repeats, random_state):
-    """
-    Wrapper function for kfold_split_and_normalize. Applies k-fold cross-validation and normalization to the input data sets.
-
-    Returns four lists containing the split and normalized data for X, V, and H respectively.
-    """
-    return kfold_split_and_normalize([X, V, H],
-                                     [scaler_compo, scaler_features, scaler_output],
-                                     n_splits, n_repeats, random_state)
-
-
-def kfold_with_norm_C(X, Z, W, C,
-                      scaler_compo, scaler_testing, scaler_features, scaler_output,
-                      n_splits, n_repeats, random_state):
+def kfold_with_norm(X, Z, W, C,
+                    scaler_compo, scaler_testing, scaler_features, scaler_output,
+                    n_splits, n_repeats, random_state):
     """
     Wrapper function for kfold_split_and_normalize. Applies k-fold cross-validation and normalization to the input data sets.
 
@@ -88,7 +83,7 @@ def kfold_with_norm_C(X, Z, W, C,
                                      n_splits, n_repeats, random_state)
 
 
-def plot_hist_kfold_with_norm(train_data, test_data, x_min, x_max, axs_title, n_splits, n_repeats, nrows=3, dataset='H'):
+def plot_hist_kfold_with_norm(train_data, test_data, x_min, x_max, axs_title, n_splits, n_repeats, nrows=3):
     """
     This function plots histograms for each fold of cross-validation in the K-Fold normalization scheme.
 
@@ -115,18 +110,13 @@ def plot_hist_kfold_with_norm(train_data, test_data, x_min, x_max, axs_title, n_
     colors_1, colors_2 = cm.get_cmap('Blues', 10), cm.get_cmap('Reds', 10)
 
     # Select the data to be plotted based on the dataset type
-    if dataset == 'H':
-        dataset_plot = [(train_data[0], test_data[0], x_min[0], x_max[0], 'compo'),
-                        (train_data[1], test_data[1],
-                         x_min[1], x_max[1], 'H/C specific'),
-                        (train_data[2], test_data[2], x_min[2], x_max[2], 'output')]
-    elif dataset == 'C':
-        dataset_plot = [(train_data[0], test_data[0], x_min[0], x_max[0], 'compo'),
-                        (train_data[1], test_data[1],
-                         x_min[1], x_max[1], 'C testing'),
-                        (train_data[2], test_data[2],
-                         x_min[2], x_max[2], 'H/C specific'),
-                        (train_data[3], test_data[3], x_min[3], x_max[3], 'output')]
+
+    dataset_plot = [(train_data[0], test_data[0], x_min[0], x_max[0], 'compo'),
+                    (train_data[1], test_data[1],
+                     x_min[1], x_max[1], 'H/C specific_testing'),
+                    (train_data[2], test_data[2],
+                     x_min[2], x_max[2], 'H/C specific_features'),
+                    (train_data[3], test_data[3], x_min[3], x_max[3], 'output')]
 
     # Loop over each split and repeat in the K-Fold scheme
     for i in range(n_splits*n_repeats):
@@ -134,6 +124,10 @@ def plot_hist_kfold_with_norm(train_data, test_data, x_min, x_max, axs_title, n_
         for j, data in enumerate(dataset_plot):
             # Unpack data
             train_data_j, test_data_j, x_min_j, x_max_j, axs_title_j = data
+
+            if train_data_j[0].size == 0:  # Check if the array is empty
+                continue
+
             # Plot histogram for the training data
             axs[j, i].hist(train_data_j[i], bins=10, edgecolor='black',
                            color=colors_1(range(len(train_data_j[i][0]))))
