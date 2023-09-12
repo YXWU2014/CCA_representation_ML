@@ -64,8 +64,84 @@ def read_new_data_feature_calc(df_new_wt: pd.DataFrame, vars_ele: List[str],
     return compo_new, HC_specific_features_new, C_specific_testing_new
 
 
+def prediction_new_composition(fname, compo, data_path, model_path_bo,
+                               NNH_model_name, NNC_model_name, islean, scalers,
+                               specific_features_sel_column, C_testing,
+                               k_folds, n_CVrepeats, mc_repeat):
+    """
+    Predict new compositions using provided models.
+
+    Parameters:
+    - fname (str): Filename for the composition.
+    - compo (str): Composition details.
+    - data_path (str): Path to the data directory.
+    - model_path_bo (str): Path to the model directory.
+    - specific_features_sel_column (list): List of specific features selected.
+    - C_testing (array-like): Testing data for C.
+    - NNH_model_name (str): Name of the NNH model.
+    - NNC_model_name (str): Name of the NNC model.
+    - islean (bool): Flag to determine if the model is lean.
+    - scalers (object): Scalers for data normalization.
+    - k_folds (int): Number of k-folds for cross-validation.
+    - n_CVrepeats (int): Number of cross-validation repeats.
+    - mc_repeat (int): Number of Monte Carlo repetitions.
+
+    Returns:
+    - tuple: A tuple containing composition data, testing data, feature data, and predictions.
+    """
+
+    # Load the input data
+    file_name_input = f'{data_path}MultiTaskModel_{fname}_wt_pct.xlsx'
+    df_new_wt = pd.read_excel(file_name_input)
+
+    # Extract and calculate features from the new data
+    compo_new, HC_specific_features, C_specific_testing = read_new_data_feature_calc(
+        df_new_wt, compo,
+        specific_features_sel_column=specific_features_sel_column,
+        C_testing=C_testing)
+    H_specific_testing = np.empty((0, 0))
+
+    # Prepare data based on the 'islean' flag
+    if not islean:
+        compo_data, H_testing_data, C_testing_data, HC_feature_data = compo_new, H_specific_testing, C_specific_testing, HC_specific_features
+    else:
+        compo_data, H_testing_data, C_testing_data, HC_feature_data = compo_new, np.empty(
+            (0, 0)), np.empty((0, 0)), np.empty((0, 0))
+
+    # Predict using the NNH and NNC models
+    H1_new_pred_stack, H1_new_pred_mean, H1_new_pred_std, C2_new_pred_stack, C2_new_pred_mean, C2_new_pred_std = predict_bootstrap_NNH_NNC(
+        model_path_bo, NNH_model_name, NNC_model_name,
+        compo_data, H_testing_data, C_testing_data, HC_feature_data,
+        scalers, k_folds, n_CVrepeats, mc_repeat)
+
+    # Aggregate predictions
+    H1_new_pred_KFold_mean = np.mean(np.concatenate(
+        H1_new_pred_stack, axis=0), axis=0).reshape(-1)
+    H1_new_pred_KFold_std = np.std(np.concatenate(
+        H1_new_pred_stack, axis=0), axis=0).reshape(-1)
+    C2_new_pred_KFold_mean = np.mean(np.concatenate(
+        C2_new_pred_stack, axis=0), axis=0).reshape(-1)
+    C2_new_pred_KFold_std = np.std(np.concatenate(
+        C2_new_pred_stack, axis=0), axis=0).reshape(-1)
+
+    # Update the dataframe with predictions
+    df_new_wt['H1_new_pred_KFold_mean'] = H1_new_pred_KFold_mean
+    df_new_wt['H1_new_pred_KFold_std'] = H1_new_pred_KFold_std
+    df_new_wt['C2_new_pred_KFold_mean'] = C2_new_pred_KFold_mean
+    df_new_wt['C2_new_pred_KFold_std'] = C2_new_pred_KFold_std
+
+    # Save the updated dataframe
+    file_name_output = f'{model_path_bo}MultiTaskModel_{fname}_wt_pct_ML.xlsx'
+    df_new_wt.to_excel(file_name_output, index=False)
+
+    return (compo_data, H_testing_data, C_testing_data, HC_feature_data,
+            H1_new_pred_mean, H1_new_pred_std, C2_new_pred_mean, C2_new_pred_std,
+            H1_new_pred_KFold_mean, H1_new_pred_KFold_std,
+            C2_new_pred_KFold_mean, C2_new_pred_KFold_std)
+
+
 def predict_bootstrap_NNH_NNC(model_path_bo, NNH_model_name, NNC_model_name,
-                              compo_new, HC_specific_features, C_specific_testing,
+                              compo_new, H_specific_testing, C_specific_testing, HC_specific_features,
                               scalers,
                               k_folds, n_CVrepeats, mc_repeat):
     """
@@ -102,16 +178,18 @@ def predict_bootstrap_NNH_NNC(model_path_bo, NNH_model_name, NNC_model_name,
 
     # Create lists of the new data, each repeated as many times as there are CV repetitions
     compo_new_list = [compo_new]*k_folds*n_CVrepeats
-    HC_specific_features_list = [HC_specific_features]*k_folds*n_CVrepeats
+    H_specific_testing_list = [H_specific_testing]*k_folds*n_CVrepeats
     C_specific_testing_list = [C_specific_testing]*k_folds*n_CVrepeats
+
+    HC_specific_features_list = [HC_specific_features]*k_folds*n_CVrepeats
 
     # Run bootstrap predictions in parallel using a thread pool executor
     with concurrent.futures.ThreadPoolExecutor() as executor:
         # Submit NNH model prediction task
         future1 = executor.submit(predict_bootstrap, model_path_bo, NNH_model_name,
-                                  compo_new_list, [], HC_specific_features_list,
+                                  compo_new_list, H_specific_testing_list, HC_specific_features_list,
                                   k_folds, n_CVrepeats, mc_repeat,
-                                  scalers["compo"], [], scalers["specific_features"], scalers["H_output"])
+                                  scalers["compo"], scalers["H_specific_testing"], scalers["specific_features"], scalers["H_output"])
 
         # Submit NNC model prediction task
         future2 = executor.submit(predict_bootstrap, model_path_bo, NNC_model_name,
@@ -123,7 +201,8 @@ def predict_bootstrap_NNH_NNC(model_path_bo, NNH_model_name, NNC_model_name,
     H1_new_pred_stack, H1_new_pred_mean, H1_new_pred_std = future1.result()
     C2_new_pred_stack, C2_new_pred_mean, C2_new_pred_std = future2.result()
 
-    return H1_new_pred_stack, H1_new_pred_mean, H1_new_pred_std, C2_new_pred_stack, C2_new_pred_mean, C2_new_pred_std
+    return H1_new_pred_stack, H1_new_pred_mean, H1_new_pred_std, \
+        C2_new_pred_stack, C2_new_pred_mean, C2_new_pred_std
 
 
 def plot_prediction_uncertainty(model_path_bo, coord_x, coord_y, index_PVD_x_y,
@@ -205,7 +284,10 @@ def plot_prediction_uncertainty(model_path_bo, coord_x, coord_y, index_PVD_x_y,
     plt.show()
 
 
-def plot_prediction_uncertainty_AVG(model_path_bo, coord_x, coord_y, index_PVD_x_y, H1_new_pred_stack, C2_new_pred_stack, title):
+def plot_prediction_uncertainty_AVG(model_path_bo, coord_x, coord_y, index_PVD_x_y,
+                                    H1_new_pred_KFold_mean, H1_new_pred_KFold_std,
+                                    C2_new_pred_KFold_mean, C2_new_pred_KFold_std,
+                                    title):
     """
     This function plots the average prediction uncertainty for two types of predictions (Hardness and Pitting Potential).
 
@@ -220,16 +302,6 @@ def plot_prediction_uncertainty_AVG(model_path_bo, coord_x, coord_y, index_PVD_x
     Returns:
     None. Displays and saves the generated plot.
     """
-
-    # Concatenate predictions from each model and compute the mean and standard deviation for each type of prediction
-    H1_new_pred_KFold_mean = np.mean(np.concatenate(
-        H1_new_pred_stack, axis=0), axis=0).reshape(-1)
-    H1_new_pred_KFold_std = np.std(np.concatenate(
-        H1_new_pred_stack, axis=0), axis=0).reshape(-1)
-    C2_new_pred_KFold_mean = np.mean(np.concatenate(
-        C2_new_pred_stack, axis=0), axis=0).reshape(-1)
-    C2_new_pred_KFold_std = np.std(np.concatenate(
-        C2_new_pred_stack, axis=0), axis=0).reshape(-1)
 
     # Set font size for the entire figure
     plt.rcParams.update({'font.size': 8})

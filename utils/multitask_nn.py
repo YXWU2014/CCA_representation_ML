@@ -11,10 +11,13 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.utils import plot_model
 from sklearn.metrics import r2_score
 import warnings
+import logging
+logging.basicConfig(filename='model_saving_logs.log', level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger()
 
 
 class MultiTaskNN:
-
     """
     This class implements a multi-task neural network architecture, including methods to create and train the network.
     The network consists of a shared feature network (NNF), an H-specific network (NNH), and a C-specific network (NNC).
@@ -327,8 +330,9 @@ class MultiTaskNN:
         if self.model_save_flag:
             NNH_model.save(os.path.join(self.model_path_bo, NNH_model_name))
             NNC_model.save(os.path.join(self.model_path_bo, NNC_model_name))
-            print('saved model: ', NNH_model_name)
-            print('saved model: ', NNC_model_name)
+
+            logger.info('Saved model: %s', NNH_model_name)
+            logger.info('Saved model: %s', NNC_model_name)
 
         # ----- evaluate model ------------------------------------------
         # evaluate model on test set

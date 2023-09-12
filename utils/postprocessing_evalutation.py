@@ -8,9 +8,10 @@ import tensorflow as tf
 from tensorflow import keras
 import re
 import shap
+import warnings
 
 
-def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name, mc_state=True):
+def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name, mc_state=True, islean=False):
     """
     This function displays the saved NNH and NNC models in a tabular format.
 
@@ -26,16 +27,30 @@ def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name, mc_state
     files = sorted([f for f in os.listdir(model_path_bo) if f.endswith('.h5')])
 
     # Separate NNH and NNC model files
-    if mc_state:
+    if mc_state and not islean:
+
+        table_data = [["NNH_model_mc", "NNC_model_mc"]]
         nnh_files = [f for f in files if f.startswith(
             NNH_model_name) and f.endswith('_mc.h5')]
         nnc_files = [f for f in files if f.startswith(
             NNC_model_name) and f.endswith('_mc.h5')]
-    else:
+
+    elif not mc_state and not islean:
+
+        table_data = [["NNH_model", "NNC_model"]]
         nnh_files = [f for f in files if f.startswith(
-            NNH_model_name) and not f.endswith('_mc.h5')]
+            NNH_model_name) and not f.endswith('_mc.h5') and not f.endswith('_lean.h5')]
         nnc_files = [f for f in files if f.startswith(
-            NNC_model_name) and not f.endswith('_mc.h5')]
+            NNC_model_name) and not f.endswith('_mc.h5') and not f.endswith('_lean.h5')]
+
+    elif not mc_state and islean:
+        table_data = [["NNH_model_lean", "NNC_model_lean"]]
+        nnh_files = [f for f in files if f.startswith(
+            NNH_model_name) and f.endswith('_lean.h5')]
+        nnc_files = [f for f in files if f.startswith(
+            NNC_model_name) and f.endswith('_lean.h5')]
+    else:
+        warnings.warn("error on finding saved models.")
 
     # print(nnh_files)
 
@@ -51,10 +66,6 @@ def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name, mc_state
     # nnc_files.sort(key=lambda x: int(x.split("_")[-1].split(".")[0]))
 
     # Prepare the table data with model filenames
-    if mc_state:
-        table_data = [["NNH_model_mc", "NNC_model_mc"]]
-    else:
-        table_data = [["NNH_model", "NNC_model"]]
 
     for i in range(12):
         nnh_file = nnh_files[i] if i < len(nnh_files) else ""
@@ -64,95 +75,6 @@ def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name, mc_state
     # Display the model filenames in tabular format
     print()
     print(tabulate(table_data, headers="firstrow"))
-
-
-# def predict_bootstrap(model_path_bo, model_name,
-#                       X1_list, Y1_list, V1_list,
-#                       k_folds, n_CVrepeats, mc_repeat,
-#                       scaler_compo, scaler_testing, scaler_specific, scaler_output):
-#     """
-#     Perform bootstrap predictions on a given model with specified parameters.
-
-#     Parameters:
-#     model_path_bo: str
-#         The path of the directory where the model file is stored.
-#     model_name: str
-#         The filename of the model.
-#     X1_list, Y1_list, V1_list: list of np.array
-#         List of test data arrays.
-#     k_folds: int
-#         The number of folds for k-fold cross-validation.
-#     n_CVrepeats: int
-#         The number of repeats for k-fold cross-validation.
-#     mc_repeat: int
-#         The number of Monte Carlo simulations to perform.
-#     scaler_compo, scaler_testing, scaler_specific, scaler_output: sklearn.preprocessing Scalers
-#         Scalers for normalizing input data and inverse transforming output data.
-
-#     Returns:
-#     H1_pred_X1_list, H1_pred_X1_mc_mean, H1_pred_X1_mc_std: lists
-#         Lists of predictions, means, and standard deviations of predictions.
-#     """
-#     # Initialize lists for storing prediction results
-#     H1_pred_X1_list = []
-#     H1_pred_X1_mc_mean = []
-#     H1_pred_X1_mc_std = []
-
-#     # Function to predict on one fold of the cross-validated model
-#     def predict_one_model(i):
-
-#         # Load the ith model
-#         NNH_model_loaded_temp = keras.models.load_model(
-#             os.path.join(model_path_bo, model_name.format(i+1)))
-
-#         # Normalize input data using the provided scalers
-#         X1_temp_norm = scaler_compo.transform(X1_list[i])
-#         V1_temp_norm = scaler_specific.transform(V1_list[i])
-
-#         # Concatenate normalized X1 and V1 data
-#         X1_V1_temp_norm = np.concatenate([X1_temp_norm, V1_temp_norm], axis=1)
-
-#         # Check if testing condition for C is defined
-#         if len(Y1_list) != 0:
-#             Y1_temp_norm = scaler_testing.transform(Y1_list[i])
-
-#             def predict_one_sample(): return scaler_output.inverse_transform(
-#                 NNH_model_loaded_temp.predict(
-#                     [X1_V1_temp_norm, Y1_temp_norm], verbose=0)
-#             )
-#         else:  # if testing condition for H is NOT defined
-#             def predict_one_sample(): return scaler_output.inverse_transform(
-#                 NNH_model_loaded_temp.predict(X1_V1_temp_norm, verbose=0)
-#             )
-
-#         # Perform Monte Carlo Sampling for predictions
-#         H1_pred_X1_mc_stack_temp = tf.map_fn(lambda _: predict_one_sample(),
-#                                              tf.range(mc_repeat),
-#                                              dtype=tf.float32,
-#                                              parallel_iterations=mc_repeat)
-
-#         # Compute mean and standard deviation of the predictions
-#         H1_pred_X1_mc_mean_temp = np.mean(
-#             H1_pred_X1_mc_stack_temp, axis=0).reshape((-1,))
-#         H1_pred_X1_mc_std_temp = np.std(
-#             H1_pred_X1_mc_stack_temp,  axis=0).reshape((-1,))
-
-#         return H1_pred_X1_mc_stack_temp, H1_pred_X1_mc_mean_temp, H1_pred_X1_mc_std_temp
-
-#     # Perform parallel prediction on each fold of the cross-validated model
-#     results = Parallel(n_jobs=-1)(delayed(predict_one_model)(i)
-#                                   for i in range(k_folds * n_CVrepeats))
-
-#     # Clear TensorFlow session to free up resources
-#     tf.keras.backend.clear_session()
-
-#     # Extract and return results
-#     for mc_stack, mean, std in results:
-#         H1_pred_X1_list.append(mc_stack)
-#         H1_pred_X1_mc_mean.append(mean)
-#         H1_pred_X1_mc_std.append(std)
-
-#     return H1_pred_X1_list, H1_pred_X1_mc_mean, H1_pred_X1_mc_std
 
 
 def predict_bootstrap(model_path_bo, model_name,
@@ -192,19 +114,24 @@ def predict_bootstrap(model_path_bo, model_name,
 
     # Normalize and prepare input data
     def prepare_input_data(i):
-        X1_normalized = scaler_compo.transform(X1_list[i])
-        V1_normalized = scaler_specific.transform(V1_list[i])
-        return np.concatenate([X1_normalized, V1_normalized], axis=1)
+        if V1_list[i].size != 0:
+            X1_normalized = scaler_compo.transform(X1_list[i])
+            V1_normalized = scaler_specific.transform(V1_list[i])
+            return np.concatenate([X1_normalized, V1_normalized], axis=1)
+        else:
+            X1_normalized = scaler_compo.transform(X1_list[i])
+            return X1_normalized
 
     # Define prediction function based on input
     def define_predict_function(model, input_data, i):
-        if Y1_list:
+        if Y1_list[i].size != 0:
             Y1_normalized = scaler_testing.transform(Y1_list[i])
             return lambda: scaler_output.inverse_transform(model.predict([input_data, Y1_normalized], verbose=0))
         else:
             return lambda: scaler_output.inverse_transform(model.predict(input_data, verbose=0))
 
     # Monte Carlo Sampling for predictions
+    @tf.autograph.experimental.do_not_convert
     def predict_monte_carlo_sampling(predict_func):
         predictions = tf.map_fn(lambda _: predict_func(),
                                 tf.range(mc_repeat),
