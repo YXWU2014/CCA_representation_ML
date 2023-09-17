@@ -11,22 +11,6 @@ import tensorflow as tf
 from tensorflow import keras
 
 
-def softplus_activation(beta=1.0):
-    """
-    Returns a callable function
-    representing softplus activation
-    with beta smoothing.
-
-    Args:
-        beta: The smoothing parameter. Smaller means smoother.
-    """
-    def softplus(batch_x):
-        return (1.0 / beta) * tf.keras.backend.log(1.0 +
-                                                   tf.keras.backend.exp(-1.0 * tf.keras.backend.abs(beta * batch_x))) + \
-            tf.keras.backend.maximum(batch_x, 0)
-    return softplus
-
-
 def predict_norm_shap_bootstrap(model_path_bo, model_name,
                                 X1_base_list, Y1_base_list, V1_base_list,
                                 X1_shap_list, Y1_shap_list, V1_shap_list,

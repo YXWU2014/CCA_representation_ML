@@ -9,6 +9,7 @@ import numpy as np
 from tqdm import tqdm
 from .explainer import Explainer
 
+
 class PathExplainerTF(Explainer):
     """
     Explains a model using path attributions from the given baseline.
@@ -31,6 +32,10 @@ class PathExplainerTF(Explainer):
                                  your mode will need to accept original_input
                                  as an argument.
         """
+        # Set seeds for reproducibility
+        tf.random.set_seed(42)
+        np.random.seed(42)
+
         self.model = model
         self.pass_original_input = pass_original_input
         self.eager_mode = False
@@ -69,7 +74,7 @@ class PathExplainerTF(Explainer):
         if not second_order:
             batch_difference = batch_input - batch_baseline
             batch_interpolated = batch_alphas * batch_input + \
-                                 (1.0 - batch_alphas) * batch_baseline
+                (1.0 - batch_alphas) * batch_baseline
 
             ########################
             # Compute the appropriate gradients
@@ -84,7 +89,8 @@ class PathExplainerTF(Explainer):
 
                 if output_index is not None:
                     batch_predictions = batch_predictions[:, output_index]
-            batch_gradients = tape.gradient(batch_predictions, batch_interpolated)
+            batch_gradients = tape.gradient(
+                batch_predictions, batch_interpolated)
             ########################
 
             batch_attributions = batch_gradients * batch_difference
@@ -93,7 +99,7 @@ class PathExplainerTF(Explainer):
         batch_alpha, batch_beta = batch_alphas
         batch_difference = batch_input - batch_baseline
         batch_interpolated_beta = batch_beta * batch_input + \
-                                  (1.0 - batch_beta) * batch_baseline
+            (1.0 - batch_beta) * batch_baseline
 
         ################################################
         # Handle the second order derivatives here
@@ -102,7 +108,7 @@ class PathExplainerTF(Explainer):
 
             batch_difference_beta = batch_interpolated_beta - batch_baseline
             batch_interpolated_alpha = batch_alpha * batch_interpolated_beta + \
-                                       (1.0 - batch_alpha) * batch_baseline
+                (1.0 - batch_alpha) * batch_baseline
             with tf.GradientTape() as first_order_tape:
                 first_order_tape.watch(batch_interpolated_alpha)
 
@@ -116,11 +122,13 @@ class PathExplainerTF(Explainer):
                     batch_predictions = batch_predictions[:, output_index]
 
             # Same shape as the input, e.g. [batch_size, ...]
-            batch_gradients = first_order_tape.gradient(batch_predictions, batch_interpolated_alpha)
+            batch_gradients = first_order_tape.gradient(
+                batch_predictions, batch_interpolated_alpha)
             batch_gradients = batch_gradients * batch_difference_beta
 
             if interaction_index is not None:
-                batch_gradients = batch_gradients[tuple([slice(None)] + interaction_index)]
+                batch_gradients = batch_gradients[tuple(
+                    [slice(None)] + interaction_index)]
 
         if interaction_index is not None:
             # In this case, the hessian is the same size as the input because we
@@ -141,8 +149,8 @@ class PathExplainerTF(Explainer):
         ########################
         # This code is just preparing arrays to be the right shape for broadcasting.
         if interaction_index is not None:
-            batch_difference = batch_difference[tuple([slice(None)] + \
-                                                                 interaction_index)]
+            batch_difference = batch_difference[tuple([slice(None)] +
+                                                      interaction_index)]
             for _ in range(len(batch_input.shape) - 1):
                 batch_difference = tf.expand_dims(batch_difference, axis=-1)
         else:
@@ -193,8 +201,10 @@ class PathExplainerTF(Explainer):
         """
         if use_expectation:
             if use_product:
-                alpha = np.random.uniform(low=0.0, high=1.0, size=num_samples).astype(np.float32)
-                beta = np.random.uniform(low=0.0, high=1.0, size=num_samples).astype(np.float32)
+                alpha = np.random.uniform(
+                    low=0.0, high=1.0, size=num_samples).astype(np.float32)
+                beta = np.random.uniform(
+                    low=0.0, high=1.0, size=num_samples).astype(np.float32)
                 return alpha, beta
             else:
                 return np.random.uniform(low=0.0, high=1.0, size=num_samples).astype(np.float32)
@@ -245,7 +255,7 @@ class PathExplainerTF(Explainer):
             output_index: Whether or not to index into a given class
         """
         current_input = np.expand_dims(current_input, axis=0)
-        current_alphas = tf.reshape(current_alphas, (num_samples,) + \
+        current_alphas = tf.reshape(current_alphas, (num_samples,) +
                                     (1,) * (len(current_input.shape) - 1))
 
         attribution_array = []
@@ -303,14 +313,14 @@ class PathExplainerTF(Explainer):
 
         if as_interactions and interaction_index is None:
             shape_tuple = [inputs.shape[0], ] + \
-                          2 * list(inputs.shape[1:])
+                2 * list(inputs.shape[1:])
             shape_tuple = tuple(shape_tuple)
 
         if is_multi_output and output_indices is None:
             num_classes = test_output.shape[-1]
             attributions = np.zeros((num_classes,) + shape_tuple)
         elif not is_multi_output and output_indices is not None:
-            raise ValueError('Provided output_indices but ' + \
+            raise ValueError('Provided output_indices but ' +
                              'model is not multi output!')
         else:
             attributions = np.zeros(shape_tuple)
@@ -420,10 +430,10 @@ class PathExplainerTF(Explainer):
         """
         current_input = np.expand_dims(current_input, axis=0)
         current_alpha, current_beta = current_alphas
-        current_alpha = tf.reshape(current_alpha, (num_samples,) + \
-                                    (1,) * (len(current_input.shape) - 1))
-        current_beta = tf.reshape(current_beta, (num_samples,) + \
-                                 (1,) * (len(current_input.shape) - 1))
+        current_alpha = tf.reshape(current_alpha, (num_samples,) +
+                                   (1,) * (len(current_input.shape) - 1))
+        current_beta = tf.reshape(current_beta, (num_samples,) +
+                                  (1,) * (len(current_input.shape) - 1))
         attribution_array = []
         for j in range(0, num_samples, batch_size):
             number_to_draw = min(batch_size, num_samples - j)
@@ -440,7 +450,8 @@ class PathExplainerTF(Explainer):
 
             batch_attributions = self.accumulation_function(batch_input,
                                                             batch_baseline,
-                                                            batch_alphas=(batch_alpha, batch_beta),
+                                                            batch_alphas=(
+                                                                batch_alpha, batch_beta),
                                                             output_index=output_index,
                                                             second_order=True,
                                                             interaction_index=interaction_index)

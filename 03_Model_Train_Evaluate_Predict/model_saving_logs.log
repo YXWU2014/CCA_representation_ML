@@ -70,3 +70,348 @@
 2023-09-07 23:32:16,388 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc.h5
 2023-09-07 23:32:20,366 - INFO - Saved model: NNH_model_RepeatedKFold_1.h5
 2023-09-07 23:32:20,366 - INFO - Saved model: NNC_model_RepeatedKFold_1.h5
+2023-09-13 19:21:17,126 - INFO - Saved model: NNH_model_RepeatedKFold_9_lean.h5
+2023-09-13 19:21:17,127 - INFO - Saved model: NNC_model_RepeatedKFold_9_lean.h5
+2023-09-13 19:21:17,163 - INFO - Saved model: NNH_model_RepeatedKFold_12_lean.h5
+2023-09-13 19:21:17,164 - INFO - Saved model: NNC_model_RepeatedKFold_12_lean.h5
+2023-09-13 19:21:18,448 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc.h5
+2023-09-13 19:21:18,448 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc.h5
+2023-09-13 19:21:18,479 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc.h5
+2023-09-13 19:21:18,486 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc.h5
+2023-09-13 19:21:18,534 - INFO - Saved model: NNH_model_RepeatedKFold_5_lean.h5
+2023-09-13 19:21:18,534 - INFO - Saved model: NNC_model_RepeatedKFold_5_lean.h5
+2023-09-13 19:21:18,855 - INFO - Saved model: NNH_model_RepeatedKFold_10.h5
+2023-09-13 19:21:18,856 - INFO - Saved model: NNC_model_RepeatedKFold_10.h5
+2023-09-13 19:21:19,167 - INFO - Saved model: NNH_model_RepeatedKFold_8.h5
+2023-09-13 19:21:19,168 - INFO - Saved model: NNC_model_RepeatedKFold_8.h5
+2023-09-13 19:21:19,432 - INFO - Saved model: NNH_model_RepeatedKFold_10_lean.h5
+2023-09-13 19:21:19,466 - INFO - Saved model: NNH_model_RepeatedKFold_8_lean.h5
+2023-09-13 19:21:19,526 - INFO - Saved model: NNH_model_RepeatedKFold_12.h5
+2023-09-13 19:21:19,527 - INFO - Saved model: NNC_model_RepeatedKFold_8_lean.h5
+2023-09-13 19:21:19,527 - INFO - Saved model: NNC_model_RepeatedKFold_10_lean.h5
+2023-09-13 19:21:19,527 - INFO - Saved model: NNC_model_RepeatedKFold_12.h5
+2023-09-13 19:21:19,673 - INFO - Saved model: NNH_model_RepeatedKFold_4_lean.h5
+2023-09-13 19:21:19,673 - INFO - Saved model: NNC_model_RepeatedKFold_4_lean.h5
+2023-09-13 19:21:19,674 - INFO - Saved model: NNH_model_RepeatedKFold_9.h5
+2023-09-13 19:21:19,674 - INFO - Saved model: NNC_model_RepeatedKFold_9.h5
+2023-09-13 19:21:19,674 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc.h5
+2023-09-13 19:21:19,675 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc.h5
+2023-09-13 19:21:19,714 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc.h5
+2023-09-13 19:21:19,715 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc.h5
+2023-09-13 19:21:19,720 - INFO - Saved model: NNH_model_RepeatedKFold_7.h5
+2023-09-13 19:21:19,720 - INFO - Saved model: NNC_model_RepeatedKFold_7.h5
+2023-09-13 19:21:19,807 - INFO - Saved model: NNH_model_RepeatedKFold_6.h5
+2023-09-13 19:21:19,808 - INFO - Saved model: NNC_model_RepeatedKFold_6.h5
+2023-09-13 19:21:20,006 - INFO - Saved model: NNH_model_RepeatedKFold_11_lean.h5
+2023-09-13 19:21:20,007 - INFO - Saved model: NNC_model_RepeatedKFold_11_lean.h5
+2023-09-13 19:21:20,071 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc.h5
+2023-09-13 19:21:20,071 - INFO - Saved model: NNH_model_RepeatedKFold_11.h5
+2023-09-13 19:21:20,072 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc.h5
+2023-09-13 19:21:20,072 - INFO - Saved model: NNC_model_RepeatedKFold_11.h5
+2023-09-13 19:21:20,335 - INFO - Saved model: NNH_model_RepeatedKFold_3_lean.h5
+2023-09-13 19:21:20,336 - INFO - Saved model: NNC_model_RepeatedKFold_3_lean.h5
+2023-09-13 19:21:20,521 - INFO - Saved model: NNH_model_RepeatedKFold_4.h5
+2023-09-13 19:21:20,523 - INFO - Saved model: NNC_model_RepeatedKFold_4.h5
+2023-09-13 19:21:20,546 - INFO - Saved model: NNH_model_RepeatedKFold_5.h5
+2023-09-13 19:21:20,546 - INFO - Saved model: NNC_model_RepeatedKFold_5.h5
+2023-09-13 19:21:20,717 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc.h5
+2023-09-13 19:21:20,718 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc.h5
+2023-09-13 19:21:20,806 - INFO - Saved model: NNH_model_RepeatedKFold_7_lean.h5
+2023-09-13 19:21:20,806 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc.h5
+2023-09-13 19:21:20,807 - INFO - Saved model: NNC_model_RepeatedKFold_7_lean.h5
+2023-09-13 19:21:20,807 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc.h5
+2023-09-13 19:21:20,845 - INFO - Saved model: NNH_model_RepeatedKFold_3.h5
+2023-09-13 19:21:20,845 - INFO - Saved model: NNC_model_RepeatedKFold_3.h5
+2023-09-13 19:21:20,849 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc.h5
+2023-09-13 19:21:20,849 - INFO - Saved model: NNH_model_RepeatedKFold_2.h5
+2023-09-13 19:21:20,849 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc.h5
+2023-09-13 19:21:20,849 - INFO - Saved model: NNC_model_RepeatedKFold_2.h5
+2023-09-13 19:21:20,849 - INFO - Saved model: NNH_model_RepeatedKFold_2_lean.h5
+2023-09-13 19:21:20,850 - INFO - Saved model: NNC_model_RepeatedKFold_2_lean.h5
+2023-09-13 19:21:20,935 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc.h5
+2023-09-13 19:21:20,936 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc.h5
+2023-09-13 19:21:21,123 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc.h5
+2023-09-13 19:21:21,123 - INFO - Saved model: NNH_model_RepeatedKFold_6_lean.h5
+2023-09-13 19:21:21,123 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc.h5
+2023-09-13 19:21:21,122 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc.h5
+2023-09-13 19:21:21,123 - INFO - Saved model: NNC_model_RepeatedKFold_6_lean.h5
+2023-09-13 19:21:21,123 - INFO - Saved model: NNH_model_RepeatedKFold_1.h5
+2023-09-13 19:21:21,123 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc.h5
+2023-09-13 19:21:21,123 - INFO - Saved model: NNC_model_RepeatedKFold_1.h5
+2023-09-13 19:21:21,198 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc.h5
+2023-09-13 19:21:21,208 - INFO - Saved model: NNH_model_RepeatedKFold_1_lean.h5
+2023-09-13 19:21:21,275 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc.h5
+2023-09-13 19:21:21,275 - INFO - Saved model: NNC_model_RepeatedKFold_1_lean.h5
+2023-09-13 20:41:18,603 - INFO - Saved model: NNH_model_RepeatedKFold_12.h5
+2023-09-13 20:41:18,603 - INFO - Saved model: NNC_model_RepeatedKFold_12.h5
+2023-09-13 20:41:21,352 - INFO - Saved model: NNH_model_RepeatedKFold_5.h5
+2023-09-13 20:41:21,356 - INFO - Saved model: NNC_model_RepeatedKFold_5.h5
+2023-09-13 20:41:24,687 - INFO - Saved model: NNH_model_RepeatedKFold_3.h5
+2023-09-13 20:41:24,688 - INFO - Saved model: NNC_model_RepeatedKFold_3.h5
+2023-09-13 20:41:34,373 - INFO - Saved model: NNH_model_RepeatedKFold_10.h5
+2023-09-13 20:41:34,375 - INFO - Saved model: NNC_model_RepeatedKFold_10.h5
+2023-09-13 20:41:53,382 - INFO - Saved model: NNH_model_RepeatedKFold_7.h5
+2023-09-13 20:41:53,383 - INFO - Saved model: NNC_model_RepeatedKFold_7.h5
+2023-09-13 20:41:57,353 - INFO - Saved model: NNH_model_RepeatedKFold_6.h5
+2023-09-13 20:41:57,354 - INFO - Saved model: NNC_model_RepeatedKFold_6.h5
+2023-09-13 20:42:11,896 - INFO - Saved model: NNH_model_RepeatedKFold_9_lean.h5
+2023-09-13 20:42:11,897 - INFO - Saved model: NNC_model_RepeatedKFold_9_lean.h5
+2023-09-13 20:42:14,304 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc.h5
+2023-09-13 20:42:14,305 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc.h5
+2023-09-13 20:42:53,037 - INFO - Saved model: NNH_model_RepeatedKFold_9.h5
+2023-09-13 20:42:53,038 - INFO - Saved model: NNC_model_RepeatedKFold_9.h5
+2023-09-13 20:43:09,162 - INFO - Saved model: NNH_model_RepeatedKFold_4.h5
+2023-09-13 20:43:09,163 - INFO - Saved model: NNC_model_RepeatedKFold_4.h5
+2023-09-13 20:43:13,909 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc.h5
+2023-09-13 20:43:13,910 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc.h5
+2023-09-13 20:43:15,347 - INFO - Saved model: NNH_model_RepeatedKFold_11.h5
+2023-09-13 20:43:15,347 - INFO - Saved model: NNC_model_RepeatedKFold_11.h5
+2023-09-13 20:43:15,958 - INFO - Saved model: NNH_model_RepeatedKFold_2.h5
+2023-09-13 20:43:15,964 - INFO - Saved model: NNC_model_RepeatedKFold_2.h5
+2023-09-13 20:43:21,267 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc.h5
+2023-09-13 20:43:21,271 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc.h5
+2023-09-13 20:43:25,359 - INFO - Saved model: NNH_model_RepeatedKFold_1.h5
+2023-09-13 20:43:25,359 - INFO - Saved model: NNC_model_RepeatedKFold_1.h5
+2023-09-13 20:43:25,500 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc.h5
+2023-09-13 20:43:25,500 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc.h5
+2023-09-13 20:43:26,108 - INFO - Saved model: NNH_model_RepeatedKFold_8.h5
+2023-09-13 20:43:26,109 - INFO - Saved model: NNC_model_RepeatedKFold_8.h5
+2023-09-13 20:43:26,498 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc.h5
+2023-09-13 20:43:26,498 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc.h5
+2023-09-13 20:43:27,032 - INFO - Saved model: NNH_model_RepeatedKFold_8_lean.h5
+2023-09-13 20:43:27,032 - INFO - Saved model: NNC_model_RepeatedKFold_8_lean.h5
+2023-09-13 20:43:27,949 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc.h5
+2023-09-13 20:43:27,949 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc.h5
+2023-09-13 20:43:28,060 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc.h5
+2023-09-13 20:43:28,061 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc.h5
+2023-09-13 20:43:42,905 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc.h5
+2023-09-13 20:43:42,906 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc.h5
+2023-09-13 20:43:45,424 - INFO - Saved model: NNH_model_RepeatedKFold_12_lean.h5
+2023-09-13 20:43:45,425 - INFO - Saved model: NNC_model_RepeatedKFold_12_lean.h5
+2023-09-13 20:43:48,261 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc.h5
+2023-09-13 20:43:48,262 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc.h5
+2023-09-13 20:43:58,748 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc.h5
+2023-09-13 20:43:58,749 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc.h5
+2023-09-13 20:44:00,663 - INFO - Saved model: NNH_model_RepeatedKFold_2_lean.h5
+2023-09-13 20:44:00,663 - INFO - Saved model: NNC_model_RepeatedKFold_2_lean.h5
+2023-09-13 20:44:11,317 - INFO - Saved model: NNH_model_RepeatedKFold_10_lean.h5
+2023-09-13 20:44:11,318 - INFO - Saved model: NNC_model_RepeatedKFold_10_lean.h5
+2023-09-13 20:44:13,231 - INFO - Saved model: NNH_model_RepeatedKFold_1_lean.h5
+2023-09-13 20:44:13,232 - INFO - Saved model: NNC_model_RepeatedKFold_1_lean.h5
+2023-09-13 20:44:14,246 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc.h5
+2023-09-13 20:44:14,247 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc.h5
+2023-09-13 20:44:14,247 - INFO - Saved model: NNH_model_RepeatedKFold_11_lean.h5
+2023-09-13 20:44:14,247 - INFO - Saved model: NNC_model_RepeatedKFold_11_lean.h5
+2023-09-13 20:44:14,690 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc.h5
+2023-09-13 20:44:14,712 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc.h5
+2023-09-13 20:44:16,505 - INFO - Saved model: NNH_model_RepeatedKFold_7_lean.h5
+2023-09-13 20:44:16,506 - INFO - Saved model: NNC_model_RepeatedKFold_7_lean.h5
+2023-09-13 20:44:20,915 - INFO - Saved model: NNH_model_RepeatedKFold_6_lean.h5
+2023-09-13 20:44:20,915 - INFO - Saved model: NNC_model_RepeatedKFold_6_lean.h5
+2023-09-13 20:44:22,128 - INFO - Saved model: NNH_model_RepeatedKFold_5_lean.h5
+2023-09-13 20:44:22,129 - INFO - Saved model: NNC_model_RepeatedKFold_5_lean.h5
+2023-09-13 20:44:23,807 - INFO - Saved model: NNH_model_RepeatedKFold_3_lean.h5
+2023-09-13 20:44:23,808 - INFO - Saved model: NNC_model_RepeatedKFold_3_lean.h5
+2023-09-13 20:44:24,824 - INFO - Saved model: NNH_model_RepeatedKFold_4_lean.h5
+2023-09-13 20:44:24,824 - INFO - Saved model: NNC_model_RepeatedKFold_4_lean.h5
+2023-09-14 13:40:41,545 - INFO - Saved model: NNH_model_RepeatedKFold_5_lean.h5
+2023-09-14 13:40:41,546 - INFO - Saved model: NNC_model_RepeatedKFold_5_lean.h5
+2023-09-14 13:40:41,951 - INFO - Saved model: NNH_model_RepeatedKFold_11_lean.h5
+2023-09-14 13:40:41,953 - INFO - Saved model: NNC_model_RepeatedKFold_11_lean.h5
+2023-09-14 13:40:41,953 - INFO - Saved model: NNH_model_RepeatedKFold_9_lean.h5
+2023-09-14 13:40:41,957 - INFO - Saved model: NNC_model_RepeatedKFold_9_lean.h5
+2023-09-14 13:40:42,089 - INFO - Saved model: NNH_model_RepeatedKFold_2_lean.h5
+2023-09-14 13:40:42,090 - INFO - Saved model: NNC_model_RepeatedKFold_2_lean.h5
+2023-09-14 13:40:42,441 - INFO - Saved model: NNH_model_RepeatedKFold_6_lean.h5
+2023-09-14 13:40:42,442 - INFO - Saved model: NNC_model_RepeatedKFold_6_lean.h5
+2023-09-14 13:40:42,611 - INFO - Saved model: NNH_model_RepeatedKFold_4_lean.h5
+2023-09-14 13:40:42,612 - INFO - Saved model: NNC_model_RepeatedKFold_4_lean.h5
+2023-09-14 13:40:42,897 - INFO - Saved model: NNH_model_RepeatedKFold_3_lean.h5
+2023-09-14 13:40:42,898 - INFO - Saved model: NNC_model_RepeatedKFold_3_lean.h5
+2023-09-14 13:40:42,897 - INFO - Saved model: NNH_model_RepeatedKFold_7_lean.h5
+2023-09-14 13:40:42,898 - INFO - Saved model: NNC_model_RepeatedKFold_7_lean.h5
+2023-09-14 13:40:42,898 - INFO - Saved model: NNH_model_RepeatedKFold_10_lean.h5
+2023-09-14 13:40:42,901 - INFO - Saved model: NNC_model_RepeatedKFold_10_lean.h5
+2023-09-14 13:40:43,306 - INFO - Saved model: NNH_model_RepeatedKFold_8_lean.h5
+2023-09-14 13:40:43,306 - INFO - Saved model: NNC_model_RepeatedKFold_8_lean.h5
+2023-09-14 13:40:43,306 - INFO - Saved model: NNH_model_RepeatedKFold_12_lean.h5
+2023-09-14 13:40:43,307 - INFO - Saved model: NNC_model_RepeatedKFold_12_lean.h5
+2023-09-14 13:40:43,832 - INFO - Saved model: NNH_model_RepeatedKFold_1_lean.h5
+2023-09-14 13:40:43,844 - INFO - Saved model: NNC_model_RepeatedKFold_1_lean.h5
+2023-09-14 14:28:40,669 - INFO - Saved model: NNH_model_RepeatedKFold_7_lean.h5
+2023-09-14 14:28:40,670 - INFO - Saved model: NNC_model_RepeatedKFold_7_lean.h5
+2023-09-14 14:28:40,868 - INFO - Saved model: NNH_model_RepeatedKFold_12_lean.h5
+2023-09-14 14:28:40,869 - INFO - Saved model: NNC_model_RepeatedKFold_12_lean.h5
+2023-09-14 14:28:43,236 - INFO - Saved model: NNH_model_RepeatedKFold_3_lean.h5
+2023-09-14 14:28:43,237 - INFO - Saved model: NNC_model_RepeatedKFold_3_lean.h5
+2023-09-14 14:28:48,577 - INFO - Saved model: NNH_model_RepeatedKFold_5_lean.h5
+2023-09-14 14:28:48,578 - INFO - Saved model: NNC_model_RepeatedKFold_5_lean.h5
+2023-09-14 14:28:53,112 - INFO - Saved model: NNH_model_RepeatedKFold_1_lean.h5
+2023-09-14 14:28:53,113 - INFO - Saved model: NNC_model_RepeatedKFold_1_lean.h5
+2023-09-14 14:28:59,835 - INFO - Saved model: NNH_model_RepeatedKFold_8_lean.h5
+2023-09-14 14:28:59,836 - INFO - Saved model: NNC_model_RepeatedKFold_8_lean.h5
+2023-09-14 14:28:59,871 - INFO - Saved model: NNH_model_RepeatedKFold_6_lean.h5
+2023-09-14 14:28:59,873 - INFO - Saved model: NNC_model_RepeatedKFold_6_lean.h5
+2023-09-14 14:29:08,885 - INFO - Saved model: NNH_model_RepeatedKFold_10_lean.h5
+2023-09-14 14:29:08,887 - INFO - Saved model: NNC_model_RepeatedKFold_10_lean.h5
+2023-09-14 14:29:10,594 - INFO - Saved model: NNH_model_RepeatedKFold_11_lean.h5
+2023-09-14 14:29:10,594 - INFO - Saved model: NNC_model_RepeatedKFold_11_lean.h5
+2023-09-14 14:29:25,041 - INFO - Saved model: NNH_model_RepeatedKFold_2_lean.h5
+2023-09-14 14:29:25,042 - INFO - Saved model: NNC_model_RepeatedKFold_2_lean.h5
+2023-09-14 14:29:44,818 - INFO - Saved model: NNH_model_RepeatedKFold_9_lean.h5
+2023-09-14 14:29:44,819 - INFO - Saved model: NNC_model_RepeatedKFold_9_lean.h5
+2023-09-14 14:30:13,651 - INFO - Saved model: NNH_model_RepeatedKFold_4_lean.h5
+2023-09-14 14:30:13,652 - INFO - Saved model: NNC_model_RepeatedKFold_4_lean.h5
+2023-09-14 15:06:25,272 - WARNING - Using 450 background data samples could cause slower run times. Consider using shap.sample(data, K) or shap.kmeans(data, K) to summarize the background as K samples.
+2023-09-14 15:06:25,605 - INFO - num_full_subsets = 2
+2023-09-14 15:06:25,686 - INFO - phi = [ 0.0697913  -0.0099615  -0.02519843  0.0216094   0.00780327]
+2023-09-14 15:06:25,995 - INFO - num_full_subsets = 2
+2023-09-14 15:06:26,053 - INFO - phi = [ 0.07577137 -0.01123914  0.00494073  0.03634573  0.01467504]
+2023-09-14 15:06:26,385 - INFO - num_full_subsets = 2
+2023-09-14 15:06:26,443 - INFO - phi = [ 0.08207729 -0.01041064  0.03414131  0.05417857  0.02574582]
+2023-09-14 15:06:26,698 - INFO - num_full_subsets = 2
+2023-09-14 15:06:26,756 - INFO - phi = [ 0.08733094 -0.00823237  0.06926625  0.07516681  0.04010651]
+2023-09-14 15:06:27,011 - INFO - num_full_subsets = 2
+2023-09-14 15:06:27,067 - INFO - phi = [ 0.09262572 -0.00316448  0.10588635  0.10112798  0.06157118]
+2023-09-14 15:06:27,371 - INFO - num_full_subsets = 2
+2023-09-14 15:06:27,429 - INFO - phi = [ 0.05313734 -0.0050748  -0.05434867  0.01214321  0.00390623]
+2023-09-14 15:06:27,684 - INFO - num_full_subsets = 2
+2023-09-14 15:06:27,742 - INFO - phi = [ 0.05409437 -0.00680711 -0.03979854  0.01693315  0.00587111]
+2023-09-14 15:06:27,995 - INFO - num_full_subsets = 2
+2023-09-14 15:06:28,052 - INFO - phi = [ 0.05785615 -0.00866163 -0.01404401  0.03012007  0.01323456]
+2023-09-14 15:06:28,281 - INFO - num_full_subsets = 2
+2023-09-14 15:06:28,332 - INFO - phi = [ 0.06196911 -0.00893298  0.00915365  0.04537571  0.02237242]
+2023-09-14 15:06:28,550 - INFO - num_full_subsets = 2
+2023-09-14 15:06:28,603 - INFO - phi = [ 0.06737908 -0.00794414  0.04785466  0.06940469  0.03955375]
+2023-09-14 15:06:28,819 - INFO - num_full_subsets = 2
+2023-09-14 15:06:28,872 - INFO - phi = [ 0.07400422 -0.0053264   0.08574994  0.08855294  0.06779677]
+2023-09-14 15:06:29,089 - INFO - num_full_subsets = 2
+2023-09-14 15:06:29,141 - INFO - phi = [ 0.07708949 -0.00095339  0.12729202  0.11429086  0.10111129]
+2023-09-14 15:06:29,356 - INFO - num_full_subsets = 2
+2023-09-14 15:06:29,411 - INFO - phi = [ 0.04497517 -0.00071659 -0.06968998  0.00699777  0.00227288]
+2023-09-14 15:06:29,629 - INFO - num_full_subsets = 2
+2023-09-14 15:06:29,680 - INFO - phi = [ 0.04388214 -0.00228642 -0.05769272  0.01109308  0.00330003]
+2023-09-14 15:06:29,896 - INFO - num_full_subsets = 2
+2023-09-14 15:06:29,948 - INFO - phi = [ 0.04592429 -0.0034348  -0.0420317   0.0267316   0.00826337]
+2023-09-14 15:06:30,169 - INFO - num_full_subsets = 2
+2023-09-14 15:06:30,228 - INFO - phi = [ 0.04321248 -0.00516789 -0.02538043  0.02334907  0.0122057 ]
+2023-09-14 15:06:30,448 - INFO - num_full_subsets = 2
+2023-09-14 15:06:30,500 - INFO - phi = [ 0.04406327 -0.00640379  0.00089473  0.03762931  0.02051708]
+2023-09-14 15:06:30,715 - INFO - num_full_subsets = 2
+2023-09-14 15:06:30,767 - INFO - phi = [ 0.04877233 -0.00624782  0.03337434  0.05748125  0.04192966]
+2023-09-14 15:06:30,984 - INFO - num_full_subsets = 2
+2023-09-14 15:06:31,036 - INFO - phi = [ 0.05365562 -0.00519094  0.07211184  0.07951378  0.06714673]
+2023-09-14 15:06:31,254 - INFO - num_full_subsets = 2
+2023-09-14 15:06:31,305 - INFO - phi = [ 0.06093815 -0.0025708   0.11360028  0.10091118  0.10845801]
+2023-09-14 15:06:31,529 - INFO - num_full_subsets = 2
+2023-09-14 15:06:31,580 - INFO - phi = [0.06965811 0.00044861 0.15940811 0.12390325 0.15693739]
+2023-09-14 15:06:31,798 - INFO - num_full_subsets = 2
+2023-09-14 15:06:31,851 - INFO - phi = [ 0.03650788  0.00122241 -0.06406291  0.00680678  0.00199581]
+2023-09-14 15:06:32,071 - INFO - num_full_subsets = 2
+2023-09-14 15:06:32,124 - INFO - phi = [ 0.03320536  0.00037179 -0.05284546  0.00834036  0.00343827]
+2023-09-14 15:06:32,342 - INFO - num_full_subsets = 2
+2023-09-14 15:06:32,393 - INFO - phi = [ 0.03098626 -0.00079973 -0.03844362  0.01347065  0.00630047]
+2023-09-14 15:06:32,613 - INFO - num_full_subsets = 2
+2023-09-14 15:06:32,666 - INFO - phi = [ 0.02939625 -0.00192921 -0.02222461  0.01987047  0.01053782]
+2023-09-14 15:06:32,882 - INFO - num_full_subsets = 2
+2023-09-14 15:06:32,934 - INFO - phi = [ 2.76232623e-02 -2.56249458e-03 -2.36357019e-05  3.04692518e-02
+  1.99763738e-02]
+2023-09-14 15:06:33,151 - INFO - num_full_subsets = 2
+2023-09-14 15:06:33,204 - INFO - phi = [ 0.03087312 -0.00342231  0.03047513  0.04831586  0.03982747]
+2023-09-14 15:06:33,422 - INFO - num_full_subsets = 2
+2023-09-14 15:06:33,475 - INFO - phi = [ 0.03434088 -0.0034633   0.0660737   0.06690563  0.06619854]
+2023-09-14 15:06:33,701 - INFO - num_full_subsets = 2
+2023-09-14 15:06:33,754 - INFO - phi = [ 0.04265081 -0.00221522  0.10863597  0.09421912  0.10954599]
+2023-09-14 15:06:33,974 - INFO - num_full_subsets = 2
+2023-09-14 15:06:34,027 - INFO - phi = [ 0.05099641 -0.00163164  0.14674232  0.11025191  0.16513896]
+2023-09-14 15:06:34,282 - INFO - num_full_subsets = 2
+2023-09-14 15:06:34,334 - INFO - phi = [ 0.02733294  0.00311766 -0.05502724  0.00521706  0.00197414]
+2023-09-14 15:06:34,557 - INFO - num_full_subsets = 2
+2023-09-14 15:06:34,609 - INFO - phi = [ 0.02316571  0.00264096 -0.04253162  0.0082572   0.00391695]
+2023-09-14 15:06:34,832 - INFO - num_full_subsets = 2
+2023-09-14 15:06:34,885 - INFO - phi = [ 0.01912427  0.00206029 -0.02703471  0.01288644  0.00668256]
+2023-09-14 15:06:35,106 - INFO - num_full_subsets = 2
+2023-09-14 15:06:35,158 - INFO - phi = [ 0.01455347  0.00179399 -0.00857315  0.01850996  0.01219471]
+2023-09-14 15:06:35,375 - INFO - num_full_subsets = 2
+2023-09-14 15:06:35,427 - INFO - phi = [0.01291596 0.00074746 0.01457325 0.0291778  0.02247835]
+2023-09-14 15:06:35,645 - INFO - num_full_subsets = 2
+2023-09-14 15:06:35,697 - INFO - phi = [0.01246303 0.00074742 0.03641449 0.04218324 0.03761626]
+2023-09-14 15:06:35,914 - INFO - num_full_subsets = 2
+2023-09-14 15:06:35,968 - INFO - phi = [ 0.01453371 -0.00021202  0.07441233  0.06255247  0.06493999]
+2023-09-14 15:06:36,191 - INFO - num_full_subsets = 2
+2023-09-14 15:06:36,245 - INFO - phi = [ 0.01894747 -0.0006182   0.10738721  0.07815751  0.1027714 ]
+2023-09-14 15:06:36,563 - INFO - num_full_subsets = 2
+2023-09-14 15:06:36,619 - INFO - phi = [ 0.0292969  -0.00191362  0.13956471  0.09931222  0.16092548]
+2023-09-14 15:06:36,845 - INFO - num_full_subsets = 2
+2023-09-14 15:06:36,897 - INFO - phi = [ 0.01602223  0.0049941  -0.03902432  0.00541624  0.00196314]
+2023-09-14 15:06:37,178 - INFO - num_full_subsets = 2
+2023-09-14 15:06:37,248 - INFO - phi = [ 0.01058006  0.00495142 -0.0248402   0.00788766  0.0034255 ]
+2023-09-14 15:06:37,556 - INFO - num_full_subsets = 2
+2023-09-14 15:06:37,615 - INFO - phi = [ 0.00607083  0.00482087 -0.01184396  0.00999699  0.00560398]
+2023-09-14 15:06:37,892 - INFO - num_full_subsets = 2
+2023-09-14 15:06:37,955 - INFO - phi = [0.00073289 0.00477491 0.0096694  0.01942386 0.01109016]
+2023-09-14 15:06:38,255 - INFO - num_full_subsets = 2
+2023-09-14 15:06:38,312 - INFO - phi = [-0.00422727  0.00464268  0.02812378  0.02484472  0.01793816]
+2023-09-14 15:06:38,647 - INFO - num_full_subsets = 2
+2023-09-14 15:06:38,714 - INFO - phi = [-0.00644561  0.00443637  0.05032944  0.03625293  0.03342091]
+2023-09-14 15:06:38,987 - INFO - num_full_subsets = 2
+2023-09-14 15:06:39,045 - INFO - phi = [-0.00908702  0.00385523  0.08331406  0.05236558  0.05838513]
+2023-09-14 15:06:39,328 - INFO - num_full_subsets = 2
+2023-09-14 15:06:39,391 - INFO - phi = [3.47195038e-05 2.09571999e-03 1.11380329e-01 7.29323412e-02
+ 9.80326384e-02]
+2023-09-14 15:06:39,856 - INFO - num_full_subsets = 2
+2023-09-14 15:06:39,916 - INFO - phi = [ 4.41724319e-03 -7.55764078e-05  1.38838548e-01  8.81335595e-02
+  1.37428507e-01]
+2023-09-14 15:06:40,167 - INFO - num_full_subsets = 2
+2023-09-14 15:06:40,227 - INFO - phi = [ 0.00274271  0.00727084 -0.01812715  0.0049147   0.00253915]
+2023-09-14 15:06:40,484 - INFO - num_full_subsets = 2
+2023-09-14 15:06:40,543 - INFO - phi = [-0.00577401  0.00756546  0.0019106   0.00795435  0.00371323]
+2023-09-14 15:06:40,791 - INFO - num_full_subsets = 2
+2023-09-14 15:06:40,843 - INFO - phi = [-0.0119981   0.00771617  0.01606506  0.00962197  0.00572982]
+2023-09-14 15:06:41,060 - INFO - num_full_subsets = 2
+2023-09-14 15:06:41,113 - INFO - phi = [-0.01869978  0.00816911  0.03479604  0.01702056  0.01084572]
+2023-09-14 15:06:41,327 - INFO - num_full_subsets = 2
+2023-09-14 15:06:41,379 - INFO - phi = [-0.02449037  0.00801444  0.05275752  0.02297408  0.01873507]
+2023-09-14 15:06:41,606 - INFO - num_full_subsets = 2
+2023-09-14 15:06:41,666 - INFO - phi = [-0.02743957  0.00751871  0.07005617  0.03142621  0.03034927]
+2023-09-14 15:06:41,890 - INFO - num_full_subsets = 2
+2023-09-14 15:06:41,940 - INFO - phi = [-0.03140582  0.0071249   0.09092833  0.03996909  0.04967328]
+2023-09-14 15:06:42,164 - INFO - num_full_subsets = 2
+2023-09-14 15:06:42,219 - INFO - phi = [-0.03037801  0.00587909  0.11735091  0.05916484  0.07442029]
+2023-09-14 15:06:42,435 - INFO - num_full_subsets = 2
+2023-09-14 15:06:42,488 - INFO - phi = [-0.01912503  0.00234358  0.13776543  0.07639407  0.1252064 ]
+2023-09-14 15:06:42,712 - INFO - num_full_subsets = 2
+2023-09-14 15:06:42,767 - INFO - phi = [-0.0250646   0.01022001  0.0306193   0.00753141  0.00339851]
+2023-09-14 15:06:42,979 - INFO - num_full_subsets = 2
+2023-09-14 15:06:43,032 - INFO - phi = [-0.03248282  0.01088464  0.04436993  0.01104739  0.00613723]
+2023-09-14 15:06:43,439 - INFO - num_full_subsets = 2
+2023-09-14 15:06:43,497 - INFO - phi = [-0.04022034  0.01072533  0.05942709  0.01449578  0.00878853]
+2023-09-14 15:06:43,749 - INFO - num_full_subsets = 2
+2023-09-14 15:06:43,806 - INFO - phi = [-0.04559736  0.01071556  0.07245183  0.01978029  0.01493771]
+2023-09-14 15:06:44,088 - INFO - num_full_subsets = 2
+2023-09-14 15:06:44,150 - INFO - phi = [-0.04814096  0.01049845  0.08469796  0.02737011  0.02364788]
+2023-09-14 15:06:44,425 - INFO - num_full_subsets = 2
+2023-09-14 15:06:44,487 - INFO - phi = [-0.0522673   0.01003096  0.10190378  0.03541906  0.04080137]
+2023-09-14 15:06:44,764 - INFO - num_full_subsets = 2
+2023-09-14 15:06:44,828 - INFO - phi = [-0.05009648  0.00859839  0.12183941  0.05105568  0.0665746 ]
+2023-09-14 15:06:45,117 - INFO - num_full_subsets = 2
+2023-09-14 15:06:45,174 - INFO - phi = [-0.06010739  0.01248282  0.07504647  0.00906872  0.00489027]
+2023-09-14 15:06:45,423 - INFO - num_full_subsets = 2
+2023-09-14 15:06:45,481 - INFO - phi = [-0.06606246  0.01246321  0.08313304  0.01070341  0.00705497]
+2023-09-14 15:06:45,712 - INFO - num_full_subsets = 2
+2023-09-14 15:06:45,764 - INFO - phi = [-0.07179283  0.01228211  0.09514818  0.01682868  0.01290301]
+2023-09-14 15:06:45,979 - INFO - num_full_subsets = 2
+2023-09-14 15:06:46,033 - INFO - phi = [-0.07305726  0.01206578  0.10114479  0.02086185  0.01824085]
+2023-09-14 15:06:46,249 - INFO - num_full_subsets = 2
+2023-09-14 15:06:46,310 - INFO - phi = [-0.07409858  0.01204992  0.11442459  0.03292582  0.03090336]
+2023-09-14 15:06:46,343 - WARNING - No such comm: 7571c9c55ee44168a0845acf644ca2b6
+2023-09-14 15:06:46,345 - WARNING - No such comm: 849c3d7d77214b6490ef9b72c18a7424
+2023-09-14 15:06:46,347 - WARNING - No such comm: e3dd81bd8fd24e1d8c7f146be1db3753
+2023-09-14 15:06:46,358 - WARNING - No such comm: 0c694cf846f44d22b6f6aeb7c89ea0f6
+2023-09-14 15:06:46,360 - WARNING - No such comm: 71a2b8807523403c85ab83d07955f7a7
+2023-09-14 15:06:46,399 - WARNING - No such comm: 38c865f3845e4479b3136648590ad842
+2023-09-14 15:06:46,401 - WARNING - No such comm: dde3cb3c350b4a6b94f2af597044d7d0
+2023-09-14 15:06:46,404 - WARNING - No such comm: 902f92b56d144cf091808599f9dcdeae
+2023-09-14 15:06:46,438 - WARNING - No such comm: ac4dae04bd3c408e8560a8bea2945982
+2023-09-14 15:06:46,442 - WARNING - No such comm: 1e66bc0256e34e11baabfe56bb509e4f
+2023-09-14 15:06:46,446 - WARNING - No such comm: 65174b715b1c41df840e3dca18e15648
