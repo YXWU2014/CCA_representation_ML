@@ -1,0 +1,17 @@
+{
+  "tchea4": [
+    "\u0027Default volume data, V0DFLT\u003d7.0E-6; VADFLT\u003d10.0E-6*THREE*DELTAT\u0027",
+    "\u0027G(LAVES,AA)\u003d3*G(SER,AA)+15000\u0027",
+    "\u0027H. Mao, Thermo-Calc Software AB, Stockholm, 2019; Molar volumes\u0027",
+    "\u0027Unassessed PARAMETER, linear combination of unary data (MU,SIGMA)\u0027",
+    "\u0027New sigma using combined CEF\u0027",
+    "\u0027N. Dupin, Thesis, LTPCM, France, 1995; Cr-Ni-Ta\u0027",
+    "\u0027Nigel Saunders, 1992, COST 507; Cr-Ti\u0027",
+    "\u0027N. Dupin, 2006\u0027",
+    "\u0027Byeong-Joo Lee, unpublished work at KTH (1999); update of steel database\u0027",
+    "\u0027K.C. Hari Kumar, L. Dumitrescu, B. Sundman, P. Wollants, 1999\u0027",
+    "\u0027N. Dupin, AD/SN 2003\u0027",
+    "\u0027A. Markstrom, Thermo-Calc Software AB (2013), Extrapolations, assumptions \u0026 adjustment\u0027",
+    "\u0027Yang YANG, Modeling of Fe-Mo-Ti for project Ti/TiAl II, 2018\u0027"
+  ]
+}

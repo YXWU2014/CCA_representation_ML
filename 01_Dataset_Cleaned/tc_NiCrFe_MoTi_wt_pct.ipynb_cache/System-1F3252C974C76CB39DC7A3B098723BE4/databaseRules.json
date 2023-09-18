@@ -1,0 +1,28 @@
+[
+  {
+    "elements": [
+      "Cr",
+      "Fe",
+      "Mo",
+      "Ni",
+      "Ti"
+    ],
+    "speciesToCreateAndSelect": [],
+    "speciesToAdd": [],
+    "speciesToRemove": [],
+    "phasesToAdd": [
+      "C14_LAVES"
+    ],
+    "addedCompositionSets": [],
+    "phasesToRemove": [
+      "*"
+    ],
+    "constituentsToRejectFromSublattice": [],
+    "constituentsToSelectFromSublattice": [],
+    "name": "tchea4",
+    "deSelectDefaultPhases": false,
+    "lastChanged": 0,
+    "isUserDatabase": false,
+    "databaseLoadCommand": "tchea4"
+  }
+]

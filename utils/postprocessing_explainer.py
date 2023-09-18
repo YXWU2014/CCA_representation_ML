@@ -166,6 +166,9 @@ def plot_interactions_heatmap(interactions_values, sample_indices, col_labels, v
         cbar = idx == len(sample_indices) - 1
 
         # Display heatmap
+        print(filtered_interactions)
+        print(annotations)
+
         sns.heatmap(filtered_interactions, ax=ax, mask=mask, annot=annotations, fmt="",
                     cmap='RdBu_r', vmin=vmin, vmax=vmax,
                     xticklabels=filtered_labels, yticklabels=filtered_labels,
@@ -485,28 +488,74 @@ def data_for_shap_force(X1_shap_data, Y1_shap_data, V1_shap_data,
 def plot_shap_summary(shap_KFold_mean, feature_names,
                       title='Feature Importance', figsize=(5, 5), palette='twilight_shifted_r'):
     """
-    Plots the SHAP values in a descending order of importance.
+    Plot SHAP values in descending order of importance.
     """
     shap_KFold_mean_avg = np.abs(shap_KFold_mean).mean(axis=0)
-    # shap_KFold_mean_avg = shap_KFold_mean.mean(axis=0)
 
-    # Organize the calculated SHAP values and their corresponding feature names into a DataFrame.
+    # Create DataFrame from SHAP values and features
     shap_df = pd.DataFrame(
         data={'SHAP Value': shap_KFold_mean_avg, 'Feature': feature_names})
 
-    # Order the DataFrame based on the SHAP values to understand which features have the greatest influence.
+    # Sort SHAP values and filter out zeros
     shap_df = shap_df.sort_values(by='SHAP Value', ascending=False)
     shap_df = shap_df[shap_df['SHAP Value'] != 0]
 
-    # Use Seaborn's barplot function to plot the data
+    # Plot SHAP values
     plt.figure(figsize=figsize)
     sns.barplot(x=shap_df['SHAP Value'], y=shap_df['Feature'], palette=palette)
-
     plt.xlabel('Mean Absolute SHAP Value')
     plt.title(title)
-
-    # Ensure the plot layout is optimized to prevent overlapping or cutting off labels.
     plt.tight_layout()
+    plt.show()
 
-    # Display the plotted chart.
+
+def plot_interactions_summary(interactions_values, feature_names,
+                              title='Feature Importance', figsize=(5, 5), palette='twilight_shifted_r'):
+    """
+    Plots the interaction values in a descending order of importance.
+    """
+
+    # Calculate average of interactions_values
+    # interactions_avg = interactions_values.mean(axis=0)
+    interactions_avg = np.abs(interactions_values).mean(axis=0)
+
+    # Filter non-zero rows and columns
+    non_zero_rows = np.any(interactions_avg != 0, axis=1)
+    non_zero_cols = np.any(interactions_avg != 0, axis=0)
+    filtered_interactions = interactions_avg[non_zero_rows][:, non_zero_cols]
+    filtered_labels = np.array(feature_names)[non_zero_rows]
+
+    # Generate annotations
+    annotations = np.array([[f'({filtered_labels[i]},{filtered_labels[j]})'
+                             for j in range(filtered_interactions.shape[1])]
+                            for i in range(filtered_interactions.shape[0])], dtype=object)
+
+    def get_upper_triangle_mask(matrix):
+        """Return a mask for the upper triangle of a matrix, excluding the diagonal."""
+        mask_inverse = np.triu(np.ones_like(matrix, dtype=bool))
+        np.fill_diagonal(mask_inverse, True)
+        return mask_inverse
+
+    mask_inverse = get_upper_triangle_mask(filtered_interactions)
+
+    # Extract values using mask
+    filtered_interactions_masked = filtered_interactions[mask_inverse]
+    annotations_masked = annotations[mask_inverse]
+
+    # Organize into DataFrame
+    interactions_df = pd.DataFrame(
+        data={'Interactions Value': filtered_interactions_masked, 'Feature': annotations_masked})
+
+    # Sort and filter
+    interactions_df = interactions_df.sort_values(
+        by='Interactions Value', ascending=False)
+    interactions_df = interactions_df[interactions_df['Interactions Value'] != 0]
+
+    # Plot
+    plt.figure(figsize=figsize)
+    sns.barplot(x=interactions_df['Interactions Value'],
+                y=interactions_df['Feature'], palette=palette)
+    plt.xlabel('Mean Absolute Interactions Value')
+    plt.title(title)
+    plt.tight_layout()
     plt.show()

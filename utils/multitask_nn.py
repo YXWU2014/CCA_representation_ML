@@ -151,7 +151,8 @@ class MultiTaskNN:
             # NNH_l = BatchNormalization()(NNH_l)
             NNH_l = self.get_dropout(NNH_l, p=self.NNH_dropout)
 
-        NNH_output = layers.Dense(1, activation='sigmoid')(NNH_l)
+        # NNH_output = layers.Dense(1, activation='sigmoid')(NNH_l)
+        NNH_output = layers.Dense(1)(NNH_l)
 
         return models.Model(inputs=model_inputs, outputs=NNH_output)
 
@@ -182,7 +183,8 @@ class MultiTaskNN:
             # NNC_l = BatchNormalization()(NNC_l)
             NNC_l = self.get_dropout(NNC_l, p=self.NNC_dropout)
 
-        NNC_output = layers.Dense(1, activation='sigmoid')(NNC_l)
+        # NNC_output = layers.Dense(1, activation='sigmoid')(NNC_l)
+        NNC_output = layers.Dense(1)(NNC_l)
 
         return models.Model(inputs=model_inputs, outputs=NNC_output)
 

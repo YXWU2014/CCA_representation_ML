@@ -12,41 +12,6 @@ print("Cache Filename: ", cache_fname)
 print("Output Filename: ", output_fname)
 print("Current Dir: ", current_directory)
 
-# # Setup thermodynamic calculation
-# with TCPython() as start:
-#     calculation = (
-#         start
-#         .set_cache_folder(os.path.join(current_directory, cache_fname))
-#         .set_ges_version(5)
-#         .select_database_and_elements("tchea4", ["Ni", "Cr", "Mo", "Ti", "Fe"])
-#         .get_system()
-#         .with_batch_equilibrium_calculation()
-#         .set_condition("W(Ni)", 95E-2)
-#         .set_condition("W(Cr)", 0.1E-2)
-#         .set_condition("W(Mo)", 0.1E-2)
-#         .set_condition("W(Ti)", 0.1E-2)
-#         .set_condition("T", 1000+273.15)
-#         .disable_global_minimization()
-#     )
-
-#     # Generate condition combinations for equilibrium calculations
-#     k = 40
-#     list_of_conditions = [(("W(Ni)", w_ni), ("W(Cr)", w_cr), ("W(Mo)", 0.1E-2), ("W(Ti)", w_ti), ("T", tk))
-#                           for w_ni in np.linspace(0.1E-2, 0.95, k)
-#                           for w_cr in np.linspace(0.1E-2, 0.95, k)
-#                           for w_ti in np.linspace(0.1E-2, 0.95, k)
-#                           for tk in np.arange(900+273.15, 1300+273.15, 50)
-#                           if w_ni + w_cr + 0.1E-2 + w_ti <= 1]
-
-#     calculation.set_conditions_for_equilibria(list_of_conditions)
-
-#     results = calculation.calculate(
-#         ["np(FCC_L12)", "np(FCC_L12#1)", "np(FCC_L12#2)"], 100)
-
-#     list_np_FCC_L12 = results.get_values_of('np(FCC_L12)')
-#     list_np_FCC_L12_1 = results.get_values_of('np(FCC_L12#1)')
-#     list_np_FCC_L12_2 = results.get_values_of('np(FCC_L12#2)')
-
 
 def tc_calculation(tk):
     # Setup thermodynamic calculation
