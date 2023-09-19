@@ -323,11 +323,11 @@ class MultiTaskNN:
 
         # ----- save model ------------------------------------------
         if self.mc_state:
-            NNH_model_name = f'{self.NNH_model_name.format(i_fold + 1)}_mc.h5'
-            NNC_model_name = f'{self.NNC_model_name.format(i_fold + 1)}_mc.h5'
+            NNH_model_name = f'{self.NNH_model_name.format(i_fold + 1, act=self.act)}.h5'
+            NNC_model_name = f'{self.NNC_model_name.format(i_fold + 1, act=self.act)}.h5'
         else:
-            NNH_model_name = f'{self.NNH_model_name.format(i_fold + 1)}.h5'
-            NNC_model_name = f'{self.NNC_model_name.format(i_fold + 1)}.h5'
+            NNH_model_name = f'{self.NNH_model_name.format(i_fold + 1, act=self.act)}.h5'
+            NNC_model_name = f'{self.NNC_model_name.format(i_fold + 1, act=self.act)}.h5'
 
         if self.model_save_flag:
             NNH_model.save(os.path.join(self.model_path_bo, NNH_model_name))

@@ -11,7 +11,8 @@ import shap
 import warnings
 
 
-def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name, mc_state=True, islean=False):
+def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name,
+                         mc_state=True, islean=False, act='relu'):
     """
     This function displays the saved NNH and NNC models in a tabular format.
 
@@ -24,31 +25,32 @@ def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name, mc_state
     """
 
     # Get all h5 files from the specified directory
-    files = sorted([f for f in os.listdir(model_path_bo) if f.endswith('.h5')])
+    files = sorted([f for f in os.listdir(
+        model_path_bo) if f.endswith(f'_{act}.h5')])
 
     # Separate NNH and NNC model files
     if mc_state and not islean:
 
         table_data = [["NNH_model_mc", "NNC_model_mc"]]
         nnh_files = [f for f in files if f.startswith(
-            NNH_model_name) and f.endswith('_mc.h5')]
+            NNH_model_name) and f.endswith(f'_mc_{act}.h5')]
         nnc_files = [f for f in files if f.startswith(
-            NNC_model_name) and f.endswith('_mc.h5')]
+            NNC_model_name) and f.endswith(f'_mc_{act}.h5')]
 
     elif not mc_state and not islean:
 
         table_data = [["NNH_model", "NNC_model"]]
         nnh_files = [f for f in files if f.startswith(
-            NNH_model_name) and not f.endswith('_mc.h5') and not f.endswith('_lean.h5')]
+            NNH_model_name) and not f.endswith(f'_mc_{act}.h5') and not f.endswith(f'_lean_{act}.h5')]
         nnc_files = [f for f in files if f.startswith(
-            NNC_model_name) and not f.endswith('_mc.h5') and not f.endswith('_lean.h5')]
+            NNC_model_name) and not f.endswith(f'_mc_{act}.h5') and not f.endswith(f'_lean_{act}.h5')]
 
     elif not mc_state and islean:
         table_data = [["NNH_model_lean", "NNC_model_lean"]]
         nnh_files = [f for f in files if f.startswith(
-            NNH_model_name) and f.endswith('_lean.h5')]
+            NNH_model_name) and f.endswith(f'_lean_{act}.h5')]
         nnc_files = [f for f in files if f.startswith(
-            NNC_model_name) and f.endswith('_lean.h5')]
+            NNC_model_name) and f.endswith(f'_lean_{act}.h5')]
     else:
         warnings.warn("error on finding saved models.")
 

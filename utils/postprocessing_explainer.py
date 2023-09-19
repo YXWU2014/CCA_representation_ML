@@ -165,10 +165,10 @@ def plot_interactions_heatmap(interactions_values, sample_indices, col_labels, v
         # Display colorbar only for the last subplot
         cbar = idx == len(sample_indices) - 1
 
-        # Display heatmap
-        print(filtered_interactions)
-        print(annotations)
+        # print(filtered_interactions)
+        # print(annotations)
 
+        # Display heatmap
         sns.heatmap(filtered_interactions, ax=ax, mask=mask, annot=annotations, fmt="",
                     cmap='RdBu_r', vmin=vmin, vmax=vmax,
                     xticklabels=filtered_labels, yticklabels=filtered_labels,
@@ -485,12 +485,15 @@ def data_for_shap_force(X1_shap_data, Y1_shap_data, V1_shap_data,
     return pred_norm_base_KFold_mean.mean(), sample_shap_values, columns
 
 
-def plot_shap_summary(shap_KFold_mean, feature_names,
+def plot_shap_summary(shap_KFold_mean, feature_names, is_abs=True,
                       title='Feature Importance', figsize=(5, 5), palette='twilight_shifted_r'):
     """
     Plot SHAP values in descending order of importance.
     """
-    shap_KFold_mean_avg = np.abs(shap_KFold_mean).mean(axis=0)
+    if is_abs:
+        shap_KFold_mean_avg = np.abs(shap_KFold_mean).mean(axis=0)
+    else:
+        shap_KFold_mean_avg = shap_KFold_mean.mean(axis=0)
 
     # Create DataFrame from SHAP values and features
     shap_df = pd.DataFrame(
@@ -509,15 +512,17 @@ def plot_shap_summary(shap_KFold_mean, feature_names,
     plt.show()
 
 
-def plot_interactions_summary(interactions_values, feature_names,
+def plot_interactions_summary(interactions_values, feature_names, is_abs=True,
                               title='Feature Importance', figsize=(5, 5), palette='twilight_shifted_r'):
     """
     Plots the interaction values in a descending order of importance.
     """
 
     # Calculate average of interactions_values
-    # interactions_avg = interactions_values.mean(axis=0)
-    interactions_avg = np.abs(interactions_values).mean(axis=0)
+    if is_abs:
+        interactions_avg = np.abs(interactions_values).mean(axis=0)
+    else:
+        interactions_avg = interactions_values.mean(axis=0)
 
     # Filter non-zero rows and columns
     non_zero_rows = np.any(interactions_avg != 0, axis=1)
