@@ -113,7 +113,7 @@ def plot_shap_attributions_interactions(shap_values, attributions, interactions,
         [reshaped_attributions.min(), reshaped_attributions.max()],
         color='grey'
     )
-    axs[3].set_title('Attributions vs. Interactions')
+    axs[3].set_title('Completeness check: Attributions vs. Interactions')
 
     # Adjust plots for better visualization
     for ax in axs[:-1]:  # Scatter plot excluded
@@ -122,7 +122,8 @@ def plot_shap_attributions_interactions(shap_values, attributions, interactions,
     plt.show()
 
 
-def plot_interactions_heatmap(interactions_values, sample_indices, col_labels, vmin, vmax):
+def plot_interactions_heatmap(interactions_values, sample_indices, col_labels,
+                              cmap, vmin, vmax):
     """
     Plot heatmaps for interaction values, highlighting non-zero interactions.
 
@@ -140,7 +141,7 @@ def plot_interactions_heatmap(interactions_values, sample_indices, col_labels, v
     def get_upper_triangle_mask(matrix):
         """Return a mask for the upper triangle of a matrix, excluding the diagonal."""
         mask = np.triu(np.ones_like(matrix, dtype=bool))
-        np.fill_diagonal(mask, False)
+        np.fill_diagonal(mask, True)
         return mask
 
     fig, axs = plt.subplots(1, len(sample_indices), figsize=(
@@ -170,7 +171,7 @@ def plot_interactions_heatmap(interactions_values, sample_indices, col_labels, v
 
         # Display heatmap
         sns.heatmap(filtered_interactions, ax=ax, mask=mask, annot=annotations, fmt="",
-                    cmap='RdBu_r', vmin=vmin, vmax=vmax,
+                    cmap=cmap, vmin=vmin, vmax=vmax,
                     xticklabels=filtered_labels, yticklabels=filtered_labels,
                     cbar=cbar)
 

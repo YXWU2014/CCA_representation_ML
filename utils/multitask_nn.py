@@ -20,13 +20,13 @@ logger = logging.getLogger()
 class MultiTaskNN:
     """
     This class implements a multi-task neural network architecture, including methods to create and train the network.
-    The network consists of a shared feature network (NNF), an H-specific network (NNH), and a C-specific network (NNC).
+    The network consists of a shared feature network (NNS), an H-specific network (NNH), and a C-specific network (NNC).
     """
     # function for initializing the class
 
     def __init__(self,
-                 NNF_num_nodes: int, NNF_num_layers: int, NNH_num_nodes: int, NNH_num_layers: int, NNC_num_nodes: int, NNC_num_layers: int,
-                 mc_state: bool, act: str, NNF_dropout: float, NNH_dropout: float, NNC_dropout: float,
+                 NNS_num_nodes: int, NNS_num_layers: int, NNH_num_nodes: int, NNH_num_layers: int, NNC_num_nodes: int, NNC_num_layers: int,
+                 mc_state: bool, act: str, NNS_dropout: float, NNH_dropout: float, NNC_dropout: float,
                  loss_func: str, learning_rate_H: float, learning_rate_C: float,
                  batch_size_H: int, N_epochs_local: int, total_epochs: int,
                  model_save_flag: bool, model_path_bo: str,
@@ -35,15 +35,15 @@ class MultiTaskNN:
         """
         Initialize the MultiTaskNN class with the given parameters.
 
-        :param NNF_num_nodes: Number of nodes in the NNF layers
-        :param NNF_num_layers: Number of layers in the NNF
+        :param NNS_num_nodes: Number of nodes in the NNS layers
+        :param NNS_num_layers: Number of layers in the NNS
         :param NNH_num_nodes: Number of nodes in the NNH layers
         :param NNH_num_layers: Number of layers in the NNH
         :param NNC_num_nodes: Number of nodes in the NNC layers
         :param NNC_num_layers: Number of layers in the NNC
         :param mc_state: Dropout state for Monte Carlo dropout
         :param act: Activation function to be used in the network
-        :param NNF_dropout: Dropout rate for the NNF
+        :param NNS_dropout: Dropout rate for the NNS
         :param NNH_dropout: Dropout rate for the NNH
         :param NNC_dropout: Dropout rate for the NNC
         :param loss_func: Loss function for the network training
@@ -56,8 +56,8 @@ class MultiTaskNN:
         :param model_path_bo: Path to save the trained model
         """
         # NN architecture parameters
-        self.NNF_num_nodes = NNF_num_nodes
-        self.NNF_num_layers = NNF_num_layers
+        self.NNS_num_nodes = NNS_num_nodes
+        self.NNS_num_layers = NNS_num_layers
         self.NNH_num_nodes = NNH_num_nodes
         self.NNH_num_layers = NNH_num_layers
         self.NNC_num_nodes = NNC_num_nodes
@@ -66,7 +66,7 @@ class MultiTaskNN:
         # NN training parameters
         self.mc_state = mc_state
         self.act = act  # activation function
-        self.NNF_dropout = NNF_dropout
+        self.NNS_dropout = NNS_dropout
         self.NNH_dropout = NNH_dropout
         self.NNC_dropout = NNC_dropout
         self.loss_func = loss_func
@@ -101,49 +101,49 @@ class MultiTaskNN:
 
     #  function for creating shared feature network
 
-    def create_NNF_model(self, input1_compo_features_shape):
+    def create_NNS_model(self, input1_compo_features_shape):
         """
-        Creates the shared feature network (NNF).
+        Creates the shared feature network (NNS).
 
         :param input1_compo_features_shape: The shape of the component features input
-        :return: The NNF model
+        :return: The NNS model
         """
         input1_compo_features_layer = layers.Input(
             shape=input1_compo_features_shape)
 
-        if self.NNF_num_layers == 0:
+        if self.NNS_num_layers == 0:
             return models.Model(inputs=input1_compo_features_layer, outputs=input1_compo_features_layer)
 
-        NNF_l = input1_compo_features_layer
+        NNS_l = input1_compo_features_layer
 
-        for _ in range(self.NNF_num_layers):
-            NNF_l = layers.Dense(self.NNF_num_nodes,
-                                 activation=self.act)(NNF_l)
-            # NNF_l = BatchNormalization()(NNF_l)
-            NNF_l = self.get_dropout(NNF_l, p=self.NNF_dropout)
+        for _ in range(self.NNS_num_layers):
+            NNS_l = layers.Dense(self.NNS_num_nodes,
+                                 activation=self.act)(NNS_l)
+            # NNS_l = BatchNormalization()(NNS_l)
+            NNS_l = self.get_dropout(NNS_l, p=self.NNS_dropout)
 
-        return models.Model(inputs=input1_compo_features_layer, outputs=NNF_l)
+        return models.Model(inputs=input1_compo_features_layer, outputs=NNS_l)
 
     # function for creating H-specific network
 
-    def create_NNH_model(self, NNF_model, input2_H_specific_shape):
+    def create_NNH_model(self, NNS_model, input2_H_specific_shape):
         """
-        Creates the H-specific network (NNH), which includes the NNF and additional layers.
+        Creates the H-specific network (NNH), which includes the NNS and additional layers.
 
-        :param NNF_model: The shared feature network (NNF) model
+        :param NNS_model: The shared feature network (NNS) model
         :param input2_H_specific_shape: The shape of the H-specific input
         :return: The NNH model
         """
-        NNF_output = NNF_model.output
-        model_inputs = [NNF_model.input]
+        NNS_output = NNS_model.output
+        model_inputs = [NNS_model.input]
 
         if input2_H_specific_shape != (0,):
             input2_H_specific_layer = layers.Input(
                 shape=input2_H_specific_shape)
-            NNH_l = Concatenate()([input2_H_specific_layer, NNF_output])
+            NNH_l = Concatenate()([input2_H_specific_layer, NNS_output])
             model_inputs.append(input2_H_specific_layer)
         else:
-            NNH_l = NNF_output
+            NNH_l = NNS_output
 
         for _ in range(self.NNH_num_layers):
             NNH_l = layers.Dense(self.NNH_num_nodes,
@@ -158,24 +158,24 @@ class MultiTaskNN:
 
     #  function for creating C-specific network
 
-    def create_NNC_model(self, NNF_model, input3_C_specific_shape):
+    def create_NNC_model(self, NNS_model, input3_C_specific_shape):
         """
-        Creates the C-specific network (NNC), which includes the NNF and additional layers.
+        Creates the C-specific network (NNC), which includes the NNS and additional layers.
 
-        :param NNF_model: The shared feature network (NNF) model
+        :param NNS_model: The shared feature network (NNS) model
         :param input3_C_specific_shape: The shape of the C-specific input
         :return: The NNC model
         """
-        NNF_output = NNF_model.output
-        model_inputs = [NNF_model.input]
+        NNS_output = NNS_model.output
+        model_inputs = [NNS_model.input]
 
         if input3_C_specific_shape != (0,):
             input3_C_specific_layer = layers.Input(
                 shape=input3_C_specific_shape)
-            NNC_l = Concatenate()([input3_C_specific_layer, NNF_output])
+            NNC_l = Concatenate()([input3_C_specific_layer, NNS_output])
             model_inputs.append(input3_C_specific_layer)
         else:
-            NNC_l = NNF_output
+            NNC_l = NNS_output
 
         for _ in range(self.NNC_num_layers):
             NNC_l = layers.Dense(self.NNC_num_nodes,
@@ -192,25 +192,25 @@ class MultiTaskNN:
 
     def get_NN_full_model(self, input1_compo_features_shape, input2_H_specific_shape, input3_C_specific_shape):
         """
-        This function constructs the full multi-task network model. It is composed of the shared features network (NNF) 
+        This function constructs the full multi-task network model. It is composed of the shared features network (NNS) 
         and two task-specific networks (NNH and NNC). 
 
-        :param input1_compo_features_shape: Shape of the input for the shared features network (NNF).
+        :param input1_compo_features_shape: Shape of the input for the shared features network (NNS).
         :param input2_H_specific_shape: Shape of the input specific to the first task (NNH).
         :param input3_C_specific_shape: Shape of the input specific to the second task (NNC).
         :return: Compiled NNH and NNC models.
         """
 
-        # Construct and compile the shared features network (NNF).
-        NNF_model = self.create_NNF_model(input1_compo_features_shape)
+        # Construct and compile the shared features network (NNS).
+        NNS_model = self.create_NNS_model(input1_compo_features_shape)
 
         # Construct and compile the first task-specific network (NNH).
-        NNH_model = self.create_NNH_model(NNF_model, input2_H_specific_shape)
+        NNH_model = self.create_NNH_model(NNS_model, input2_H_specific_shape)
         NNH_model.compile(loss=self.loss_func,
                           optimizer=Adam(self.learning_rate_H))
 
         # Construct and compile the second task-specific network (NNC).
-        NNC_model = self.create_NNC_model(NNF_model, input3_C_specific_shape)
+        NNC_model = self.create_NNC_model(NNS_model, input3_C_specific_shape)
         NNC_model.compile(loss=self.loss_func,
                           optimizer=Adam(self.learning_rate_C))
 

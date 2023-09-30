@@ -31,7 +31,7 @@ class BayesianOptimizationObjective:
         self.hypertable = pd.DataFrame(columns=['score_r2_HC', 'score_r2_HC_best', 'score_loss_HC',
                                                 'score_r2_H', 'score_r2_C', 'score_loss_H', 'score_loss_C'] + self.all_hyper_names)
 
-    def BO_NNF_NNH_NNC_objective(self, search_hyper_params, fixed_hyper_space, search_hyper_names, fixed_hyper_names,
+    def BO_NNS_NNH_NNC_objective(self, search_hyper_params, fixed_hyper_space, search_hyper_names, fixed_hyper_names,
                                  n_initial_points: int, n_iterations: int,
                                  mc_state: bool, act: str,
                                  total_epochs: int,
@@ -91,11 +91,11 @@ class BayesianOptimizationObjective:
             raise ValueError(f"Invalid loss function '{loss_encoder}' ")
 
         # Create a MultiTaskNN model
-        mt_nn_bo = MultiTaskNN(NNF_num_nodes=int(all_hyper_dict['NNF_num_nodes']), NNF_num_layers=int(all_hyper_dict['NNF_num_layers']),
+        mt_nn_bo = MultiTaskNN(NNS_num_nodes=int(all_hyper_dict['NNS_num_nodes']), NNS_num_layers=int(all_hyper_dict['NNS_num_layers']),
                                NNH_num_nodes=int(all_hyper_dict['NNH_num_nodes']), NNH_num_layers=int(all_hyper_dict['NNH_num_layers']),
                                NNC_num_nodes=int(all_hyper_dict['NNC_num_nodes']), NNC_num_layers=int(all_hyper_dict['NNC_num_layers']),
                                mc_state=mc_state, act=act,
-                               NNF_dropout=all_hyper_dict['NNF_dropout'], NNH_dropout=all_hyper_dict[
+                               NNS_dropout=all_hyper_dict['NNS_dropout'], NNH_dropout=all_hyper_dict[
                                    'NNH_NNC_dropout'], NNC_dropout=all_hyper_dict['NNH_NNC_dropout'],
                                loss_func=loss_func,
                                learning_rate_H=all_hyper_dict['learning_rate_H'], learning_rate_C=all_hyper_dict['learning_rate_C'],
