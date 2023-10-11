@@ -1,0 +1,25 @@
+[
+  {
+    "elements": [
+      "Co",
+      "Mo"
+    ],
+    "speciesToCreateAndSelect": [],
+    "speciesToAdd": [],
+    "speciesToRemove": [],
+    "phasesToAdd": [
+      "FCC_A1"
+    ],
+    "addedCompositionSets": [],
+    "phasesToRemove": [
+      "*"
+    ],
+    "constituentsToRejectFromSublattice": [],
+    "constituentsToSelectFromSublattice": [],
+    "name": "tcfe11",
+    "deSelectDefaultPhases": false,
+    "lastChanged": 0,
+    "isUserDatabase": false,
+    "databaseLoadCommand": "tcfe11"
+  }
+]

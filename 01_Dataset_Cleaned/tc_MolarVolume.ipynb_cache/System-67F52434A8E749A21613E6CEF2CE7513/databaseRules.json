@@ -1,0 +1,25 @@
+[
+  {
+    "elements": [
+      "Ni",
+      "V"
+    ],
+    "speciesToCreateAndSelect": [],
+    "speciesToAdd": [],
+    "speciesToRemove": [],
+    "phasesToAdd": [
+      "FCC_L12"
+    ],
+    "addedCompositionSets": [],
+    "phasesToRemove": [
+      "*"
+    ],
+    "constituentsToRejectFromSublattice": [],
+    "constituentsToSelectFromSublattice": [],
+    "name": "tcfe11",
+    "deSelectDefaultPhases": false,
+    "lastChanged": 0,
+    "isUserDatabase": false,
+    "databaseLoadCommand": "tcfe11"
+  }
+]

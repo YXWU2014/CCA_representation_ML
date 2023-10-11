@@ -1,0 +1,20 @@
+[
+  {
+    "elementName": "NI",
+    "isInterstitial": false,
+    "molarMass": 58.69,
+    "stableElementReference": "FCC_A1",
+    "enthalpy": 4787.0,
+    "entropyDiff0To298K": 29.796,
+    "isValid": true
+  },
+  {
+    "elementName": "MN",
+    "isInterstitial": false,
+    "molarMass": 54.938,
+    "stableElementReference": "CBCC_A12",
+    "enthalpy": 4996.0,
+    "entropyDiff0To298K": 32.008,
+    "isValid": true
+  }
+]

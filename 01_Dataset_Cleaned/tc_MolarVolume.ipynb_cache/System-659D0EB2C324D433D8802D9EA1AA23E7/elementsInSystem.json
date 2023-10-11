@@ -1,0 +1,20 @@
+[
+  {
+    "elementName": "TI",
+    "isInterstitial": false,
+    "molarMass": 47.88,
+    "stableElementReference": "HCP_A3",
+    "enthalpy": 4810.0,
+    "entropyDiff0To298K": 30.648,
+    "isValid": true
+  },
+  {
+    "elementName": "NI",
+    "isInterstitial": false,
+    "molarMass": 58.69,
+    "stableElementReference": "FCC_A1",
+    "enthalpy": 4787.0,
+    "entropyDiff0To298K": 29.796,
+    "isValid": true
+  }
+]

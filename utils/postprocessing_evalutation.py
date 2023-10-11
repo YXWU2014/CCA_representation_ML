@@ -216,7 +216,7 @@ def plot_test_true_vs_pred(k_folds, n_CVrepeats, test_KFold, test_pred_mean, tes
             r), transform=ax[row_idx, col_idx].transAxes, color=color)
 
         # Set labels and aspect ratio for the subplot
-        ax[row_idx, col_idx].set_xlabel('True values in training dataset')
+        ax[row_idx, col_idx].set_xlabel('True values in the testing datasets')
         ax[row_idx, col_idx].set_ylabel('Predictions')
         ax[row_idx, col_idx].set_aspect('equal', 'box')
 
@@ -271,25 +271,35 @@ def plot_full_true_vs_pred(HC_list, HC_pred_stack_list, model_path_bo, lims):
     # Data, labels and colors for each subplot
     data_labels_colors = [
         ((HC_list[0], H1_pred_X1_KFold_mean, H1_pred_X1_KFold_std),
-         'NNH_model', 'steelblue'),
-        ((HC_list[1], C2_pred_X2_KFold_mean,
-         C2_pred_X2_KFold_std), 'NNC_model', 'firebrick')
+         'hardness model', 'steelblue'),
+        ((HC_list[1], C2_pred_X2_KFold_mean, C2_pred_X2_KFold_std),
+         'corrosion model', 'firebrick')
     ]
 
     # Create each subplot
     for i, (data, label, color) in enumerate(data_labels_colors):
+
+        min, max = lims[i]
+        ticks = np.arange(min, max, 200)
+
+        ax[i].set_xticks(ticks)
+        ax[i].set_yticks(ticks)
+
+        # ax[i].set(xlim=lims[i], ylim=lims[i], aspect='equal', box_aspect=1,
+        #           xlabel='True values in the testing datasets', ylabel='Predictions',
+        #           title=f'{label} - r2={r2_score(data[0], data[1]):.2f}')
         ax[i].set(xlim=lims[i], ylim=lims[i], aspect='equal', box_aspect=1,
-                  xlabel='True values in training dataset', ylabel='Predictions',
-                  title=f'{label} - r2={r2_score(data[0], data[1]):.2f}')
+                  xlabel='True values in the testing datasets', ylabel='Predictions',
+                  title=r'{} - $R^2={:.2f}$'.format(label, r2_score(data[0], data[1])))
         ax[i].plot(lims[i], lims[i], color='grey')
         ax[i].scatter(*data[:2], label=label, color=color, alpha=0.5)
         ax[i].errorbar(x=data[0], y=data[1], yerr=data[2],
                        fmt='none', ecolor=color, capsize=3, alpha=0.3)
         ax[i].legend(loc=4, prop={'size': 8})
-        ax[i].grid()
+        ax[i].grid(alpha=0.5, linewidth=0.5)
 
     # Adjust spacing and save the figure
     fig.tight_layout()
     plt.savefig(os.path.join(
-        model_path_bo, 'NN_full_RepeatedKFold_True_Prediction_fulldata.png'), bbox_inches='tight')
+        model_path_bo, 'NN_full_RepeatedKFold_True_Prediction_fulldata.pdf'), bbox_inches='tight')
     plt.show()

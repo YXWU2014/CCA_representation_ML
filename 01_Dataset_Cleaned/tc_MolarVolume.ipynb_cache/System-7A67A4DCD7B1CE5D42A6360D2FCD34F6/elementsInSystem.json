@@ -1,0 +1,20 @@
+[
+  {
+    "elementName": "FE",
+    "isInterstitial": false,
+    "molarMass": 55.847,
+    "stableElementReference": "BCC_A2",
+    "enthalpy": 4489.0,
+    "entropyDiff0To298K": 27.28,
+    "isValid": true
+  },
+  {
+    "elementName": "CO",
+    "isInterstitial": false,
+    "molarMass": 58.933,
+    "stableElementReference": "HCP_A3",
+    "enthalpy": 0.0,
+    "entropyDiff0To298K": 0.0,
+    "isValid": true
+  }
+]
