@@ -36,6 +36,7 @@ class BayesianOptimizationObjective:
                                  mc_state: bool, act: str,
                                  total_epochs: int,
                                  model_save_flag: bool, model_path_bo: str,
+                                 share_initial_layers: bool,
                                  NNH_model_name: str, NNC_model_name: str,
                                  X1_train_norm_KFold: list, X1_test_norm_KFold: list, Y1_train_norm_KFold: list, Y1_test_norm_KFold: list, V1_train_norm_KFold: list, V1_test_norm_KFold: list, H1_train_norm_KFold: list, H1_test_norm_KFold: list,
                                  X2_train_norm_KFold: list, X2_test_norm_KFold: list, Z2_train_norm_KFold: list, Z2_test_norm_KFold: list, W2_train_norm_KFold: list, W2_test_norm_KFold: list, C2_train_norm_KFold: list, C2_test_norm_KFold: list,
@@ -103,6 +104,7 @@ class BayesianOptimizationObjective:
                                    all_hyper_dict['batch_size_H']),
                                N_epochs_local=int(all_hyper_dict['N_epochs_local']), total_epochs=total_epochs,
                                model_save_flag=model_save_flag, model_path_bo=model_path_bo,
+                               share_initial_layers=share_initial_layers,
                                NNH_model_name=NNH_model_name, NNC_model_name=NNC_model_name)
 
         # Train the model and get scores
@@ -176,6 +178,7 @@ class BayesianOptimizationObjective:
             ax.set_ylabel('Best Objective: R2 score')
             ax.grid(alpha=0.5, color='lightgrey')
             ax.legend()
+            ax.set_box_aspect(1)
 
         # Create a figure with three subplots
         fig, axs = plt.subplots(1, 3, figsize=(

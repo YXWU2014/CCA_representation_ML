@@ -35,6 +35,8 @@ def compute_shap_attributions_interactions(model, X1_base_normalized, X1_shap_no
     # Obtain Shapley values using KernelExplainer
     shap_values_all = shap.KernelExplainer(
         model, background_X).shap_values(X1_shap_normalized)
+    # shap_values_all = shap.DeepExplainer(
+    #     model, background_X).shap_values(X1_shap_normalized)
 
     # Use PathExplainerTF for attributions and interactions
     explainer = PathExplainerTF(model)
@@ -62,7 +64,7 @@ def compute_shap_attributions_interactions(model, X1_base_normalized, X1_shap_no
     return shap_values_all[0], attributions, interactions
 
 
-def plot_shap_attributions_interactions(shap_values, attributions, interactions, i_KFold, compo_column):
+def plot_shap_attributions_interactions(shap_values, attributions, interactions, i_sample, compo_column):
     """
     Visualize the attributions, Shapley values, diagonal interaction values, and their scatter plot.
 
@@ -70,7 +72,7 @@ def plot_shap_attributions_interactions(shap_values, attributions, interactions,
     - shap_values (array): Shapley values for each feature.
     - attributions (array): Attributions for each feature.
     - interactions (array): Interaction values between features.
-    - i_KFold (int): Index for the fold being visualized.
+    - i_sample (int): Index for the sample being visualized.
     - compo_column (list): Column names or labels for features.
 
     Returns:
@@ -79,24 +81,24 @@ def plot_shap_attributions_interactions(shap_values, attributions, interactions,
 
     # Print aggregated values
     print(
-        f"Sum of Shapley values for sample {i_KFold}: {shap_values[i_KFold, :].sum()}")
+        f"Sum of Shapley values for sample {i_sample}: {shap_values[i_sample, :].sum()}")
     print(
-        f"Sum of attributions for sample {i_KFold}: {attributions[i_KFold, :].sum()}")
+        f"Sum of attributions for sample {i_sample}: {attributions[i_sample, :].sum()}")
     print(
-        f"Sum of interactions for sample {i_KFold}: {interactions[i_KFold, :].sum(axis=-1).sum()}")
+        f"Sum of interactions for sample {i_sample}: {interactions[i_sample, :].sum(axis=-1).sum()}")
 
     fig, axs = plt.subplots(1, 4, figsize=(
-        16, 4), sharex=True, constrained_layout=True)
+        12, 3), sharex=True, constrained_layout=True)
 
     # Plot attributions, Shapley values, and diagonal interactions
-    axs[0].barh(compo_column, attributions[i_KFold, :], color='steelblue')
-    axs[1].barh(compo_column, shap_values[i_KFold, :], color='steelblue')
+    axs[0].barh(compo_column, attributions[i_sample, :], color='steelblue')
+    axs[1].barh(compo_column, shap_values[i_sample, :], color='steelblue')
     axs[2].barh(compo_column, np.diag(
-        interactions[i_KFold, :, :]), color='steelblue')
+        interactions[i_sample, :, :]), color='steelblue')
 
-    axs[0].set_title("Attributions by Janizek")
-    axs[1].set_title("Shapley Values")
-    axs[2].set_title('Diagonal Interactions')
+    axs[0].set_title("Attributions (Janizek model)")
+    axs[1].set_title("Kernal SHAP")
+    axs[2].set_title("Interactions (diagonal)")
 
     # Scatter plot of attributions against summed interactions
     reshaped_attributions = np.reshape(attributions, -1)
@@ -118,12 +120,14 @@ def plot_shap_attributions_interactions(shap_values, attributions, interactions,
     # Adjust plots for better visualization
     for ax in axs[:-1]:  # Scatter plot excluded
         ax.invert_yaxis()
+        ax.set_box_aspect(1)
 
     plt.show()
 
 
-def plot_interactions_heatmap(interactions_values, sample_indices, col_labels,
-                              cmap, vmin, vmax):
+def plot_interactions_heatmap(model_path_bo, interactions_values, sample_indices, col_labels,
+                              cmap, vmin, vmax, figsize,
+                              save_flag, figname):
     """
     Plot heatmaps for interaction values, highlighting non-zero interactions.
 
@@ -145,14 +149,19 @@ def plot_interactions_heatmap(interactions_values, sample_indices, col_labels,
         return mask
 
     fig, axs = plt.subplots(1, len(sample_indices), figsize=(
-        4 * len(sample_indices), 4), constrained_layout=True)
+        figsize * len(sample_indices), figsize), constrained_layout=True)
 
     for idx, sample_index in enumerate(sample_indices):
         interactions_sample = interactions_values[sample_index, :, :]
 
         # Filter non-zero rows and columns
-        non_zero_rows = np.any(interactions_sample != 0, axis=1)
-        non_zero_cols = np.any(interactions_sample != 0, axis=0)
+        # non_zero_rows = np.any(interactions_sample != 0, axis=1)
+        # non_zero_cols = np.any(interactions_sample != 0, axis=0)
+
+        threshold = 1e-5
+        non_zero_rows = np.any(np.abs(interactions_sample) > threshold, axis=1)
+        non_zero_cols = np.any(np.abs(interactions_sample) > threshold, axis=0)
+
         filtered_interactions = interactions_sample[non_zero_rows][:, non_zero_cols]
         filtered_labels = np.array(col_labels)[non_zero_rows]
 
@@ -170,21 +179,75 @@ def plot_interactions_heatmap(interactions_values, sample_indices, col_labels,
         # print(annotations)
 
         # Display heatmap
-        sns.heatmap(filtered_interactions, ax=ax, mask=mask, annot=annotations, fmt="",
-                    cmap=cmap, vmin=vmin, vmax=vmax,
-                    xticklabels=filtered_labels, yticklabels=filtered_labels,
-                    cbar=cbar)
+        heatmap = sns.heatmap(filtered_interactions, ax=ax, mask=mask, annot=annotations, fmt="",
+                              cmap=cmap, vmin=vmin, vmax=vmax,
+                              xticklabels=filtered_labels, yticklabels=filtered_labels,
+                              cbar=cbar, annot_kws={"size": 14, "weight": "bold"})
 
-        ax.set_aspect('equal')
-        ax.set_title(f"Correlation matrix - Sample {sample_index}")
+        if cbar:
+            # Access the colorbar object and set its label
+            cbar = heatmap.collections[0].colorbar
+            cbar.set_label('Interaction Values', rotation=270,
+                           labelpad=20, fontsize=14)
+            cbar.ax.tick_params(labelsize=12)
+
+        ax.set_box_aspect(1)
+        ax.set_title(f"Correlation matrix - Sample {sample_index+1}",  pad=20)
 
         # Fine-tune visualization
         for t in ax.texts:
             t.set_size(10)
-        ax.tick_params(axis='x', labelrotation=45, labelsize=12)
-        ax.tick_params(axis='y', labelsize=12)
+        ax.tick_params(axis='x', labelrotation=45, labelsize=14)
+        ax.tick_params(axis='y', labelsize=14)
 
-    plt.show()
+    # plt.tight_layout()
+    if save_flag:
+        plt.savefig(model_path_bo + figname + '.pdf', bbox_inches='tight')
+        plt.show()
+    else:
+        # plt.close(fig)
+        plt.show()
+
+# def plot_interactions_heatmap(model_path_bo, interactions_values, sample_indices, col_labels,
+#                               cmap, vmin, vmax, save_flag, figname):
+#     """
+#     Plot heatmaps for interaction values, highlighting non-zero interactions.
+#     """
+#     def get_upper_triangle_mask(matrix):
+#         mask = np.triu(np.ones_like(matrix, dtype=bool))
+#         np.fill_diagonal(mask, True)
+#         return mask
+
+#     num_plots = len(sample_indices)
+#     fig, axs = plt.subplots(1, num_plots, figsize=(4 * num_plots, 4))
+#     axs = axs if num_plots > 1 else [axs]
+
+#     for idx, (ax, sample_index) in enumerate(zip(axs, sample_indices)):
+#         interactions_sample = interactions_values[sample_index, :, :]
+#         threshold = 1e-5
+#         non_zero_rows = np.any(np.abs(interactions_sample) > threshold, axis=1)
+#         non_zero_cols = np.any(np.abs(interactions_sample) > threshold, axis=0)
+#         filtered_interactions = interactions_sample[non_zero_rows][:, non_zero_cols]
+#         filtered_labels = np.array(col_labels)[non_zero_rows]
+
+#         mask = get_upper_triangle_mask(filtered_interactions)
+#         sns.heatmap(filtered_interactions, ax=ax, mask=mask, annot=False,
+#                     cmap=cmap, vmin=vmin, vmax=vmax,
+#                     xticklabels=filtered_labels, yticklabels=filtered_labels,
+#                     cbar=idx == num_plots - 1)
+
+#         if idx == num_plots - 1:
+#             ax.figure.colorbar(
+#                 ax.collections[0], ax=ax, label='Interaction Values', orientation='vertical')
+
+#         ax.set_title(f"Correlation matrix - Sample {sample_index + 1}")
+#         ax.tick_params(axis='x', labelrotation=45, labelsize=10)
+#         ax.tick_params(axis='y', labelsize=10)
+
+#     plt.tight_layout()
+#     if save_flag:
+#         plt.savefig(model_path_bo + figname + '.pdf', bbox_inches='tight')
+#     plt.show()
 
 
 class ModelExplainer:
@@ -380,7 +443,7 @@ def process_inverse_norm_explainer_data(pred_norm_base_stack, pred_norm_shap_sta
     - shap_norm_stack (list of np.array): Normalized Shapley values.
     - attributions_norm_stack (list of np.array): Normalized attribution values.
     - interactions_norm_stack (list of np.array): Normalized interaction values.
-    - scaler_output (MinMaxScaler): Scaler for the model output.
+    - scaler_output: Scaler for the model output.
 
     Returns:
     - tuple: Mean and standard deviation of predictions, Shapley values, attribution and interactions values in both spaces.
@@ -485,6 +548,60 @@ def data_for_shap_force(X1_shap_data, Y1_shap_data, V1_shap_data,
 
     return pred_norm_base_KFold_mean.mean(), sample_shap_values, columns
 
+# --------------------------------------------------
+# plotting the force plot for corrosion network (individual)
+# --------------------------------------------------
+# import shap
+# from utils.postprocessing_explainer import data_for_shap_force
+# from IPython.display import display
+
+# shap.initjs()
+# sample_indices = [49, 51, 53, 55]
+# sample_indices = [x-1 for x in sample_indices]
+
+# for sample_index in sample_indices:
+#     A_baseline, B_shap_values, C_column_names = data_for_shap_force(X2_shap_data, Z2_shap_data, W2_shap_data,
+#                                                                     compo_column, C_specific_testing_column, specific_features_sel_column,
+#                                                                     C2_pred_X2_base_KFold_mean, C2_shap_X2_KFold_mean,
+#                                                                     sample_index=[sample_index])
+#     # shap.initjs()
+#     shap_html = shap.force_plot(
+#         A_baseline,
+#         B_shap_values,
+#         C_column_names,
+#         link='identity',
+#         matplotlib=False,
+#         figsize=(5, 2.6),
+#         text_rotation=45,
+#         contribution_threshold=0.1)
+
+#     display(shap_html)  # Display the plot in th
+#     shap.save_html(
+#         model_path_bo + f"shap_force_{shap_fname}_NNC_{sample_index+1}.html", shap_html)
+
+
+# --------------------------------------------------
+# plotting the force plot for corrosion network (merged)
+# --------------------------------------------------
+# sample_index = [49, 51, 53, 55]
+# # sample_index = [12]
+
+# sample_index = [x-1 for x in sample_index]
+# A_baseline, B_shap_values, C_column_names = data_for_shap_force(X2_shap_data, Z2_shap_data, W2_shap_data,
+#                                                                 compo_column, C_specific_testing_column, specific_features_sel_column,
+#                                                                 C2_pred_X2_base_KFold_mean, C2_shap_X2_KFold_mean,
+#                                                                 sample_index=sample_index)
+# shap.initjs()
+# shap.force_plot(
+#     A_baseline,
+#     B_shap_values,
+#     C_column_names,
+#     link='identity',
+#     matplotlib=False,
+#     figsize=(25, 3),
+#     text_rotation=45,
+#     contribution_threshold=0.001)
+
 
 def plot_shap_summary(shap_KFold_mean, feature_names, is_abs=True,
                       title='Feature Importance', figsize=(5, 5), palette='twilight_shifted_r'):
@@ -511,6 +628,12 @@ def plot_shap_summary(shap_KFold_mean, feature_names, is_abs=True,
     plt.title(title)
     plt.tight_layout()
     plt.show()
+
+# plot_shap_summary(H1_shap_X1_KFold_mean, compo_column, is_abs=True,
+#                   title='Feature Importance - Hardness', figsize=(4, 4), palette='twilight_shifted_r')
+
+# plot_shap_summary(C2_shap_X2_KFold_mean, compo_column, is_abs=True,
+#                   title='Feature Importance - Corrosion', figsize=(4, 4), palette='twilight_shifted_r')
 
 
 def plot_interactions_summary(interactions_values, feature_names, is_abs=True,
@@ -565,3 +688,9 @@ def plot_interactions_summary(interactions_values, feature_names, is_abs=True,
     plt.title(title)
     plt.tight_layout()
     plt.show()
+
+# plot_interactions_summary(H1_interactions_X1_KFold_mean, compo_column, is_abs=True,
+#                           title='Interaction Importance - Hardness', figsize=(4, 4), palette='twilight_shifted_r')
+
+# plot_interactions_summary(C2_interactions_X2_KFold_mean, compo_column, is_abs=True,
+#                           title='Interaction Importance - Corrosion', figsize=(4, 4), palette='twilight_shifted_r')

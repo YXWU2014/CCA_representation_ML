@@ -9,67 +9,44 @@ from tensorflow import keras
 import re
 import shap
 import warnings
+from matplotlib.ticker import MaxNLocator
 
 
-def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name,
-                         mc_state=True, islean=False, act='relu'):
+def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name, act='relu'):
     """
     This function displays the saved NNH and NNC models in a tabular format.
-
-    Parameters:
-    model_path_bo: str
-        The path of the directory where the model files are stored.
-
-    The function sorts the models based on their type (NNH or NNC) and their index 
-    (as mentioned in the filename after 'RepeatedKFold_'). It then displays them in a table.
     """
 
+    # Correct the formatting of the model names
+    NNH_model_name = NNH_model_name.format('{}', act=act)
+    NNC_model_name = NNC_model_name.format('{}', act=act)
+
+    # Compile regex patterns for matching files
+    nnh_pattern = re.compile(NNH_model_name.replace('{}', r'(\d+)'))
+    nnc_pattern = re.compile(NNC_model_name.replace('{}', r'(\d+)'))
+
     # Get all h5 files from the specified directory
-    files = sorted([f for f in os.listdir(
-        model_path_bo) if f.endswith(f'_{act}.h5')])
+    files = [f for f in os.listdir(model_path_bo) if f.endswith('.h5')]
 
-    # Separate NNH and NNC model files
-    if mc_state and not islean:
+    # Filter the files based on the model type and condition
+    nnh_files = [f for f in files if nnh_pattern.match(f)]
+    nnc_files = [f for f in files if nnc_pattern.match(f)]
 
-        table_data = [["NNH_model_mc", "NNC_model_mc"]]
-        nnh_files = [f for f in files if f.startswith(
-            NNH_model_name) and f.endswith(f'_mc_{act}.h5')]
-        nnc_files = [f for f in files if f.startswith(
-            NNC_model_name) and f.endswith(f'_mc_{act}.h5')]
-
-    elif not mc_state and not islean:
-
-        table_data = [["NNH_model", "NNC_model"]]
-        nnh_files = [f for f in files if f.startswith(
-            NNH_model_name) and not f.endswith(f'_mc_{act}.h5') and not f.endswith(f'_lean_{act}.h5')]
-        nnc_files = [f for f in files if f.startswith(
-            NNC_model_name) and not f.endswith(f'_mc_{act}.h5') and not f.endswith(f'_lean_{act}.h5')]
-
-    elif not mc_state and islean:
-        table_data = [["NNH_model_lean", "NNC_model_lean"]]
-        nnh_files = [f for f in files if f.startswith(
-            NNH_model_name) and f.endswith(f'_lean_{act}.h5')]
-        nnc_files = [f for f in files if f.startswith(
-            NNC_model_name) and f.endswith(f'_lean_{act}.h5')]
-    else:
-        warnings.warn("error on finding saved models.")
-
-    # print(nnh_files)
-
-    def extract_number_from_filename(filename):
-        match = re.search(r'_(\d+)', filename)
+    # Define function to extract number from the filenames for sorting
+    def extract_number_from_filename(filename, pattern):
+        match = pattern.search(filename)
         return int(match.group(1)) if match else 0
 
-    nnh_files.sort(key=extract_number_from_filename)
-    nnc_files.sort(key=extract_number_from_filename)
-
-    # # Sort model files based on the index present in the filename
-    # nnh_files.sort(key=lambda x: int(x.split("_")[-1].split(".")[0]))
-    # nnc_files.sort(key=lambda x: int(x.split("_")[-1].split(".")[0]))
+    # Sort model files based on the index present in the filename
+    nnh_files.sort(key=lambda f: extract_number_from_filename(f, nnh_pattern))
+    nnc_files.sort(key=lambda f: extract_number_from_filename(f, nnc_pattern))
 
     # Prepare the table data with model filenames
+    max_files = max(len(nnh_files), len(nnc_files))
+    table_data = [[NNH_model_name.format(
+        'Index'), NNC_model_name.format('Index')]]
 
-    for i in range(12):
+    for i in range(max_files):
         nnh_file = nnh_files[i] if i < len(nnh_files) else ""
         nnc_file = nnc_files[i] if i < len(nnc_files) else ""
         table_data.append([nnh_file, nnc_file])
@@ -77,6 +54,122 @@ def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name,
     # Display the model filenames in tabular format
     print()
     print(tabulate(table_data, headers="firstrow"))
+
+
+# def display_saved_models(model_path_bo, NNH_model_name, NNC_model_name,
+#                          mc_state=True, islean=False, act='relu'):
+#     """
+#     This function displays the saved NNH and NNC models in a tabular format.
+
+#     Parameters:
+#     model_path_bo: str
+#         The path of the directory where the model files are stored.
+
+#     The function sorts the models based on their type (NNH or NNC) and their index
+#     (as mentioned in the filename after 'RepeatedKFold_'). It then displays them in a table.
+#     """
+
+#     # Get all h5 files from the specified directory
+#     files = sorted([f for f in os.listdir(
+#         model_path_bo) if f.endswith(f'_{act}.h5')])
+
+#     # Separate NNH and NNC model files
+#     if mc_state and not islean:
+
+#         table_data = [["NNH_model_mc", "NNC_model_mc"]]
+#         nnh_files = [f for f in files if f.startswith(
+#             NNH_model_name) and f.endswith(f'_mc_{act}.h5')]
+#         nnc_files = [f for f in files if f.startswith(
+#             NNC_model_name) and f.endswith(f'_mc_{act}.h5')]
+
+#     elif not mc_state and not islean:
+
+#         table_data = [["NNH_model", "NNC_model"]]
+#         nnh_files = [f for f in files if f.startswith(
+#             NNH_model_name) and not f.endswith(f'_mc_{act}.h5') and not f.endswith(f'_lean_{act}.h5')]
+#         nnc_files = [f for f in files if f.startswith(
+#             NNC_model_name) and not f.endswith(f'_mc_{act}.h5') and not f.endswith(f'_lean_{act}.h5')]
+
+#     elif not mc_state and islean:
+#         table_data = [["NNH_model_lean", "NNC_model_lean"]]
+#         nnh_files = [f for f in files if f.startswith(
+#             NNH_model_name) and f.endswith(f'_lean_{act}.h5')]
+#         nnc_files = [f for f in files if f.startswith(
+#             NNC_model_name) and f.endswith(f'_lean_{act}.h5')]
+#     else:
+#         warnings.warn("error on finding saved models.")
+
+#     # print(nnh_files)
+
+#     def extract_number_from_filename(filename):
+#         match = re.search(r'_(\d+)', filename)
+#         return int(match.group(1)) if match else 0
+
+#     nnh_files.sort(key=extract_number_from_filename)
+#     nnc_files.sort(key=extract_number_from_filename)
+
+#     # # Sort model files based on the index present in the filename
+#     # nnh_files.sort(key=lambda x: int(x.split("_")[-1].split(".")[0]))
+#     # nnc_files.sort(key=lambda x: int(x.split("_")[-1].split(".")[0]))
+
+#     # Prepare the table data with model filenames
+
+#     for i in range(12):
+#         nnh_file = nnh_files[i] if i < len(nnh_files) else ""
+#         nnc_file = nnc_files[i] if i < len(nnc_files) else ""
+#         table_data.append([nnh_file, nnc_file])
+
+#     # Display the model filenames in tabular format
+#     print()
+#     print(tabulate(table_data, headers="firstrow"))
+
+# Function to create empty arrays based on the shape of input arrays
+def create_empty_arrays(arr_list):
+    return [np.empty((arr.shape[0], 0)) for arr in arr_list]
+
+# Function to prepare test datasets and corresponding lists for evaluation
+
+
+def prepare_data_for_eval(X1, Y1, V1, X2, Z2, W2,
+                          X1_test_KFold, Y1_test_KFold, V1_test_KFold,
+                          X2_test_KFold, Z2_test_KFold, W2_test_KFold,
+                          k_folds, n_CVrepeats,
+                          iscompo_testing, iscompoOnly, iscompo_features):
+
+    # Create empty versions of the test datasets
+    datasets = [Y1_test_KFold, V1_test_KFold, Z2_test_KFold, W2_test_KFold]
+    Y1_test_empty, V1_test_empty, Z2_test_empty, W2_test_empty = map(
+        create_empty_arrays, datasets)
+
+    # Prepare test list arrays
+    X1_test_list = X1_test_KFold
+    Y1_test_list = Y1_test_empty if iscompoOnly or iscompo_features else Y1_test_KFold
+    V1_test_list = V1_test_empty if iscompoOnly or iscompo_testing else V1_test_KFold
+
+    X2_test_list = X2_test_KFold
+    Z2_test_list = Z2_test_empty if iscompoOnly or iscompo_features else Z2_test_KFold
+    W2_test_list = W2_test_empty if iscompoOnly or iscompo_testing else W2_test_KFold
+
+    # Calculate repeat factor for bootstrapping
+    repeat_factor = k_folds * n_CVrepeats
+
+    # Prepare full list arrays
+    X1_list = [X1] * repeat_factor
+    Y1_list = Y1_test_empty if iscompoOnly or iscompo_features else [
+        Y1] * repeat_factor
+    V1_list = V1_test_empty if iscompoOnly or iscompo_testing else [
+        V1] * repeat_factor
+
+    X2_list = [X2] * repeat_factor
+    Z2_list = Z2_test_empty if iscompoOnly or iscompo_features else [
+        Z2] * repeat_factor
+    W2_list = W2_test_empty if iscompoOnly or iscompo_testing else [
+        W2] * repeat_factor
+
+    return (X1_test_list, Y1_test_list, V1_test_list,
+            X2_test_list, Z2_test_list, W2_test_list,
+            X1_list, Y1_list, V1_list,
+            X2_list, Z2_list, W2_list)
 
 
 def predict_bootstrap(model_path_bo, model_name,
@@ -117,8 +210,10 @@ def predict_bootstrap(model_path_bo, model_name,
     # Normalize and prepare input data
     def prepare_input_data(i):
         if V1_list[i].size != 0:
+            # print('before norm: ', X1_list[i].shape)
             X1_normalized = scaler_compo.transform(X1_list[i])
             V1_normalized = scaler_specific.transform(V1_list[i])
+            # print('after norm: ', X1_normalized.shape)
             return np.concatenate([X1_normalized, V1_normalized], axis=1)
         else:
             X1_normalized = scaler_compo.transform(X1_list[i])
@@ -128,6 +223,9 @@ def predict_bootstrap(model_path_bo, model_name,
     def define_predict_function(model, input_data, i):
         if Y1_list[i].size != 0:
             Y1_normalized = scaler_testing.transform(Y1_list[i])
+            # print(input_data.shape)
+            # print(Y1_normalized.shape)
+            # print(model.predict([input_data, Y1_normalized], verbose=0).shape)
             return lambda: scaler_output.inverse_transform(model.predict([input_data, Y1_normalized], verbose=0))
         else:
             return lambda: scaler_output.inverse_transform(model.predict(input_data, verbose=0))
@@ -145,6 +243,7 @@ def predict_bootstrap(model_path_bo, model_name,
     def predict_for_one_fold(i):
         model = load_model(i)
         input_data = prepare_input_data(i)
+        # print('input: ', input_data.shape)
         predict_func = define_predict_function(model, input_data, i)
         return predict_monte_carlo_sampling(predict_func)
 
@@ -161,7 +260,10 @@ def predict_bootstrap(model_path_bo, model_name,
     return predictions_list, predictions_mc_mean, predictions_mc_std
 
 
-def plot_test_true_vs_pred(k_folds, n_CVrepeats, test_KFold, test_pred_mean, test_pred_std, lims, label, color, model_path_bo):
+def plot_test_true_vs_pred(k_folds, n_CVrepeats,
+                           test_KFold, test_pred_mean, test_pred_std,
+                           lims, label, color, model_path_bo, plot_flag,
+                           figname):
     """
     Plot true vs predicted values for test data across multiple cross-validation folds.
 
@@ -191,6 +293,9 @@ def plot_test_true_vs_pred(k_folds, n_CVrepeats, test_KFold, test_pred_mean, tes
     # Initialize a new matplotlib figure
     fig, ax = plt.subplots(nrows=2, ncols=6, figsize=(18, 7))
 
+    # Initialize an empty list to store R-squared values
+    r_values = []
+
     # Iterate over each fold
     for i in range(k_folds * n_CVrepeats):
         # Determine the row and column index for the subplot
@@ -200,7 +305,10 @@ def plot_test_true_vs_pred(k_folds, n_CVrepeats, test_KFold, test_pred_mean, tes
         # Set the limits of the subplot and draw the line y=x
         ax[row_idx, col_idx].set_xlim(lims)
         ax[row_idx, col_idx].set_ylim(lims)
+        ax[row_idx, col_idx].tick_params(axis='both', labelsize=14)
         ax[row_idx, col_idx].plot(lims, lims, color='grey')
+        ax[row_idx, col_idx].xaxis.set_major_locator(MaxNLocator(4))
+        ax[row_idx, col_idx].yaxis.set_major_locator(MaxNLocator(4))
 
         # Scatter plot of true vs predicted values
         ax[row_idx, col_idx].scatter(
@@ -212,32 +320,42 @@ def plot_test_true_vs_pred(k_folds, n_CVrepeats, test_KFold, test_pred_mean, tes
 
         # Compute and add R^2 score to the subplot
         r = r2_score(test_KFold[i], test_pred_mean[i])
+        r_values.append(r)
+
         ax[row_idx, col_idx].text(.05, .7, 'r2={:.2f}'.format(
-            r), transform=ax[row_idx, col_idx].transAxes, color=color)
+            r), transform=ax[row_idx, col_idx].transAxes, color=color, fontsize=14)
 
         # Set labels and aspect ratio for the subplot
-        ax[row_idx, col_idx].set_xlabel('True values in the testing datasets')
-        ax[row_idx, col_idx].set_ylabel('Predictions')
+        ax[row_idx, col_idx].set_xlabel(
+            'True values\nin the testing datasets', fontsize=14)
+        ax[row_idx, col_idx].set_ylabel('Predictions', fontsize=14)
         ax[row_idx, col_idx].set_aspect('equal', 'box')
 
         # Add a legend to the subplot
-        ax[row_idx, col_idx].legend(loc=4, prop={'size': 8})
+        ax[row_idx, col_idx].legend(loc=4, prop={'size': 12})
 
         # Enable grid for the subplot
-        ax[row_idx, col_idx].grid()
+        ax[row_idx, col_idx].grid(True, linestyle='--', which='major',
+                                  color='grey', alpha=.25)
 
     # Adjust spacing and add title
     fig.tight_layout()
-    axs_title = label + '_RepeatedKFold_True_Prediction_testdata'
+    axs_title = figname
     fig.suptitle(axs_title, fontsize=18)
 
-    # Save the figure and display the plot
-    plt.savefig(os.path.join(model_path_bo, axs_title + '.png'),
-                bbox_inches='tight')
-    plt.show()
+    if plot_flag:
+        # Save the figure and display the plot
+        plt.savefig(os.path.join(model_path_bo, figname + '.pdf'),
+                    bbox_inches='tight')
+        plt.show()
+    else:
+        plt.close(fig)
+
+    return np.array(r_values)
 
 
-def plot_full_true_vs_pred(HC_list, HC_pred_stack_list, model_path_bo, lims):
+def plot_full_true_vs_pred(HC_list, HC_pred_stack_list, model_path_bo, lims,
+                           figname='NN_full_RepeatedKFold_True_Prediction_full'):
     """
     Plot true vs predicted values for a model's full output.
 
@@ -266,21 +384,21 @@ def plot_full_true_vs_pred(HC_list, HC_pred_stack_list, model_path_bo, lims):
     C2_pred_X2_KFold_std = np.std(C2_pred_X2_conc, axis=0).reshape(-1)
 
     # Initialize a new matplotlib figure
-    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(8, 4))
+    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(6, 3))
 
     # Data, labels and colors for each subplot
     data_labels_colors = [
         ((HC_list[0], H1_pred_X1_KFold_mean, H1_pred_X1_KFold_std),
-         'hardness model', 'steelblue'),
+         'hardness network', 'steelblue'),
         ((HC_list[1], C2_pred_X2_KFold_mean, C2_pred_X2_KFold_std),
-         'corrosion model', 'firebrick')
+         'corrosion network', 'firebrick')
     ]
 
     # Create each subplot
     for i, (data, label, color) in enumerate(data_labels_colors):
 
         min, max = lims[i]
-        ticks = np.arange(min, max, 200)
+        ticks = np.arange(min, max, 300)
 
         ax[i].set_xticks(ticks)
         ax[i].set_yticks(ticks)
@@ -295,11 +413,16 @@ def plot_full_true_vs_pred(HC_list, HC_pred_stack_list, model_path_bo, lims):
         ax[i].scatter(*data[:2], label=label, color=color, alpha=0.5)
         ax[i].errorbar(x=data[0], y=data[1], yerr=data[2],
                        fmt='none', ecolor=color, capsize=3, alpha=0.3)
-        ax[i].legend(loc=4, prop={'size': 8})
+        ax[i].legend(loc=4, prop={'size': 10})
         ax[i].grid(alpha=0.5, linewidth=0.5)
+
+    axs_title = figname
+    fig.suptitle(axs_title, fontsize=10)
 
     # Adjust spacing and save the figure
     fig.tight_layout()
+
     plt.savefig(os.path.join(
-        model_path_bo, 'NN_full_RepeatedKFold_True_Prediction_fulldata.pdf'), bbox_inches='tight')
+        model_path_bo, figname+'.pdf'), bbox_inches='tight', format='pdf')
+
     plt.show()

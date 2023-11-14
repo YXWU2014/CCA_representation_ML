@@ -2,6 +2,7 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from multiprocessing import Pool
 import tensorflow as tf
 from tensorflow.keras import layers
@@ -30,6 +31,7 @@ class MultiTaskNN:
                  loss_func: str, learning_rate_H: float, learning_rate_C: float,
                  batch_size_H: int, N_epochs_local: int, total_epochs: int,
                  model_save_flag: bool, model_path_bo: str,
+                 share_initial_layers: bool,
                  NNH_model_name: str = 'NNH_model_RepeatedKFold_{}',
                  NNC_model_name: str = 'NNC_model_RepeatedKFold_{}'):
         """
@@ -54,6 +56,7 @@ class MultiTaskNN:
         :param N_epochs_local: Number of epochs for local training
         :param model_save_flag: Flag to save the model after training
         :param model_path_bo: Path to save the trained model
+        :param share_initial_layers: flexibility of having separate initial layers for the NNH and NNC models 
         """
         # NN architecture parameters
         self.NNS_num_nodes = NNS_num_nodes
@@ -84,6 +87,9 @@ class MultiTaskNN:
         self.model_path_bo = model_path_bo
         self.NNH_model_name = NNH_model_name
         self.NNC_model_name = NNC_model_name
+
+        # NN separate initial layers
+        self.share_initial_layers = share_initial_layers
 
     #  function for Monte Carlo dropout
 
@@ -124,9 +130,22 @@ class MultiTaskNN:
 
         return models.Model(inputs=input1_compo_features_layer, outputs=NNS_l)
 
+    def _create_initial_layers(self, input_layer):
+        """
+        Helper function to create initial layers.
+        """
+        if self.NNS_num_layers == 0:
+            return input_layer
+
+        x = input_layer
+        for _ in range(self.NNS_num_layers):
+            x = layers.Dense(self.NNS_num_nodes, activation=self.act)(x)
+            x = self.get_dropout(x, p=self.NNS_dropout)
+        return x
+
     # function for creating H-specific network
 
-    def create_NNH_model(self, NNS_model, input2_H_specific_shape):
+    def create_NNH_model(self, NNS_model, input1_compo_features_shape, input2_H_specific_shape):
         """
         Creates the H-specific network (NNH), which includes the NNS and additional layers.
 
@@ -134,9 +153,19 @@ class MultiTaskNN:
         :param input2_H_specific_shape: The shape of the H-specific input
         :return: The NNH model
         """
-        NNS_output = NNS_model.output
-        model_inputs = [NNS_model.input]
+        if self.share_initial_layers:
+            # Use shared layers from NNS_model
+            NNS_output = NNS_model.output
+            model_inputs = [NNS_model.input]
+        else:
+            # Create separate initial layers for NNH
+            input1_compo_features_layer = layers.Input(
+                shape=input1_compo_features_shape)
+            NNS_output = self._create_initial_layers(
+                input1_compo_features_layer)
+            model_inputs = [input1_compo_features_layer]
 
+        # now connect to the task-specific layers
         if input2_H_specific_shape != (0,):
             input2_H_specific_layer = layers.Input(
                 shape=input2_H_specific_shape)
@@ -158,7 +187,7 @@ class MultiTaskNN:
 
     #  function for creating C-specific network
 
-    def create_NNC_model(self, NNS_model, input3_C_specific_shape):
+    def create_NNC_model(self, NNS_model, input1_compo_features_shape, input3_C_specific_shape):
         """
         Creates the C-specific network (NNC), which includes the NNS and additional layers.
 
@@ -166,8 +195,20 @@ class MultiTaskNN:
         :param input3_C_specific_shape: The shape of the C-specific input
         :return: The NNC model
         """
-        NNS_output = NNS_model.output
-        model_inputs = [NNS_model.input]
+
+        if self.share_initial_layers:
+            # Use shared layers from NNS_model
+            NNS_output = NNS_model.output
+            model_inputs = [NNS_model.input]
+        else:
+            # Create separate initial layers for NNH
+            input1_compo_features_layer = layers.Input(
+                shape=input1_compo_features_shape)
+            NNS_output = self._create_initial_layers(
+                input1_compo_features_layer)
+            model_inputs = [input1_compo_features_layer]
+
+        # now connect to the task-specific layers
 
         if input3_C_specific_shape != (0,):
             input3_C_specific_layer = layers.Input(
@@ -205,12 +246,14 @@ class MultiTaskNN:
         NNS_model = self.create_NNS_model(input1_compo_features_shape)
 
         # Construct and compile the first task-specific network (NNH).
-        NNH_model = self.create_NNH_model(NNS_model, input2_H_specific_shape)
+        NNH_model = self.create_NNH_model(
+            NNS_model, input1_compo_features_shape, input2_H_specific_shape)
         NNH_model.compile(loss=self.loss_func,
                           optimizer=Adam(self.learning_rate_H))
 
         # Construct and compile the second task-specific network (NNC).
-        NNC_model = self.create_NNC_model(NNS_model, input3_C_specific_shape)
+        NNC_model = self.create_NNC_model(
+            NNS_model, input1_compo_features_shape, input3_C_specific_shape)
         NNC_model.compile(loss=self.loss_func,
                           optimizer=Adam(self.learning_rate_C))
 
@@ -386,7 +429,7 @@ class MultiTaskNN:
 
     def evaluate_NN_full_model(self, X1_train_norm_KFold, X1_test_norm_KFold, Y1_train_norm_KFold, Y1_test_norm_KFold, V1_train_norm_KFold, V1_test_norm_KFold, H1_train_norm_KFold, H1_test_norm_KFold,
                                X2_train_norm_KFold, X2_test_norm_KFold, Z2_train_norm_KFold, Z2_test_norm_KFold, W2_train_norm_KFold, W2_test_norm_KFold, C2_train_norm_KFold, C2_test_norm_KFold,
-                               k_folds, n_CVrepeats):
+                               k_folds, n_CVrepeats, scalers):
         """
         Orchestrates the training and evaluation of machine learning models. It initiates parallel processes for training 
         and evaluating the models and collects the results.
@@ -457,10 +500,20 @@ class MultiTaskNN:
             if np.isnan(NNH_test_pred_temp[:, 1]).any():
                 print("NNH_test_pred_temp[:, 1] contains NaN values.")
 
-            score_r2_H_temp = r2_score(
-                NNH_test_pred_temp[:, 0], NNH_test_pred_temp[:, 1])
-            score_r2_C_temp = r2_score(
-                NNC_test_pred_temp[:, 0], NNC_test_pred_temp[:, 1])
+            # print(NNH_test_pred_temp[:, 0].shape)
+            # score_r2_H_temp = r2_score(
+            #     scalers["H_output"].inverse_transform(
+            #         NNH_test_pred_temp[:, 0].reshape(-1, 1)),
+            #     scalers["H_output"].inverse_transform(NNH_test_pred_temp[:, 1].reshape(-1, 1)))
+            # score_r2_C_temp = r2_score(
+            #     scalers["C_output"].inverse_transform(
+            #         NNC_test_pred_temp[:, 0].reshape(-1, 1)),
+            #     scalers["C_output"].inverse_transform(NNC_test_pred_temp[:, 1].reshape(-1, 1)))
+
+            score_r2_H_temp = r2_score(NNH_test_pred_temp[:, 0],
+                                       NNH_test_pred_temp[:, 1])
+            score_r2_C_temp = r2_score(NNC_test_pred_temp[:, 0],
+                                       NNC_test_pred_temp[:, 1])
 
             score_r2_H.append(score_r2_H_temp)
             score_r2_C.append(score_r2_C_temp)
@@ -483,57 +536,284 @@ class MultiTaskNN:
                 score_loss_H, score_loss_C,
                 score_r2_H,   score_r2_C)
 
-    # plot the training and validation losses for both tasks
+# ---------- plotting functions below ----------
+# plot the training and validation losses for both tasks
 
-    def plot_losses(self, train_loss_H, val_loss_H,
-                    train_loss_C, val_loss_C, k_folds, n_CVrepeats, index=0):
-        """
-        Plot training and validation losses for tasks H and C over multiple epochs.
 
-        Args:
-            train_loss_H (list): Training losses for task H.
-            val_loss_H (list): Validation losses for task H.
-            train_loss_C (list): Training losses for task C.
-            val_loss_C (list): Validation losses for task C.
-            k_folds (int): The number of folds used for cross-validation.
-            n_CVrepeats (int): The number of times cross-validation was repeated.
+def plot_losses(model_path_bo, train_loss_H, val_loss_H,
+                train_loss_C, val_loss_C, k_folds, n_CVrepeats, index=0, ymax=0.03,
+                savefig=False, figname='NN_full_RepeatedKFold_loss.pdf'):
+    """
+    Plot training and validation losses for tasks H and C over multiple epochs.
 
-        Returns:
-            None. A plot is displayed and saved to the model_path_bo directory.
-        """
-        # Initialize a new figure with two subplots side by side
-        fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(8, 3))
+    Args:
+        train_loss_H (list): Training losses for task H.
+        val_loss_H (list): Validation losses for task H.
+        train_loss_C (list): Training losses for task C.
+        val_loss_C (list): Validation losses for task C.
+        k_folds (int): The number of folds used for cross-validation.
+        n_CVrepeats (int): The number of times cross-validation was repeated.
 
-        # For each fold in the cross-validation
-        for i in range(k_folds * n_CVrepeats):
-            # Only label the first set of plots for clarity
-            if i == index:
-                # Plot training and validation losses for task H
-                ax[0].plot(train_loss_H[i], label=f"Train Loss_H",
-                           linewidth=1, color='steelblue', alpha=0.5)
-                ax[0].plot(val_loss_H[i], label=f"Validation Loss_H",
-                           linewidth=1, color='firebrick', alpha=0.5)
+    Returns:
+        None. A plot is displayed and saved to the model_path_bo directory.
+    """
+    # Initialize a new figure with two subplots side by side
+    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(6, 3))
 
-                # Plot training and validation losses for task C
-                ax[1].plot(train_loss_C[i], label=f"Train Loss_C",
-                           linewidth=1, color='steelblue', alpha=0.5)
-                ax[1].plot(val_loss_C[i], label=f"Validation Loss_C",
-                           linewidth=1, color='firebrick', alpha=0.5)
+    # For each fold in the cross-validation
+    for i in range(k_folds * n_CVrepeats):
+        # Only label the first set of plots for clarity
+        if i == index:
+            # Plot training and validation losses for task H
+            ax[0].plot(train_loss_H[i], label=f"Train Loss",
+                       linewidth=1, color='#1f77b4', alpha=0.5)
+            ax[0].plot(val_loss_H[i], label=f"Validation Loss",
+                       linewidth=1, color='#ff7f0e', alpha=0.5)
+            ax[0].set_title('Hardness network')
 
-        # Set labels, title, legend, and grid for each subplot
-        for axi in ax.flat:
-            axi.set_xlabel("Epochs")  # x-axis label represents training epochs
-            # y-axis label represents the loss or error
-            axi.set_ylabel("Error")
-            axi.set_title('MSE')  # title of the plot
-            axi.legend()  # show legend on the plot
-            axi.grid()  # display gridlines on the plot
-            axi.set_box_aspect(1)  # maintain aspect ratio
-            axi.set_ylim(0, 0.03)  # set limits for y-axis
+            # Plot training and validation losses for task C
+            ax[1].plot(train_loss_C[i], label=f"Train Loss",
+                       linewidth=1, color='#1f77b4', alpha=0.5)
+            ax[1].plot(val_loss_C[i], label=f"Validation Loss",
+                       linewidth=1, color='#ff7f0e', alpha=0.5)
+            ax[1].set_title('Corrosion network')
 
-        # Save the figure as a .png image in the model_path_bo directory
-        plt.savefig(self.model_path_bo +
-                    'NN_full_RepeatedKFold_loss.png', format='png', dpi=200)
+    # Set labels, title, legend, and grid for each subplot
+    for axi in ax.flat:
+        axi.set_xlabel("Epochs")
+        axi.set_ylabel("Error")
+        # axi.set_title('MSE')
+        axi.legend()
+        axi.grid(True, linestyle='--', which='major',
+                 color='grey', alpha=.25)
+        axi.set_box_aspect(1)
+        axi.set_ylim(0, ymax)
 
-        # Display the figure
-        plt.show()
+    # Set tight layout to ensure everything fits well
+    plt.tight_layout()
+
+    if savefig:
+        plt.savefig(model_path_bo +
+                    figname, format='pdf')
+    plt.show()
+
+
+def plot_losses_avg(model_path_bo, train_loss_H, val_loss_H, train_loss_C, val_loss_C,
+                    k_folds, n_CVrepeats, index=0, ymax=0.03, window_size=5,
+                    savefig=False, figname='NN_full_RepeatedKFold_loss.pdf'):
+    """
+    Plot averaged training and validation losses for tasks H and C over multiple epochs.
+    """
+
+    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(6, 3))
+
+    # Convert lists to numpy arrays for easier manipulation
+    train_loss_H = np.array(train_loss_H)
+    val_loss_H = np.array(val_loss_H)
+    train_loss_C = np.array(train_loss_C)
+    val_loss_C = np.array(val_loss_C)
+
+    # Calculate the mean losses across all folds for each epoch
+    mean_train_loss_H = np.squeeze(np.mean(train_loss_H, axis=0))
+    mean_val_loss_H = np.squeeze(np.mean(val_loss_H, axis=0))
+    mean_train_loss_C = np.squeeze(np.mean(train_loss_C, axis=0))
+    mean_val_loss_C = np.squeeze(np.mean(val_loss_C, axis=0))
+
+    std_train_loss_H = np.squeeze(np.std(train_loss_H, axis=0))
+    std_val_loss_H = np.squeeze(np.std(val_loss_H, axis=0))
+    std_train_loss_C = np.squeeze(np.std(train_loss_C, axis=0))
+    std_val_loss_C = np.squeeze(np.std(val_loss_C, axis=0))
+
+    def _moving_average(x, w):
+        return np.convolve(x, np.ones(w), 'valid') / w
+
+    mean_train_loss_H = _moving_average(
+        mean_train_loss_H, window_size)
+    mean_val_loss_H = _moving_average(mean_val_loss_H, window_size)
+    mean_train_loss_C = _moving_average(
+        mean_train_loss_C, window_size)
+    mean_val_loss_C = _moving_average(mean_val_loss_C, window_size)
+    std_train_loss_H = _moving_average(
+        std_train_loss_H, window_size)
+    std_val_loss_H = _moving_average(std_val_loss_H, window_size)
+    std_train_loss_C = _moving_average(
+        std_train_loss_C, window_size)
+    std_val_loss_C = _moving_average(std_val_loss_C, window_size)
+
+    # print(mean_train_loss_H.shape, mean_val_loss_H.shape)
+    epochs = np.array(range(len(mean_train_loss_H)))
+    # print(epochs)
+
+    # Plot the averaged training and validation losses for task H
+    ax[0].plot(epochs, mean_train_loss_H, label=f"Avg Train Loss",
+               linewidth=2, color='#1f77b4')
+    ax[0].fill_between(epochs, mean_train_loss_H - std_train_loss_H,
+                       mean_train_loss_H + std_train_loss_H, color='#1f77b4', alpha=0.2)
+    ax[0].plot(epochs, mean_val_loss_H, label=f"Avg Validation Loss",
+               linewidth=2, color='#ff7f0e')
+    ax[0].fill_between(epochs, mean_val_loss_H - std_val_loss_H,
+                       mean_val_loss_H + std_val_loss_H, color='#ff7f0e', alpha=0.2)
+    ax[0].set_title("Hardness network")
+
+    # Plot the averaged training and validation losses for task C
+    ax[1].plot(epochs, mean_train_loss_C, label=f"Avg Train Loss",
+               linewidth=2, color='#1f77b4')
+    ax[1].fill_between(epochs, mean_train_loss_C - std_train_loss_C,
+                       mean_train_loss_C + std_train_loss_C, color='#1f77b4', alpha=0.2)
+    ax[1].plot(epochs, mean_val_loss_C, label=f"Avg Validation Loss",
+               linewidth=2, color='#ff7f0e')
+    ax[1].fill_between(epochs, mean_val_loss_C - std_val_loss_C,
+                       mean_val_loss_C + std_val_loss_C, color='#ff7f0e', alpha=0.2)
+    ax[1].set_title("Corrosion network")
+
+    # Set labels, title, legend, and grid for each subplot
+    for axi in ax.flat:
+        axi.set_xlabel("Epochs")
+        axi.set_ylabel("Error")
+        axi.legend()
+        axi.grid(True, linestyle='--', which='major',
+                 color='grey', alpha=.25)
+        axi.set_box_aspect(1)
+        axi.set_ylim(0, ymax)
+
+    # Set tight layout to ensure everything fits well
+    plt.tight_layout()
+
+    if savefig:
+        plt.savefig(model_path_bo +
+                    figname, format='pdf')
+    plt.show()
+
+
+# function not in the MultiTaskNN class
+
+# def plot_R2_avg(model_path_bo,
+#                 score_r2_H_shared, score_r2_C_shared, score_r2_H_separate, score_r2_C_separate,
+#                 ymin, ymax,
+#                 savefig=True, figname='NN_full_RepeatedKFold_R2_compare.pdf'):
+#     """
+#     Plot the average R^2 scores for shared and separate learning models.
+#     """
+#     # Calculate the means of the pairs
+#     r2_HC_shared = [(x + y) / 2 for x,
+#                     y in zip(score_r2_H_shared, score_r2_C_shared)]
+#     r2_HC_separate = [(x + y) / 2 for x,
+#                       y in zip(score_r2_H_separate, score_r2_C_separate)]
+
+#     # Calculate the average of the means for the bar height
+#     r2_HC_shared_mean = np.mean(r2_HC_shared)
+#     r2_HC_separate_mean = np.mean(r2_HC_separate)
+
+#     # Set the positions for the bars
+#     bar_width = 0.4
+#     x_pos = np.array([1 - bar_width/1.5, 1 + bar_width/1.5])
+
+#     # Set up the figure and axis for the plot
+#     # Keeping the plot size small as you requested
+#     fig, ax = plt.subplots(figsize=(3, 3))
+
+#     # Elegant color choices
+#     bar_colors = ['#b19cd9', '#8dc47f']
+#     point_colors = ['#7e1e9c', '#557f2d']
+
+#     # Plot the bars
+#     ax.bar(x_pos, [r2_HC_shared_mean, r2_HC_separate_mean],
+#            color=bar_colors, width=bar_width)
+
+#     # Add data points with jitter
+#     jitter_width = 0.04  # A bit narrower to keep the figure tidy
+#     for i, points in enumerate([r2_HC_shared, r2_HC_separate]):
+#         ax.scatter(np.repeat(x_pos[i], len(points)) + np.random.uniform(-jitter_width, jitter_width, len(points)),
+#                    points, color=point_colors[i], alpha=0.7)
+
+#     # Set labels and fonts
+#     ax.set_ylabel(r'$\mathrm{R^2_{<hardness, corrosion>}}$', fontsize=12)
+#     ax.set_title(
+#         r'$R^2$ score (test data) for individual model ensemble', fontsize=12)
+#     ax.set_xticks(x_pos)
+#     ax.set_xticklabels(
+#         ['Multi-task\nlearning', 'Averaged\nseparate models'], fontsize=12)
+#     ax.tick_params(axis='y', which='major', labelsize=10)
+#     ax.set_ylim([ymin, ymax])
+
+#     # Add grid for better readability
+#     ax.yaxis.grid(True, linestyle='--', which='major',
+#                   color='grey', alpha=.25)
+
+#     # Set tight layout to ensure everything fits well
+#     plt.tight_layout()
+
+#     if savefig:
+#         plt.savefig(model_path_bo +
+#                     figname, format='pdf')
+#     # Show the plot
+#     plt.show()
+
+
+def plot_R2_avg(model_path_bo, H_scores, C_scores, ymin, ymax, x_labels=None,
+                savefig=True, figname='NN_full_RepeatedKFold_R2_compare.pdf'):
+    """
+    Plot the average R^2 scores for multiple pairs of H and C.
+
+    H_scores and C_scores should be lists of score lists.
+    x_labels should be a list of labels corresponding to the H-C pairs.
+    """
+    if x_labels is None:
+        x_labels = [f'Pair {i+1}' for i in range(len(H_scores))]
+
+    # Ensure the lists are of the same length
+    if len(H_scores) != len(C_scores):
+        raise ValueError("H_scores and C_scores must have the same length.")
+
+    # Calculate the means for each pair
+    r2_means = [(np.mean(h) + np.mean(c)) / 2 for h,
+                c in zip(H_scores, C_scores)]
+
+    # print(r2_means)
+
+    # Generate colors from the 'winter' colormap
+    cmap = cm.get_cmap('cividis')
+    colors = [cmap(i / len(r2_means)) for i in range(len(r2_means))]
+
+    # Set the positions for the bars
+    bar_width = 0.5
+    x_pos = np.arange(len(r2_means))
+
+    # Set up the figure and axis for the plot
+    fig, ax = plt.subplots(figsize=(3.5, 3.5))
+
+    bars = ax.bar(x_pos, r2_means, color=colors, width=bar_width, alpha=0.6)
+
+    # Add data points with jitter
+    jitter_width = bar_width / 4
+    for i, (h_scores, c_scores) in enumerate(zip(H_scores, C_scores)):
+
+        combined_scores = np.stack((h_scores, c_scores))
+        mean_scores = np.mean(combined_scores, axis=0)
+
+        # (H scores + C scores)/2
+        ax.scatter(np.repeat(x_pos[i], len(h_scores)) + np.random.uniform(-jitter_width, jitter_width, len(h_scores)),
+                   mean_scores, color=colors[i], alpha=0.4)
+        # # C scores
+        # ax.scatter(np.repeat(x_pos[i], len(c_scores)) + np.random.uniform(-jitter_width, jitter_width, len(c_scores)),
+        #            c_scores, color=colors[i], alpha=0.4)
+
+    # Set labels and fonts
+    ax.set_ylabel(r'$\mathrm{R^2_{<hardness, corrosion>}}$', fontsize=12)
+    ax.set_title(r'$R^2$ score (test data) for model comparisons', fontsize=12)
+    ax.set_xticks(x_pos)
+    ax.set_xticklabels(x_labels, fontsize=10)
+    ax.tick_params(axis='y', which='major', labelsize=10)
+    ax.set_box_aspect(1)
+    ax.set_ylim([ymin, ymax])
+
+    # Add grid for better readability
+    ax.yaxis.grid(True, linestyle='--', which='major', color='grey', alpha=.25)
+
+    # Set tight layout to ensure everything fits well
+    plt.tight_layout()
+
+    if savefig:
+        plt.savefig(model_path_bo + figname, format='pdf')
+    # Show the plot
+    plt.show()

@@ -65,7 +65,9 @@ def read_new_data_feature_calc(df_new_wt: pd.DataFrame, vars_ele: List[str],
 
 
 def prediction_new_composition(fname, compo, data_path, model_path_bo,
-                               NNH_model_name, NNC_model_name, islean, scalers,
+                               NNH_model_name, NNC_model_name,
+                               iscompo_testing, iscompoOnly, iscompo_features,
+                               scalers,
                                specific_features_sel_column, C_testing,
                                k_folds, n_CVrepeats, mc_repeat):
     """
@@ -101,12 +103,29 @@ def prediction_new_composition(fname, compo, data_path, model_path_bo,
         C_testing=C_testing)
     H_specific_testing = np.empty((0, 0))
 
-    # Prepare data based on the 'islean' flag
-    if not islean:
-        compo_data, H_testing_data, C_testing_data, HC_feature_data = compo_new, H_specific_testing, C_specific_testing, HC_specific_features
-    else:
-        compo_data, H_testing_data, C_testing_data, HC_feature_data = compo_new, np.empty(
-            (0, 0)), np.empty((0, 0)), np.empty((0, 0))
+    # # Function to create empty arrays based on the shape of input arrays
+    # def create_empty_arrays(arr_list):
+    #     return [np.empty((arr.shape[0], 0)) for arr in arr_list]
+
+    # # Create empty versions of the test datasets
+    # datasets = [H_specific_testing, C_specific_testing, HC_specific_features]
+    # H_specific_testing_empty, C_specific_testing_empty, HC_specific_features_empty = map(
+    #     create_empty_arrays, datasets)
+
+    # Prepare test list arrays
+    compo_data = compo_new
+    H_testing_data = np.empty(
+        (0, 0)) if iscompoOnly or iscompo_features else H_specific_testing
+    C_testing_data = np.empty(
+        (0, 0)) if iscompoOnly or iscompo_features else C_specific_testing
+    HC_feature_data = np.empty(
+        (0, 0)) if iscompoOnly or iscompo_testing else HC_specific_features
+
+    # if not islean:
+    #     compo_data, H_testing_data, C_testing_data, HC_feature_data = compo_new, H_specific_testing, C_specific_testing, HC_specific_features
+    # else:
+    #     compo_data, H_testing_data, C_testing_data, HC_feature_data = compo_new, np.empty(
+    #         (0, 0)), np.empty((0, 0)), np.empty((0, 0))
 
     # Predict using the NNH and NNC models
     H1_new_pred_stack, H1_new_pred_mean, H1_new_pred_std, C2_new_pred_stack, C2_new_pred_mean, C2_new_pred_std = predict_bootstrap_NNH_NNC(
@@ -207,7 +226,7 @@ def predict_bootstrap_NNH_NNC(model_path_bo, NNH_model_name, NNC_model_name,
 
 def plot_prediction_uncertainty(model_path_bo, coord_x, coord_y, index_PVD_x_y,
                                 pred_mean, pred_std, pred_label, unc_label,
-                                title, vmin1, vmax1, vmin2, vmax2):
+                                title):
     """
     This function generates two subplots per iteration: one for predicted values and one for their uncertainties.
     Each point in the scatter plot corresponds to an observation with its color denoting the predicted value or uncertainty.
@@ -226,6 +245,11 @@ def plot_prediction_uncertainty(model_path_bo, coord_x, coord_y, index_PVD_x_y,
     None. A plot is generated and saved as an image in the provided model_path_bo.
     """
 
+    vmin1 = np.min([np.min(m) for m in pred_mean])
+    vmax1 = np.max([np.max(m) for m in pred_mean])*0.8
+    vmin2 = np.min([np.min(s) for s in pred_std])
+    vmax2 = np.max([np.max(s) for s in pred_std])*0.8
+
     # Creating subplots grid
     fig, axs = plt.subplots(nrows=4, ncols=6, figsize=(18, 10), dpi=200)
 
@@ -237,20 +261,26 @@ def plot_prediction_uncertainty(model_path_bo, coord_x, coord_y, index_PVD_x_y,
             coord_x, coord_y, c=pred_mean[i], s=400, marker='.', cmap='RdBu_r', vmin=vmin1, vmax=vmax1)
 
         # Setting labels and titles
-        ax_pred.set_xlabel('X')
-        ax_pred.set_ylabel('Y')
-        ax_pred.set_title(f'Prediction {i+1}', fontsize=8)
+        ax_pred.set_xlabel('position x', fontsize=10)
+        ax_pred.set_ylabel('position y', fontsize=10)
+        ax_pred.set_xlim(0, 100)
+        ax_pred.set_ylim(0, 100)
+        ax_pred.xaxis.set_major_locator(plt.MultipleLocator(10))
+        ax_pred.yaxis.set_major_locator(plt.MultipleLocator(10))
+        ax_pred.tick_params(axis='x', labelrotation=45, labelsize=10)
+        ax_pred.tick_params(axis='y', labelsize=10)
+        ax_pred.set_title(f'Model Ensemble {i+1}', fontsize=12)
         ax_pred.set_aspect('equal', 'box')
 
         # Annotating each point with its corresponding label
         for i_pvd, txt in enumerate(index_PVD_x_y):
             ax_pred.annotate(
-                txt, (coord_x[i_pvd]-2, coord_y[i_pvd]-1), color="grey", alpha=1, fontsize=8)
+                txt, (coord_x[i_pvd]-2, coord_y[i_pvd]-1), color="grey", alpha=1, fontsize=8, fontweight='bold')
 
         # Creating colorbar and setting its label
         cbar1 = fig.colorbar(cax1, ax=ax_pred)
-        cbar1.set_label(pred_label, size=8)
-        cbar1.ax.tick_params(labelsize=8)
+        cbar1.set_label(pred_label, size=12)
+        cbar1.ax.tick_params(labelsize=12)
 
         # ----- Subplot 2: Prediction Uncertainty -----
         # Scatter plot where color represents prediction uncertainty (standard deviation).
@@ -258,9 +288,15 @@ def plot_prediction_uncertainty(model_path_bo, coord_x, coord_y, index_PVD_x_y,
             coord_x, coord_y, c=pred_std[i], s=400, marker='.', cmap='RdGy_r', vmin=vmin2, vmax=vmax2)
 
         # Setting labels and titles
-        ax_unc.set_xlabel('X')
-        ax_unc.set_ylabel('Y')
-        ax_unc.set_title(f'Prediction Uncertainty {i+1}', fontsize=8)
+        ax_unc.set_xlabel('position x', fontsize=10)
+        ax_unc.set_ylabel('position y', fontsize=10)
+        ax_unc.set_xlim(0, 100)
+        ax_unc.set_ylim(0, 100)
+        ax_unc.xaxis.set_major_locator(plt.MultipleLocator(10))
+        ax_unc.yaxis.set_major_locator(plt.MultipleLocator(10))
+        ax_unc.tick_params(axis='x', labelrotation=45, labelsize=10)
+        ax_unc.tick_params(axis='y', labelsize=10)
+        ax_unc.set_title(f'Model Uncertainty {i+1}', fontsize=12)
         ax_unc.set_aspect('equal', 'box')
 
         # Annotating each point with its corresponding label
@@ -270,15 +306,15 @@ def plot_prediction_uncertainty(model_path_bo, coord_x, coord_y, index_PVD_x_y,
 
         # Creating colorbar and setting its label
         cbar2 = fig.colorbar(cax2, ax=ax_unc)
-        cbar2.set_label(unc_label, size=8)
-        cbar2.ax.tick_params(labelsize=8)
+        cbar2.set_label(unc_label, size=12)
+        cbar2.ax.tick_params(labelsize=12)
 
     # Setting main title for all plots and adjusting layout
-    plt.suptitle(title, fontsize=18)
+    plt.suptitle(title, fontsize=14)
     fig.tight_layout()
 
     # Saving figure as .png image
-    plt.savefig(model_path_bo + title + '.png', bbox_inches='tight')
+    plt.savefig(model_path_bo + title + '.pdf', bbox_inches='tight')
 
     # Displaying the plot
     plt.show()
@@ -331,23 +367,36 @@ def plot_prediction_uncertainty_AVG(model_path_bo, coord_x, coord_y, index_PVD_x
         ax[row+1, col].set_aspect('equal')
 
         # Set x and y labels
-        ax[row, col].set_xlabel('X')
-        ax[row, col].set_ylabel('Y')
-        ax[row+1, col].set_xlabel('X')
-        ax[row+1, col].set_ylabel('Y')
+        ax[row, col].set_xlabel('position x', fontsize=10)
+        ax[row, col].set_ylabel('position y', fontsize=10)
+        ax[row, col].set_xlim(0, 100)
+        ax[row, col].set_ylim(0, 100)
+        ax[row, col].xaxis.set_major_locator(plt.MultipleLocator(10))
+        ax[row, col].yaxis.set_major_locator(plt.MultipleLocator(10))
+        ax[row, col].tick_params(axis='x', labelrotation=45, labelsize=10)
+        ax[row, col].tick_params(axis='y', labelsize=10)
+
+        ax[row+1, col].set_xlabel('position x', fontsize=10)
+        ax[row+1, col].set_ylabel('position y', fontsize=10)
+        ax[row+1, col].set_xlim(0, 100)
+        ax[row+1, col].set_ylim(0, 100)
+        ax[row+1, col].xaxis.set_major_locator(plt.MultipleLocator(10))
+        ax[row+1, col].yaxis.set_major_locator(plt.MultipleLocator(10))
+        ax[row+1, col].tick_params(axis='x', labelrotation=45, labelsize=10)
+        ax[row+1, col].tick_params(axis='y', labelsize=10)
 
         # Annotate the data points
         for i_pvd, txt in enumerate(index_PVD_x_y):
             ax[row, col].annotate(
-                txt, (coord_x[i_pvd]-3, coord_y[i_pvd]-1.5), color="grey", alpha=1)
+                txt, (coord_x[i_pvd]-3, coord_y[i_pvd]-1.5), color="grey", alpha=1, fontsize=8, fontweight='bold')
             ax[row+1, col].annotate(txt, (coord_x[i_pvd]-3,
-                                    coord_y[i_pvd]-1.5), color="grey", alpha=1)
+                                    coord_y[i_pvd]-1.5), color="grey", alpha=1, fontsize=8, fontweight='bold')
 
         # Add colorbars to the plots
         cbar1, cbar2 = fig.colorbar(
             cax1, ax=ax[row, col]), fig.colorbar(cax2, ax=ax[row+1, col])
-        cbar1.set_label(f'{name}  {unit}')
-        cbar2.set_label(f'{name}  uncertainty {unit}')
+        cbar1.set_label(f'{name}  {unit}', fontsize=10)
+        cbar2.set_label(f'{name}  uncertainty {unit}', fontsize=10)
 
     # Set the main title for the figure
     plt.suptitle(title, fontsize=10)
@@ -356,7 +405,7 @@ def plot_prediction_uncertainty_AVG(model_path_bo, coord_x, coord_y, index_PVD_x
     fig.tight_layout()
 
     # Save the figure to the specified path
-    plt.savefig(model_path_bo + title, bbox_inches='tight')
+    plt.savefig(model_path_bo + title + '.pdf', bbox_inches='tight')
 
     # Display the plot
     plt.show()
