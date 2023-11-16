@@ -40,7 +40,7 @@ class BayesianOptimizationObjective:
                                  NNH_model_name: str, NNC_model_name: str,
                                  X1_train_norm_KFold: list, X1_test_norm_KFold: list, Y1_train_norm_KFold: list, Y1_test_norm_KFold: list, V1_train_norm_KFold: list, V1_test_norm_KFold: list, H1_train_norm_KFold: list, H1_test_norm_KFold: list,
                                  X2_train_norm_KFold: list, X2_test_norm_KFold: list, Z2_train_norm_KFold: list, Z2_test_norm_KFold: list, W2_train_norm_KFold: list, W2_test_norm_KFold: list, C2_train_norm_KFold: list, C2_test_norm_KFold: list,
-                                 k_folds: int, n_CVrepeats: int,
+                                 k_folds: int, n_CVrepeats: int, scalers: dict,
                                  score_r2_HC_list: list, score_loss_HC_list: list,
                                  score_r2_H_list: list, score_r2_C_list: list,
                                  score_loss_H_list: list, score_loss_C_list: list):
@@ -83,7 +83,7 @@ class BayesianOptimizationObjective:
         all_hyper_dict = {**search_hyper_dict, **fixed_hyper_dict}
 
         # Convert the categorical encoding of loss function to tensorflow loss function
-        loss_encoder = int(all_hyper_dict['loss_encoder'])
+        loss_encoder = round(all_hyper_dict['loss_encoder'])
         if loss_encoder == 0:
             loss_func = tf.keras.metrics.mean_squared_error
         elif loss_encoder == 1:
@@ -92,17 +92,17 @@ class BayesianOptimizationObjective:
             raise ValueError(f"Invalid loss function '{loss_encoder}' ")
 
         # Create a MultiTaskNN model
-        mt_nn_bo = MultiTaskNN(NNS_num_nodes=int(all_hyper_dict['NNS_num_nodes']), NNS_num_layers=int(all_hyper_dict['NNS_num_layers']),
-                               NNH_num_nodes=int(all_hyper_dict['NNH_num_nodes']), NNH_num_layers=int(all_hyper_dict['NNH_num_layers']),
-                               NNC_num_nodes=int(all_hyper_dict['NNC_num_nodes']), NNC_num_layers=int(all_hyper_dict['NNC_num_layers']),
+        mt_nn_bo = MultiTaskNN(NNS_num_nodes=round(all_hyper_dict['NNS_num_nodes']), NNS_num_layers=round(all_hyper_dict['NNS_num_layers']),
+                               NNH_num_nodes=round(all_hyper_dict['NNH_num_nodes']), NNH_num_layers=round(all_hyper_dict['NNH_num_layers']),
+                               NNC_num_nodes=round(all_hyper_dict['NNC_num_nodes']), NNC_num_layers=round(all_hyper_dict['NNC_num_layers']),
                                mc_state=mc_state, act=act,
-                               NNS_dropout=all_hyper_dict['NNS_dropout'], NNH_dropout=all_hyper_dict[
-                                   'NNH_NNC_dropout'], NNC_dropout=all_hyper_dict['NNH_NNC_dropout'],
+                               NNS_dropout=all_hyper_dict['NNS_dropout'],
+                               NNH_dropout=all_hyper_dict['NNH_NNC_dropout'], NNC_dropout=all_hyper_dict['NNH_NNC_dropout'],
                                loss_func=loss_func,
                                learning_rate_H=all_hyper_dict['learning_rate_H'], learning_rate_C=all_hyper_dict['learning_rate_C'],
-                               batch_size_H=int(
+                               batch_size_H=round(
                                    all_hyper_dict['batch_size_H']),
-                               N_epochs_local=int(all_hyper_dict['N_epochs_local']), total_epochs=total_epochs,
+                               N_epochs_local=round(all_hyper_dict['N_epochs_local']), total_epochs=total_epochs,
                                model_save_flag=model_save_flag, model_path_bo=model_path_bo,
                                share_initial_layers=share_initial_layers,
                                NNH_model_name=NNH_model_name, NNC_model_name=NNC_model_name)
@@ -112,7 +112,7 @@ class BayesianOptimizationObjective:
          score_loss_H,  score_loss_C,
          score_r2_H,    score_r2_C) = mt_nn_bo.evaluate_NN_full_model(X1_train_norm_KFold, X1_test_norm_KFold, Y1_train_norm_KFold, Y1_test_norm_KFold, V1_train_norm_KFold, V1_test_norm_KFold, H1_train_norm_KFold, H1_test_norm_KFold,
                                                                       X2_train_norm_KFold, X2_test_norm_KFold, Z2_train_norm_KFold, Z2_test_norm_KFold, W2_train_norm_KFold, W2_test_norm_KFold, C2_train_norm_KFold, C2_test_norm_KFold,
-                                                                      k_folds, n_CVrepeats)
+                                                                      k_folds, n_CVrepeats, scalers)
 
         # Calculate mean scores for the objective function
         score_r2_HC = np.mean([score_r2_H, score_r2_C])
@@ -133,29 +133,66 @@ class BayesianOptimizationObjective:
 
         return score_r2_HC, score_loss_HC
 
-    def update_hypertable(self, fixed_hyper_space,
-                          bo, score_r2_HC_list, score_loss_HC_list,
+    # def update_hypertable(self, fixed_hyper_space,
+    #                       bo, score_r2_HC_list, score_loss_HC_list,
+    #                       score_r2_H_list, score_r2_C_list, score_loss_H_list, score_loss_C_list):
+    #     """
+    #     This function updates the hypertable with the current Bayesian Optimization scores.
+
+    #     Args:
+    #         bo: The BayesianOptimization object.
+    #         score_r2_HC_list, score_loss_HC_list, etc.: Lists to store scores for different tasks.
+    #     """
+
+    #     # print(self.hypertable)
+
+    #     # reformat the fixed_hyper_space_dict
+    #     fixed_hyper_space_dict = {
+    #         entry['name']: entry['domain'] for entry in fixed_hyper_space}
+
+    #     for i in range(len(bo.X)):
+    #         row = dict(zip(self.search_hyper_names, bo.X[i]))
+
+    #         # adding fixed_space parameters to the row
+    #         row.update(fixed_hyper_space_dict)
+
+    #         row['score_r2_HC_best'] = -bo.Y_best.flatten()[i]
+    #         row['score_r2_HC'] = np.array(score_r2_HC_list)[i]
+    #         row['score_loss_HC'] = np.array(score_loss_HC_list)[i]
+    #         row['score_r2_H'] = np.array(score_r2_H_list)[i]
+    #         row['score_r2_C'] = np.array(score_r2_C_list)[i]
+    #         row['score_loss_H'] = np.array(score_loss_H_list)[i]
+    #         row['score_loss_C'] = np.array(score_loss_C_list)[i]
+
+    #         self.hypertable.loc[len(self.hypertable)] = row
+
+    def update_hypertable(self, fixed_hyper_space, bo, score_r2_HC_list, score_loss_HC_list,
                           score_r2_H_list, score_r2_C_list, score_loss_H_list, score_loss_C_list):
         """
         This function updates the hypertable with the current Bayesian Optimization scores.
-
-        Args:
-            bo: The BayesianOptimization object.
-            score_r2_HC_list, score_loss_HC_list, etc.: Lists to store scores for different tasks.
         """
+        # Define a list or dictionary of parameters that need rounding
+        parameters_to_round = ['NNS_num_nodes', 'NNS_num_layers', 'NNH_num_nodes', 'NNH_num_layers',
+                               'NNC_num_nodes', 'NNC_num_layers', 'batch_size_H', 'N_epochs_local']
 
-        # print(self.hypertable)
-
-        # reformat the fixed_hyper_space_dict
         fixed_hyper_space_dict = {
             entry['name']: entry['domain'] for entry in fixed_hyper_space}
 
         for i in range(len(bo.X)):
-            row = dict(zip(self.search_hyper_names, bo.X[i]))
+            # Get the current set of parameters
+            params = bo.X[i]
 
-            # adding fixed_space parameters to the row
+            # Apply rounding conditionally
+            rounded_params = [round(param) if self.search_hyper_names[j]
+                              in parameters_to_round else param for j, param in enumerate(params)]
+
+            # Create the row dictionary with rounded/unaltered parameters
+            row = dict(zip(self.search_hyper_names, rounded_params))
+
+            # Add fixed space parameters to the row
             row.update(fixed_hyper_space_dict)
 
+            # Add the scores
             row['score_r2_HC_best'] = -bo.Y_best.flatten()[i]
             row['score_r2_HC'] = np.array(score_r2_HC_list)[i]
             row['score_loss_HC'] = np.array(score_loss_HC_list)[i]
@@ -164,6 +201,7 @@ class BayesianOptimizationObjective:
             row['score_loss_H'] = np.array(score_loss_H_list)[i]
             row['score_loss_C'] = np.array(score_loss_C_list)[i]
 
+            # Add the row to the hypertable
             self.hypertable.loc[len(self.hypertable)] = row
 
     def plot_best_r2_score(self):

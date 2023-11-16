@@ -10227,3 +10227,681 @@
 2023-11-14 23:01:38,069 - WARNING - No such comm: d99de27d48a9462ebcc22e0ff4e2fbfa
 2023-11-14 23:01:38,096 - WARNING - No such comm: a55a3f042aec47eca0d1bf0b499642da
 2023-11-14 23:01:38,116 - WARNING - No such comm: e8cc80a8af1646f0b78fc8cad593838a
+2023-11-15 00:25:31,782 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc_shared_relu.h5
+2023-11-15 00:25:31,784 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc_shared_relu.h5
+2023-11-15 00:25:33,568 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc_separate_relu.h5
+2023-11-15 00:25:33,569 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc_separate_relu.h5
+2023-11-15 00:25:34,546 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc_separate_relu.h5
+2023-11-15 00:25:34,548 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc_separate_relu.h5
+2023-11-15 00:25:35,572 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc_NoEng_relu.h5
+2023-11-15 00:25:35,573 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc_NoEng_relu.h5
+2023-11-15 00:25:36,086 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc_NoEng_relu.h5
+2023-11-15 00:25:36,088 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc_NoEng_relu.h5
+2023-11-15 00:25:37,111 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc_shared_relu.h5
+2023-11-15 00:25:37,111 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc_shared_relu.h5
+2023-11-15 00:25:37,359 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc_separate_relu.h5
+2023-11-15 00:25:37,383 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc_separate_relu.h5
+2023-11-15 00:25:38,671 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc_shared_relu.h5
+2023-11-15 00:25:38,672 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc_shared_relu.h5
+2023-11-15 00:25:38,844 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc_NoEng_relu.h5
+2023-11-15 00:25:38,844 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc_NoEng_relu.h5
+2023-11-15 00:25:38,870 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc_separate_relu.h5
+2023-11-15 00:25:38,871 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc_separate_relu.h5
+2023-11-15 00:25:38,877 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc_shared_relu.h5
+2023-11-15 00:25:38,877 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc_shared_relu.h5
+2023-11-15 00:25:38,932 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc_separate_relu.h5
+2023-11-15 00:25:38,932 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc_separate_relu.h5
+2023-11-15 00:25:38,933 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc_separate_relu.h5
+2023-11-15 00:25:38,933 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc_separate_relu.h5
+2023-11-15 00:25:39,627 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc_separate_relu.h5
+2023-11-15 00:25:39,628 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc_separate_relu.h5
+2023-11-15 00:25:40,124 - INFO - Saved model: NNH_model_RepeatedKFold_2_compo_features_XAI_gelu.h5
+2023-11-15 00:25:40,126 - INFO - Saved model: NNC_model_RepeatedKFold_2_compo_features_XAI_gelu.h5
+2023-11-15 00:25:40,556 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc_NoEng_relu.h5
+2023-11-15 00:25:40,556 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc_NoEng_relu.h5
+2023-11-15 00:25:41,051 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc_shared_relu.h5
+2023-11-15 00:25:41,052 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc_shared_relu.h5
+2023-11-15 00:25:41,374 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc_NoEng_relu.h5
+2023-11-15 00:25:41,375 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc_NoEng_relu.h5
+2023-11-15 00:25:41,408 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc_NoEng_relu.h5
+2023-11-15 00:25:41,408 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc_NoEng_relu.h5
+2023-11-15 00:25:41,741 - INFO - Saved model: NNH_model_RepeatedKFold_8_compo_features_XAI_gelu.h5
+2023-11-15 00:25:41,741 - INFO - Saved model: NNC_model_RepeatedKFold_8_compo_features_XAI_gelu.h5
+2023-11-15 00:25:42,096 - INFO - Saved model: NNH_model_RepeatedKFold_10_compo_features_XAI_gelu.h5
+2023-11-15 00:25:42,097 - INFO - Saved model: NNC_model_RepeatedKFold_10_compo_features_XAI_gelu.h5
+2023-11-15 00:25:42,326 - INFO - Saved model: NNH_model_RepeatedKFold_9_compo_XAI_gelu.h5
+2023-11-15 00:25:42,326 - INFO - Saved model: NNC_model_RepeatedKFold_9_compo_XAI_gelu.h5
+2023-11-15 00:25:43,171 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc_NoEng_relu.h5
+2023-11-15 00:25:43,171 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc_NoEng_relu.h5
+2023-11-15 00:25:43,517 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc_shared_relu.h5
+2023-11-15 00:25:43,517 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc_shared_relu.h5
+2023-11-15 00:25:43,621 - INFO - Saved model: NNH_model_RepeatedKFold_2_compo_XAI_gelu.h5
+2023-11-15 00:25:43,622 - INFO - Saved model: NNC_model_RepeatedKFold_2_compo_XAI_gelu.h5
+2023-11-15 00:25:44,000 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc_shared_relu.h5
+2023-11-15 00:25:44,001 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc_shared_relu.h5
+2023-11-15 00:25:44,059 - INFO - Saved model: NNH_model_RepeatedKFold_10_compo_XAI_gelu.h5
+2023-11-15 00:25:44,059 - INFO - Saved model: NNC_model_RepeatedKFold_10_compo_XAI_gelu.h5
+2023-11-15 00:25:44,283 - INFO - Saved model: NNH_model_RepeatedKFold_8_compo_XAI_gelu.h5
+2023-11-15 00:25:44,283 - INFO - Saved model: NNC_model_RepeatedKFold_8_compo_XAI_gelu.h5
+2023-11-15 00:25:44,613 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc_shared_relu.h5
+2023-11-15 00:25:44,613 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc_shared_relu.h5
+2023-11-15 00:25:45,084 - INFO - Saved model: NNH_model_RepeatedKFold_7_compo_XAI_gelu.h5
+2023-11-15 00:25:45,085 - INFO - Saved model: NNC_model_RepeatedKFold_7_compo_XAI_gelu.h5
+2023-11-15 00:25:45,455 - INFO - Saved model: NNH_model_RepeatedKFold_7_compo_features_XAI_gelu.h5
+2023-11-15 00:25:45,456 - INFO - Saved model: NNC_model_RepeatedKFold_7_compo_features_XAI_gelu.h5
+2023-11-15 00:25:46,320 - INFO - Saved model: NNH_model_RepeatedKFold_9_compo_features_XAI_gelu.h5
+2023-11-15 00:25:46,320 - INFO - Saved model: NNC_model_RepeatedKFold_9_compo_features_XAI_gelu.h5
+2023-11-15 00:25:46,363 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc_shared_relu.h5
+2023-11-15 00:25:46,364 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc_shared_relu.h5
+2023-11-15 00:25:46,464 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc_separate_relu.h5
+2023-11-15 00:25:46,465 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc_separate_relu.h5
+2023-11-15 00:25:46,941 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc_NoEng_relu.h5
+2023-11-15 00:25:46,941 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc_NoEng_relu.h5
+2023-11-15 00:25:47,213 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc_separate_relu.h5
+2023-11-15 00:25:47,213 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc_separate_relu.h5
+2023-11-15 00:25:47,294 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc_separate_relu.h5
+2023-11-15 00:25:47,314 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc_separate_relu.h5
+2023-11-15 00:25:47,948 - INFO - Saved model: NNH_model_RepeatedKFold_4_compo_features_XAI_gelu.h5
+2023-11-15 00:25:47,949 - INFO - Saved model: NNC_model_RepeatedKFold_4_compo_features_XAI_gelu.h5
+2023-11-15 00:25:48,399 - INFO - Saved model: NNH_model_RepeatedKFold_4_compo_XAI_gelu.h5
+2023-11-15 00:25:48,400 - INFO - Saved model: NNC_model_RepeatedKFold_4_compo_XAI_gelu.h5
+2023-11-15 00:25:48,403 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc_NoEng_relu.h5
+2023-11-15 00:25:48,403 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc_NoEng_relu.h5
+2023-11-15 00:25:48,646 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc_NoEng_relu.h5
+2023-11-15 00:25:48,646 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc_NoEng_relu.h5
+2023-11-15 00:25:48,755 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc_NoEng_relu.h5
+2023-11-15 00:25:48,755 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc_NoEng_relu.h5
+2023-11-15 00:25:48,780 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc_shared_relu.h5
+2023-11-15 00:25:48,781 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc_shared_relu.h5
+2023-11-15 00:25:48,793 - INFO - Saved model: NNH_model_RepeatedKFold_3_compo_XAI_gelu.h5
+2023-11-15 00:25:48,793 - INFO - Saved model: NNC_model_RepeatedKFold_3_compo_XAI_gelu.h5
+2023-11-15 00:25:48,804 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc_shared_relu.h5
+2023-11-15 00:25:48,805 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc_shared_relu.h5
+2023-11-15 00:25:49,801 - INFO - Saved model: NNH_model_RepeatedKFold_1_compo_XAI_gelu.h5
+2023-11-15 00:25:49,801 - INFO - Saved model: NNC_model_RepeatedKFold_1_compo_XAI_gelu.h5
+2023-11-15 00:25:49,882 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc_separate_relu.h5
+2023-11-15 00:25:49,883 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc_separate_relu.h5
+2023-11-15 00:25:51,973 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc_NoEng_relu.h5
+2023-11-15 00:25:51,973 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc_NoEng_relu.h5
+2023-11-15 00:25:52,314 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc_separate_relu.h5
+2023-11-15 00:25:52,314 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc_separate_relu.h5
+2023-11-15 00:25:54,340 - INFO - Saved model: NNH_model_RepeatedKFold_3_compo_features_XAI_gelu.h5
+2023-11-15 00:25:54,341 - INFO - Saved model: NNC_model_RepeatedKFold_3_compo_features_XAI_gelu.h5
+2023-11-15 00:25:54,855 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc_shared_relu.h5
+2023-11-15 00:25:54,856 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc_shared_relu.h5
+2023-11-15 00:25:57,045 - INFO - Saved model: NNH_model_RepeatedKFold_1_compo_features_XAI_gelu.h5
+2023-11-15 00:25:57,046 - INFO - Saved model: NNC_model_RepeatedKFold_1_compo_features_XAI_gelu.h5
+2023-11-15 00:25:58,393 - INFO - Saved model: NNH_model_RepeatedKFold_6_compo_XAI_gelu.h5
+2023-11-15 00:25:58,394 - INFO - Saved model: NNC_model_RepeatedKFold_6_compo_XAI_gelu.h5
+2023-11-15 00:25:59,263 - INFO - Saved model: NNH_model_RepeatedKFold_12_compo_XAI_gelu.h5
+2023-11-15 00:25:59,263 - INFO - Saved model: NNC_model_RepeatedKFold_12_compo_XAI_gelu.h5
+2023-11-15 00:26:00,042 - INFO - Saved model: NNH_model_RepeatedKFold_5_compo_XAI_gelu.h5
+2023-11-15 00:26:00,042 - INFO - Saved model: NNC_model_RepeatedKFold_5_compo_XAI_gelu.h5
+2023-11-15 00:26:00,077 - INFO - Saved model: NNH_model_RepeatedKFold_11_compo_features_XAI_gelu.h5
+2023-11-15 00:26:00,078 - INFO - Saved model: NNC_model_RepeatedKFold_11_compo_features_XAI_gelu.h5
+2023-11-15 00:26:00,826 - INFO - Saved model: NNH_model_RepeatedKFold_6_compo_features_XAI_gelu.h5
+2023-11-15 00:26:00,827 - INFO - Saved model: NNC_model_RepeatedKFold_6_compo_features_XAI_gelu.h5
+2023-11-15 00:26:02,488 - INFO - Saved model: NNH_model_RepeatedKFold_12_compo_features_XAI_gelu.h5
+2023-11-15 00:26:02,488 - INFO - Saved model: NNC_model_RepeatedKFold_12_compo_features_XAI_gelu.h5
+2023-11-15 00:26:03,968 - INFO - Saved model: NNH_model_RepeatedKFold_11_compo_XAI_gelu.h5
+2023-11-15 00:26:03,969 - INFO - Saved model: NNC_model_RepeatedKFold_11_compo_XAI_gelu.h5
+2023-11-15 00:26:07,053 - INFO - Saved model: NNH_model_RepeatedKFold_5_compo_features_XAI_gelu.h5
+2023-11-15 00:26:07,055 - INFO - Saved model: NNC_model_RepeatedKFold_5_compo_features_XAI_gelu.h5
+2023-11-15 00:32:48,323 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc_shared_relu.h5
+2023-11-15 00:32:48,327 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc_shared_relu.h5
+2023-11-15 00:32:48,459 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc_NoEng_relu.h5
+2023-11-15 00:32:48,460 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc_NoEng_relu.h5
+2023-11-15 00:32:48,768 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc_separate_relu.h5
+2023-11-15 00:32:48,781 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc_separate_relu.h5
+2023-11-15 00:32:49,639 - INFO - Saved model: NNH_model_RepeatedKFold_10_compo_features_XAI_gelu.h5
+2023-11-15 00:32:49,639 - INFO - Saved model: NNC_model_RepeatedKFold_10_compo_features_XAI_gelu.h5
+2023-11-15 00:32:50,150 - INFO - Saved model: NNH_model_RepeatedKFold_8_compo_features_XAI_gelu.h5
+2023-11-15 00:32:50,151 - INFO - Saved model: NNC_model_RepeatedKFold_8_compo_features_XAI_gelu.h5
+2023-11-15 00:32:51,065 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc_separate_relu.h5
+2023-11-15 00:32:51,068 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc_separate_relu.h5
+2023-11-15 00:32:51,340 - INFO - Saved model: NNH_model_RepeatedKFold_7_compo_features_XAI_gelu.h5
+2023-11-15 00:32:51,341 - INFO - Saved model: NNC_model_RepeatedKFold_7_compo_features_XAI_gelu.h5
+2023-11-15 00:32:52,469 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc_separate_relu.h5
+2023-11-15 00:32:52,470 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc_separate_relu.h5
+2023-11-15 00:32:53,263 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc_NoEng_relu.h5
+2023-11-15 00:32:53,264 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc_NoEng_relu.h5
+2023-11-15 00:32:54,382 - INFO - Saved model: NNH_model_RepeatedKFold_10_compo_XAI_gelu.h5
+2023-11-15 00:32:54,383 - INFO - Saved model: NNC_model_RepeatedKFold_10_compo_XAI_gelu.h5
+2023-11-15 00:32:54,562 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc_shared_relu.h5
+2023-11-15 00:32:54,562 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc_shared_relu.h5
+2023-11-15 00:32:54,583 - INFO - Saved model: NNH_model_RepeatedKFold_9_compo_XAI_gelu.h5
+2023-11-15 00:32:54,584 - INFO - Saved model: NNC_model_RepeatedKFold_9_compo_XAI_gelu.h5
+2023-11-15 00:32:54,965 - INFO - Saved model: NNH_model_RepeatedKFold_3_compo_features_XAI_gelu.h5
+2023-11-15 00:32:54,965 - INFO - Saved model: NNC_model_RepeatedKFold_3_compo_features_XAI_gelu.h5
+2023-11-15 00:32:56,254 - INFO - Saved model: NNH_model_RepeatedKFold_9_compo_features_XAI_gelu.h5
+2023-11-15 00:32:56,254 - INFO - Saved model: NNC_model_RepeatedKFold_9_compo_features_XAI_gelu.h5
+2023-11-15 00:32:56,616 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc_NoEng_relu.h5
+2023-11-15 00:32:56,616 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc_NoEng_relu.h5
+2023-11-15 00:32:57,136 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc_separate_relu.h5
+2023-11-15 00:32:57,137 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc_separate_relu.h5
+2023-11-15 00:32:58,695 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc_separate_relu.h5
+2023-11-15 00:32:58,695 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc_separate_relu.h5
+2023-11-15 00:32:59,208 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc_separate_relu.h5
+2023-11-15 00:32:59,208 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc_separate_relu.h5
+2023-11-15 00:32:59,431 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc_separate_relu.h5
+2023-11-15 00:32:59,431 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc_separate_relu.h5
+2023-11-15 00:33:00,065 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc_NoEng_relu.h5
+2023-11-15 00:33:00,065 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc_NoEng_relu.h5
+2023-11-15 00:33:00,110 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc_separate_relu.h5
+2023-11-15 00:33:00,144 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc_separate_relu.h5
+2023-11-15 00:33:01,601 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc_NoEng_relu.h5
+2023-11-15 00:33:01,602 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc_NoEng_relu.h5
+2023-11-15 00:33:01,607 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc_shared_relu.h5
+2023-11-15 00:33:01,608 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc_shared_relu.h5
+2023-11-15 00:33:01,760 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc_NoEng_relu.h5
+2023-11-15 00:33:01,761 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc_NoEng_relu.h5
+2023-11-15 00:33:01,761 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc_separate_relu.h5
+2023-11-15 00:33:01,761 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc_separate_relu.h5
+2023-11-15 00:33:02,424 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc_NoEng_relu.h5
+2023-11-15 00:33:02,424 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc_NoEng_relu.h5
+2023-11-15 00:33:03,013 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc_shared_relu.h5
+2023-11-15 00:33:03,013 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc_shared_relu.h5
+2023-11-15 00:33:03,533 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc_shared_relu.h5
+2023-11-15 00:33:03,533 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc_shared_relu.h5
+2023-11-15 00:33:03,590 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc_separate_relu.h5
+2023-11-15 00:33:03,592 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc_separate_relu.h5
+2023-11-15 00:33:03,622 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc_shared_relu.h5
+2023-11-15 00:33:03,662 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc_shared_relu.h5
+2023-11-15 00:33:05,643 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc_shared_relu.h5
+2023-11-15 00:33:05,644 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc_shared_relu.h5
+2023-11-15 00:33:06,171 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc_separate_relu.h5
+2023-11-15 00:33:06,171 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc_separate_relu.h5
+2023-11-15 00:33:06,392 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc_separate_relu.h5
+2023-11-15 00:33:06,394 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc_separate_relu.h5
+2023-11-15 00:33:06,748 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc_shared_relu.h5
+2023-11-15 00:33:06,748 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc_shared_relu.h5
+2023-11-15 00:33:07,616 - INFO - Saved model: NNH_model_RepeatedKFold_2_compo_XAI_gelu.h5
+2023-11-15 00:33:07,616 - INFO - Saved model: NNC_model_RepeatedKFold_2_compo_XAI_gelu.h5
+2023-11-15 00:33:08,098 - INFO - Saved model: NNH_model_RepeatedKFold_3_compo_XAI_gelu.h5
+2023-11-15 00:33:08,098 - INFO - Saved model: NNC_model_RepeatedKFold_3_compo_XAI_gelu.h5
+2023-11-15 00:33:08,137 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc_shared_relu.h5
+2023-11-15 00:33:08,137 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc_shared_relu.h5
+2023-11-15 00:33:08,158 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc_NoEng_relu.h5
+2023-11-15 00:33:08,158 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc_NoEng_relu.h5
+2023-11-15 00:33:09,206 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc_NoEng_relu.h5
+2023-11-15 00:33:09,206 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc_NoEng_relu.h5
+2023-11-15 00:33:09,391 - INFO - Saved model: NNH_model_RepeatedKFold_11_compo_features_XAI_gelu.h5
+2023-11-15 00:33:09,391 - INFO - Saved model: NNC_model_RepeatedKFold_11_compo_features_XAI_gelu.h5
+2023-11-15 00:33:09,498 - INFO - Saved model: NNH_model_RepeatedKFold_7_compo_XAI_gelu.h5
+2023-11-15 00:33:09,498 - INFO - Saved model: NNC_model_RepeatedKFold_7_compo_XAI_gelu.h5
+2023-11-15 00:33:09,524 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc_NoEng_relu.h5
+2023-11-15 00:33:09,524 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc_NoEng_relu.h5
+2023-11-15 00:33:09,531 - INFO - Saved model: NNH_model_RepeatedKFold_5_compo_features_XAI_gelu.h5
+2023-11-15 00:33:09,531 - INFO - Saved model: NNC_model_RepeatedKFold_5_compo_features_XAI_gelu.h5
+2023-11-15 00:33:09,569 - INFO - Saved model: NNH_model_RepeatedKFold_12_compo_XAI_gelu.h5
+2023-11-15 00:33:09,569 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc_NoEng_relu.h5
+2023-11-15 00:33:09,581 - INFO - Saved model: NNC_model_RepeatedKFold_12_compo_XAI_gelu.h5
+2023-11-15 00:33:09,581 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc_NoEng_relu.h5
+2023-11-15 00:33:10,628 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc_shared_relu.h5
+2023-11-15 00:33:10,628 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc_shared_relu.h5
+2023-11-15 00:33:10,942 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc_NoEng_relu.h5
+2023-11-15 00:33:10,942 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc_NoEng_relu.h5
+2023-11-15 00:33:11,541 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc_shared_relu.h5
+2023-11-15 00:33:11,541 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc_shared_relu.h5
+2023-11-15 00:33:12,236 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc_shared_relu.h5
+2023-11-15 00:33:12,237 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc_shared_relu.h5
+2023-11-15 00:33:13,120 - INFO - Saved model: NNH_model_RepeatedKFold_5_compo_XAI_gelu.h5
+2023-11-15 00:33:13,120 - INFO - Saved model: NNC_model_RepeatedKFold_5_compo_XAI_gelu.h5
+2023-11-15 00:33:13,223 - INFO - Saved model: NNH_model_RepeatedKFold_4_compo_features_XAI_gelu.h5
+2023-11-15 00:33:13,224 - INFO - Saved model: NNC_model_RepeatedKFold_4_compo_features_XAI_gelu.h5
+2023-11-15 00:33:13,224 - INFO - Saved model: NNH_model_RepeatedKFold_1_compo_XAI_gelu.h5
+2023-11-15 00:33:13,224 - INFO - Saved model: NNC_model_RepeatedKFold_1_compo_XAI_gelu.h5
+2023-11-15 00:33:13,271 - INFO - Saved model: NNH_model_RepeatedKFold_2_compo_features_XAI_gelu.h5
+2023-11-15 00:33:13,294 - INFO - Saved model: NNC_model_RepeatedKFold_2_compo_features_XAI_gelu.h5
+2023-11-15 00:33:15,179 - INFO - Saved model: NNH_model_RepeatedKFold_1_compo_features_XAI_gelu.h5
+2023-11-15 00:33:15,180 - INFO - Saved model: NNC_model_RepeatedKFold_1_compo_features_XAI_gelu.h5
+2023-11-15 00:33:15,198 - INFO - Saved model: NNH_model_RepeatedKFold_4_compo_XAI_gelu.h5
+2023-11-15 00:33:15,257 - INFO - Saved model: NNC_model_RepeatedKFold_4_compo_XAI_gelu.h5
+2023-11-15 00:33:16,227 - INFO - Saved model: NNH_model_RepeatedKFold_11_compo_XAI_gelu.h5
+2023-11-15 00:33:16,227 - INFO - Saved model: NNC_model_RepeatedKFold_11_compo_XAI_gelu.h5
+2023-11-15 00:33:17,092 - INFO - Saved model: NNH_model_RepeatedKFold_6_compo_features_XAI_gelu.h5
+2023-11-15 00:33:17,093 - INFO - Saved model: NNC_model_RepeatedKFold_6_compo_features_XAI_gelu.h5
+2023-11-15 00:33:19,146 - INFO - Saved model: NNH_model_RepeatedKFold_8_compo_XAI_gelu.h5
+2023-11-15 00:33:19,146 - INFO - Saved model: NNC_model_RepeatedKFold_8_compo_XAI_gelu.h5
+2023-11-15 00:33:26,519 - INFO - Saved model: NNH_model_RepeatedKFold_6_compo_XAI_gelu.h5
+2023-11-15 00:33:26,544 - INFO - Saved model: NNC_model_RepeatedKFold_6_compo_XAI_gelu.h5
+2023-11-15 00:33:26,714 - INFO - Saved model: NNH_model_RepeatedKFold_12_compo_features_XAI_gelu.h5
+2023-11-15 00:33:26,714 - INFO - Saved model: NNC_model_RepeatedKFold_12_compo_features_XAI_gelu.h5
+2023-11-15 00:35:06,981 - INFO - num_full_subsets = 2
+2023-11-15 00:35:06,995 - INFO - phi = [ 0.05446441  0.00523363  0.12204473 -0.0244488   0.01604702]
+2023-11-15 00:35:07,021 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,032 - INFO - phi = [0.11729674 0.08364548 0.24704738 0.01218071 0.03616366]
+2023-11-15 00:35:07,048 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,059 - INFO - phi = [0.17456215 0.15417978 0.3828224  0.0530491  0.06760663]
+2023-11-15 00:35:07,076 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,089 - INFO - phi = [0.21955106 0.21858199 0.54586494 0.09776994 0.10821593]
+2023-11-15 00:35:07,112 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,123 - INFO - phi = [0.24777276 0.27187488 0.71652827 0.12695068 0.1675185 ]
+2023-11-15 00:35:07,139 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,150 - INFO - phi = [-0.01419648 -0.07320582  0.04731402 -0.07129641  0.00372785]
+2023-11-15 00:35:07,166 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,176 - INFO - phi = [-0.01590856 -0.05788671  0.06946649 -0.07203118  0.00665519]
+2023-11-15 00:35:07,193 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,206 - INFO - phi = [ 0.00728629 -0.01869456  0.13178918 -0.0610115   0.02251068]
+2023-11-15 00:35:07,236 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,249 - INFO - phi = [ 0.04353658  0.0275771   0.21645061 -0.03401395  0.04790354]
+2023-11-15 00:35:07,264 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,274 - INFO - phi = [0.10001263 0.10077706 0.38398193 0.02909406 0.10287207]
+2023-11-15 00:35:07,300 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,312 - INFO - phi = [0.15318006 0.15781861 0.56431758 0.09393486 0.19849247]
+2023-11-15 00:35:07,336 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,347 - INFO - phi = [0.17738981 0.2048221  0.77999619 0.13173134 0.32219875]
+2023-11-15 00:35:07,432 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,503 - INFO - phi = [ 0.00477535 -0.06698818  0.03300846 -0.06579462  0.00294892]
+2023-11-15 00:35:07,525 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,535 - INFO - phi = [-0.01540075 -0.06197875  0.05700745 -0.08565185  0.00272166]
+2023-11-15 00:35:07,551 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,561 - INFO - phi = [-0.02093624 -0.04180144  0.07740839 -0.13959616  0.00751694]
+2023-11-15 00:35:07,577 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,587 - INFO - phi = [-0.03492366 -0.04732459  0.09156473 -0.10435373  0.01116612]
+2023-11-15 00:35:07,602 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,615 - INFO - phi = [-0.02873316 -0.02982775  0.14644396 -0.10140489  0.02956146]
+2023-11-15 00:35:07,630 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,640 - INFO - phi = [ 0.00414489  0.00520777  0.25332544 -0.05793698  0.09012181]
+2023-11-15 00:35:07,656 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,682 - INFO - phi = [0.05192504 0.06039358 0.42964381 0.01915217 0.18884742]
+2023-11-15 00:35:07,721 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,757 - INFO - phi = [0.10870455 0.12307816 0.66923379 0.10504959 0.37074661]
+2023-11-15 00:35:07,853 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,874 - INFO - phi = [0.13984312 0.17925559 0.98571851 0.13547673 0.60249746]
+2023-11-15 00:35:07,890 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,900 - INFO - phi = [-0.0007873  -0.04262132  0.05359659 -0.06647708  0.00269357]
+2023-11-15 00:35:07,917 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,927 - INFO - phi = [-0.01695318 -0.03753798  0.07565214 -0.07234939  0.00278121]
+2023-11-15 00:35:07,942 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,952 - INFO - phi = [-0.03219467 -0.03449734  0.08793677 -0.09632432  0.00321376]
+2023-11-15 00:35:07,967 - INFO - num_full_subsets = 2
+2023-11-15 00:35:07,977 - INFO - phi = [-0.04457955 -0.0348315   0.09863905 -0.11435991  0.00583129]
+2023-11-15 00:35:07,993 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,003 - INFO - phi = [-0.0562388  -0.03627778  0.12234378 -0.12820421  0.01767113]
+2023-11-15 00:35:08,027 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,037 - INFO - phi = [-0.05196923 -0.03179612  0.19389123 -0.10912888  0.06582101]
+2023-11-15 00:35:08,053 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,063 - INFO - phi = [-0.02533303 -0.00576643  0.33531647 -0.04268613  0.16707593]
+2023-11-15 00:35:08,122 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,133 - INFO - phi = [0.03776496 0.06473152 0.59893436 0.06536772 0.38392216]
+2023-11-15 00:35:08,150 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,160 - INFO - phi = [0.07968446 0.12480294 0.91111626 0.13086843 0.70641649]
+2023-11-15 00:35:08,176 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,186 - INFO - phi = [-0.00940192 -0.02176539  0.07618875 -0.05070815  0.00251847]
+2023-11-15 00:35:08,201 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,212 - INFO - phi = [-0.02261813 -0.01695969  0.09438012 -0.07024549  0.00264226]
+2023-11-15 00:35:08,227 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,237 - INFO - phi = [-0.0359084  -0.01517702  0.10417354 -0.09309203  0.0027553 ]
+2023-11-15 00:35:08,253 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,264 - INFO - phi = [-0.05196716 -0.01757222  0.11259921 -0.11034561  0.00536454]
+2023-11-15 00:35:08,279 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,289 - INFO - phi = [-0.07291797 -0.02940829  0.13467911 -0.12788184  0.01827064]
+2023-11-15 00:35:08,304 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,314 - INFO - phi = [-0.08512736 -0.03564064  0.17811223 -0.12809405  0.05126053]
+2023-11-15 00:35:08,332 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,342 - INFO - phi = [-0.08018776 -0.02754858  0.32242027 -0.06853112  0.15836236]
+2023-11-15 00:35:08,363 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,373 - INFO - phi = [-0.04139938  0.00965053  0.53419219  0.03457138  0.35952777]
+2023-11-15 00:35:08,411 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,435 - INFO - phi = [0.01871996 0.08178992 0.85487801 0.11695374 0.73502302]
+2023-11-15 00:35:08,450 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,474 - INFO - phi = [-0.02166506 -0.00615738  0.10368148 -0.04845345  0.00168982]
+2023-11-15 00:35:08,490 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,500 - INFO - phi = [-0.0315939  -0.00314417  0.11500466 -0.06270889  0.00172452]
+2023-11-15 00:35:08,522 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,532 - INFO - phi = [-0.04207297 -0.00302565  0.12117456 -0.07139581  0.00219049]
+2023-11-15 00:35:08,548 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,558 - INFO - phi = [-0.06695854 -0.00995576  0.13479122 -0.10978282  0.00586346]
+2023-11-15 00:35:08,578 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,607 - INFO - phi = [-0.0901803  -0.0188962   0.15348056 -0.1159804   0.01417194]
+2023-11-15 00:35:08,623 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,634 - INFO - phi = [-0.11604079 -0.03266446  0.19423661 -0.11877464  0.04508592]
+2023-11-15 00:35:08,649 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,659 - INFO - phi = [-0.13499305 -0.03928832  0.31655279 -0.07622271  0.13923648]
+2023-11-15 00:35:08,674 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,689 - INFO - phi = [-0.09339102 -0.00732376  0.5282941   0.01912158  0.35193393]
+2023-11-15 00:35:08,729 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,743 - INFO - phi = [-0.04875717  0.04474127  0.807797    0.11410596  0.64131755]
+2023-11-15 00:35:08,758 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,768 - INFO - phi = [-0.03437289  0.00160535  0.12298903 -0.03938033  0.00146216]
+2023-11-15 00:35:08,784 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,794 - INFO - phi = [-0.05234001  0.00157934  0.13809547 -0.05529516  0.0017904 ]
+2023-11-15 00:35:08,809 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,819 - INFO - phi = [-0.06930902 -0.00070705  0.14968488 -0.0603092   0.00313674]
+2023-11-15 00:35:08,841 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,851 - INFO - phi = [-0.10018602 -0.00845581  0.16956424 -0.08757489  0.00855663]
+2023-11-15 00:35:08,866 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,877 - INFO - phi = [-0.13098115 -0.01926247  0.197011   -0.09515856  0.02126654]
+2023-11-15 00:35:08,892 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,902 - INFO - phi = [-0.15756603 -0.03188426  0.23917768 -0.09577192  0.04925781]
+2023-11-15 00:35:08,927 - INFO - num_full_subsets = 2
+2023-11-15 00:35:08,980 - INFO - phi = [-0.17942054 -0.04194351  0.32227043 -0.06691956  0.11881208]
+2023-11-15 00:35:09,001 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,037 - INFO - phi = [-0.17517376 -0.02966282  0.50734034 -0.00151244  0.26536283]
+2023-11-15 00:35:09,053 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,063 - INFO - phi = [-0.10420017  0.02074086  0.78760345  0.09979445  0.60838825]
+2023-11-15 00:35:09,078 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,088 - INFO - phi = [-0.09234083 -0.00043664  0.17636263 -0.04515876  0.00263334]
+2023-11-15 00:35:09,104 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,127 - INFO - phi = [-0.11951666 -0.00432071  0.19615408 -0.05829467  0.00595411]
+2023-11-15 00:35:09,142 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,152 - INFO - phi = [-0.14972586 -0.01037991  0.22585093 -0.06604158  0.01081962]
+2023-11-15 00:35:09,167 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,177 - INFO - phi = [-0.17805008 -0.01824572  0.25432945 -0.07434287  0.02313407]
+2023-11-15 00:35:09,192 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,202 - INFO - phi = [-0.20118832 -0.02687177  0.29067774 -0.07910922  0.04612438]
+2023-11-15 00:35:09,222 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,249 - INFO - phi = [-0.22404047 -0.03620577  0.36794936 -0.05656687  0.10913104]
+2023-11-15 00:35:09,304 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,314 - INFO - phi = [-2.17324814e-01 -3.10126218e-02  5.26722298e-01 -3.96537734e-04
+  2.50210345e-01]
+2023-11-15 00:35:09,329 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,339 - INFO - phi = [-0.19507338 -0.00918723  0.28502355 -0.03891302  0.0080884 ]
+2023-11-15 00:35:09,355 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,365 - INFO - phi = [-0.21678585 -0.01270179  0.30943968 -0.04114043  0.01313325]
+2023-11-15 00:35:09,406 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,484 - INFO - phi = [-0.24682335 -0.02049346  0.3479579  -0.05036107  0.02883491]
+2023-11-15 00:35:09,569 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,579 - INFO - phi = [-0.25818032 -0.02550515  0.3694856  -0.05164248  0.04499898]
+2023-11-15 00:35:09,594 - INFO - num_full_subsets = 2
+2023-11-15 00:35:09,604 - INFO - phi = [-0.27612952 -0.0308149   0.44225438 -0.04389256  0.09674909]
+2023-11-15 00:38:42,324 - WARNING - No such comm: 24e69ec870794c40a26ee15aef9d91a0
+2023-11-15 00:38:42,326 - WARNING - No such comm: aa5433fb6ed74d6fb92ea2d63a4bf8a2
+2023-11-15 00:38:42,413 - WARNING - No such comm: 2dc9e6f0373645738d46cc2400fa0251
+2023-11-15 00:38:42,414 - WARNING - No such comm: 2f651b96b2a04ce6b2781596bab34fe2
+2023-11-15 00:38:42,471 - WARNING - No such comm: 0f921655aeae430b85032665098cd632
+2023-11-15 00:38:42,472 - WARNING - No such comm: 919ca793a88943349900a606ec245b45
+2023-11-15 00:38:42,595 - WARNING - No such comm: 567a8d47f30b4aff85422386b5e6ff69
+2023-11-15 00:38:42,597 - WARNING - No such comm: 3935b420df694ea8872067e3c6ec5321
+2023-11-15 00:38:42,616 - WARNING - No such comm: c4d82417697a4fb8a96aa85fe6188d7f
+2023-11-15 00:38:42,617 - WARNING - No such comm: 1b06c5f5945f4c49a7dca3900ea7b262
+2023-11-15 00:38:42,621 - WARNING - No such comm: 6baa585833084f90885511850dabfc41
+2023-11-15 09:28:10,163 - INFO - initializing Y
+2023-11-15 09:28:10,167 - INFO - initializing inference method
+2023-11-15 09:28:10,167 - INFO - adding kernel and likelihood as parameters
+2023-11-15 09:28:10,171 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-15 10:13:17,318 - INFO - initializing Y
+2023-11-15 10:13:17,322 - INFO - initializing inference method
+2023-11-15 10:13:17,322 - INFO - adding kernel and likelihood as parameters
+2023-11-15 10:13:17,378 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-15 10:32:38,512 - INFO - initializing Y
+2023-11-15 10:32:38,512 - INFO - initializing inference method
+2023-11-15 10:32:38,512 - INFO - adding kernel and likelihood as parameters
+2023-11-15 10:32:38,515 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-15 13:32:58,647 - INFO - initializing Y
+2023-11-15 13:32:58,648 - INFO - initializing inference method
+2023-11-15 13:32:58,648 - INFO - adding kernel and likelihood as parameters
+2023-11-15 13:32:58,650 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-15 14:06:11,332 - INFO - initializing Y
+2023-11-15 14:06:11,332 - INFO - initializing inference method
+2023-11-15 14:06:11,332 - INFO - adding kernel and likelihood as parameters
+2023-11-15 14:06:11,335 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-15 14:20:47,442 - INFO - initializing Y
+2023-11-15 14:20:47,443 - INFO - initializing inference method
+2023-11-15 14:20:47,444 - INFO - adding kernel and likelihood as parameters
+2023-11-15 14:20:47,446 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-15 16:05:54,255 - INFO - initializing Y
+2023-11-15 16:05:54,256 - INFO - initializing inference method
+2023-11-15 16:05:54,256 - INFO - adding kernel and likelihood as parameters
+2023-11-15 16:05:54,285 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-15 16:44:39,879 - INFO - initializing Y
+2023-11-15 16:44:39,880 - INFO - initializing inference method
+2023-11-15 16:44:39,880 - INFO - adding kernel and likelihood as parameters
+2023-11-15 16:44:39,882 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-15 17:11:43,197 - INFO - initializing Y
+2023-11-15 17:11:43,198 - INFO - initializing inference method
+2023-11-15 17:11:43,198 - INFO - adding kernel and likelihood as parameters
+2023-11-15 17:11:43,271 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-16 09:17:28,397 - INFO - initializing Y
+2023-11-16 09:17:28,398 - INFO - initializing inference method
+2023-11-16 09:17:28,398 - INFO - adding kernel and likelihood as parameters
+2023-11-16 09:17:28,401 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-16 09:33:36,947 - INFO - initializing Y
+2023-11-16 09:33:36,947 - INFO - initializing inference method
+2023-11-16 09:33:36,947 - INFO - adding kernel and likelihood as parameters
+2023-11-16 09:33:36,974 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-16 09:34:53,289 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc_NoEng_relu.h5
+2023-11-16 09:34:53,295 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc_NoEng_relu.h5
+2023-11-16 09:34:53,384 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc_shared_relu.h5
+2023-11-16 09:34:53,384 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc_shared_relu.h5
+2023-11-16 09:34:54,258 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc_NoEng_relu.h5
+2023-11-16 09:34:54,259 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc_NoEng_relu.h5
+2023-11-16 09:34:54,499 - INFO - Saved model: NNH_model_RepeatedKFold_7_compo_XAI_swish.h5
+2023-11-16 09:34:54,499 - INFO - Saved model: NNC_model_RepeatedKFold_7_compo_XAI_swish.h5
+2023-11-16 09:34:54,597 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc_separate_relu.h5
+2023-11-16 09:34:54,597 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc_separate_relu.h5
+2023-11-16 09:34:54,892 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc_NoEng_relu.h5
+2023-11-16 09:34:54,893 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc_NoEng_relu.h5
+2023-11-16 09:34:55,289 - INFO - Saved model: NNH_model_RepeatedKFold_12_compo_features_XAI_swish.h5
+2023-11-16 09:34:55,290 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc_separate_relu.h5
+2023-11-16 09:34:55,290 - INFO - Saved model: NNC_model_RepeatedKFold_12_compo_features_XAI_swish.h5
+2023-11-16 09:34:55,290 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc_separate_relu.h5
+2023-11-16 09:34:55,375 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc_shared_relu.h5
+2023-11-16 09:34:55,375 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc_shared_relu.h5
+2023-11-16 09:34:55,555 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc_separate_relu.h5
+2023-11-16 09:34:55,555 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc_separate_relu.h5
+2023-11-16 09:34:55,871 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc_separate_relu.h5
+2023-11-16 09:34:55,873 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc_separate_relu.h5
+2023-11-16 09:34:55,903 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc_separate_relu.h5
+2023-11-16 09:34:55,943 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc_separate_relu.h5
+2023-11-16 09:34:55,957 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc_shared_relu.h5
+2023-11-16 09:34:55,964 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc_shared_relu.h5
+2023-11-16 09:34:55,982 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc_shared_relu.h5
+2023-11-16 09:34:55,984 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc_separate_relu.h5
+2023-11-16 09:34:55,997 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc_separate_relu.h5
+2023-11-16 09:34:55,997 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc_shared_relu.h5
+2023-11-16 09:34:56,060 - INFO - Saved model: NNH_model_RepeatedKFold_5_compo_features_XAI_swish.h5
+2023-11-16 09:34:56,061 - INFO - Saved model: NNC_model_RepeatedKFold_5_compo_features_XAI_swish.h5
+2023-11-16 09:34:56,115 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc_NoEng_relu.h5
+2023-11-16 09:34:56,115 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc_NoEng_relu.h5
+2023-11-16 09:34:56,236 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc_separate_relu.h5
+2023-11-16 09:34:56,237 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc_separate_relu.h5
+2023-11-16 09:34:56,236 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc_NoEng_relu.h5
+2023-11-16 09:34:56,237 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc_NoEng_relu.h5
+2023-11-16 09:34:56,244 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc_shared_relu.h5
+2023-11-16 09:34:56,276 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc_shared_relu.h5
+2023-11-16 09:34:56,390 - INFO - Saved model: NNH_model_RepeatedKFold_8_compo_features_XAI_swish.h5
+2023-11-16 09:34:56,390 - INFO - Saved model: NNC_model_RepeatedKFold_8_compo_features_XAI_swish.h5
+2023-11-16 09:34:56,432 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc_NoEng_relu.h5
+2023-11-16 09:34:56,432 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc_NoEng_relu.h5
+2023-11-16 09:34:56,509 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc_separate_relu.h5
+2023-11-16 09:34:56,510 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc_separate_relu.h5
+2023-11-16 09:34:56,600 - INFO - Saved model: NNH_model_RepeatedKFold_8_compo_XAI_swish.h5
+2023-11-16 09:34:56,600 - INFO - Saved model: NNC_model_RepeatedKFold_8_compo_XAI_swish.h5
+2023-11-16 09:34:56,731 - INFO - Saved model: NNH_model_RepeatedKFold_9_compo_features_XAI_swish.h5
+2023-11-16 09:34:56,731 - INFO - Saved model: NNC_model_RepeatedKFold_9_compo_features_XAI_swish.h5
+2023-11-16 09:34:56,732 - INFO - Saved model: NNH_model_RepeatedKFold_9_compo_XAI_swish.h5
+2023-11-16 09:34:56,760 - INFO - Saved model: NNC_model_RepeatedKFold_9_compo_XAI_swish.h5
+2023-11-16 09:34:56,732 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc_NoEng_relu.h5
+2023-11-16 09:34:56,751 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc_separate_relu.h5
+2023-11-16 09:34:56,819 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc_NoEng_relu.h5
+2023-11-16 09:34:56,819 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc_separate_relu.h5
+2023-11-16 09:34:56,821 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc_shared_relu.h5
+2023-11-16 09:34:56,822 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc_shared_relu.h5
+2023-11-16 09:34:56,821 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc_NoEng_relu.h5
+2023-11-16 09:34:56,833 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc_NoEng_relu.h5
+2023-11-16 09:34:57,000 - INFO - Saved model: NNH_model_RepeatedKFold_5_compo_XAI_swish.h5
+2023-11-16 09:34:57,000 - INFO - Saved model: NNC_model_RepeatedKFold_5_compo_XAI_swish.h5
+2023-11-16 09:34:57,159 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc_separate_relu.h5
+2023-11-16 09:34:57,161 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc_separate_relu.h5
+2023-11-16 09:34:57,339 - INFO - Saved model: NNH_model_RepeatedKFold_4_compo_features_XAI_swish.h5
+2023-11-16 09:34:57,340 - INFO - Saved model: NNC_model_RepeatedKFold_4_compo_features_XAI_swish.h5
+2023-11-16 09:34:57,485 - INFO - Saved model: NNH_model_RepeatedKFold_11_compo_features_XAI_swish.h5
+2023-11-16 09:34:57,486 - INFO - Saved model: NNC_model_RepeatedKFold_11_compo_features_XAI_swish.h5
+2023-11-16 09:34:57,525 - INFO - Saved model: NNH_model_RepeatedKFold_4_compo_XAI_swish.h5
+2023-11-16 09:34:57,535 - INFO - Saved model: NNC_model_RepeatedKFold_4_compo_XAI_swish.h5
+2023-11-16 09:34:57,701 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc_NoEng_relu.h5
+2023-11-16 09:34:57,701 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc_NoEng_relu.h5
+2023-11-16 09:34:57,929 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc_separate_relu.h5
+2023-11-16 09:34:57,929 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc_separate_relu.h5
+2023-11-16 09:34:58,071 - INFO - Saved model: NNH_model_RepeatedKFold_11_compo_XAI_swish.h5
+2023-11-16 09:34:58,072 - INFO - Saved model: NNC_model_RepeatedKFold_11_compo_XAI_swish.h5
+2023-11-16 09:34:58,124 - INFO - Saved model: NNH_model_RepeatedKFold_12_compo_XAI_swish.h5
+2023-11-16 09:34:58,131 - INFO - Saved model: NNC_model_RepeatedKFold_12_compo_XAI_swish.h5
+2023-11-16 09:34:58,180 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc_shared_relu.h5
+2023-11-16 09:34:58,180 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc_shared_relu.h5
+2023-11-16 09:34:58,181 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc_shared_relu.h5
+2023-11-16 09:34:58,192 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc_shared_relu.h5
+2023-11-16 09:34:58,365 - INFO - Saved model: NNH_model_RepeatedKFold_2_compo_features_XAI_swish.h5
+2023-11-16 09:34:58,366 - INFO - Saved model: NNC_model_RepeatedKFold_2_compo_features_XAI_swish.h5
+2023-11-16 09:34:58,454 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc_separate_relu.h5
+2023-11-16 09:34:58,455 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc_separate_relu.h5
+2023-11-16 09:34:58,720 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc_NoEng_relu.h5
+2023-11-16 09:34:58,720 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc_NoEng_relu.h5
+2023-11-16 09:34:58,948 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc_shared_relu.h5
+2023-11-16 09:34:58,948 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc_shared_relu.h5
+2023-11-16 09:34:58,973 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc_shared_relu.h5
+2023-11-16 09:34:58,990 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc_shared_relu.h5
+2023-11-16 09:34:58,991 - INFO - Saved model: NNH_model_RepeatedKFold_3_compo_XAI_swish.h5
+2023-11-16 09:34:59,112 - INFO - Saved model: NNC_model_RepeatedKFold_3_compo_XAI_swish.h5
+2023-11-16 09:34:59,113 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc_NoEng_relu.h5
+2023-11-16 09:34:59,137 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc_NoEng_relu.h5
+2023-11-16 09:34:59,324 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc_shared_relu.h5
+2023-11-16 09:34:59,324 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc_shared_relu.h5
+2023-11-16 09:34:59,607 - INFO - Saved model: NNH_model_RepeatedKFold_10_compo_features_XAI_swish.h5
+2023-11-16 09:34:59,608 - INFO - Saved model: NNC_model_RepeatedKFold_10_compo_features_XAI_swish.h5
+2023-11-16 09:34:59,608 - INFO - Saved model: NNH_model_RepeatedKFold_1_compo_XAI_swish.h5
+2023-11-16 09:34:59,640 - INFO - Saved model: NNC_model_RepeatedKFold_1_compo_XAI_swish.h5
+2023-11-16 09:34:59,719 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc_shared_relu.h5
+2023-11-16 09:34:59,720 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc_shared_relu.h5
+2023-11-16 09:34:59,894 - INFO - Saved model: NNH_model_RepeatedKFold_10_compo_XAI_swish.h5
+2023-11-16 09:34:59,894 - INFO - Saved model: NNC_model_RepeatedKFold_10_compo_XAI_swish.h5
+2023-11-16 09:35:00,003 - INFO - Saved model: NNH_model_RepeatedKFold_7_compo_features_XAI_swish.h5
+2023-11-16 09:35:00,003 - INFO - Saved model: NNC_model_RepeatedKFold_7_compo_features_XAI_swish.h5
+2023-11-16 09:35:00,016 - INFO - Saved model: NNH_model_RepeatedKFold_6_compo_features_XAI_swish.h5
+2023-11-16 09:35:00,106 - INFO - Saved model: NNC_model_RepeatedKFold_6_compo_features_XAI_swish.h5
+2023-11-16 09:35:00,225 - INFO - Saved model: NNH_model_RepeatedKFold_1_compo_features_XAI_swish.h5
+2023-11-16 09:35:00,226 - INFO - Saved model: NNC_model_RepeatedKFold_1_compo_features_XAI_swish.h5
+2023-11-16 09:35:00,346 - INFO - Saved model: NNH_model_RepeatedKFold_2_compo_XAI_swish.h5
+2023-11-16 09:35:00,347 - INFO - Saved model: NNC_model_RepeatedKFold_2_compo_XAI_swish.h5
+2023-11-16 09:35:00,503 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc_NoEng_relu.h5
+2023-11-16 09:35:00,504 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc_NoEng_relu.h5
+2023-11-16 09:35:00,508 - INFO - Saved model: NNH_model_RepeatedKFold_3_compo_features_XAI_swish.h5
+2023-11-16 09:35:00,566 - INFO - Saved model: NNC_model_RepeatedKFold_3_compo_features_XAI_swish.h5
+2023-11-16 09:35:01,606 - INFO - Saved model: NNH_model_RepeatedKFold_6_compo_XAI_swish.h5
+2023-11-16 09:35:01,607 - INFO - Saved model: NNC_model_RepeatedKFold_6_compo_XAI_swish.h5
+2023-11-16 09:44:45,703 - INFO - initializing Y
+2023-11-16 09:44:45,704 - INFO - initializing inference method
+2023-11-16 09:44:45,704 - INFO - adding kernel and likelihood as parameters
+2023-11-16 09:44:45,757 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-16 09:46:02,505 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc_NoEng_relu.h5
+2023-11-16 09:46:02,506 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc_NoEng_relu.h5
+2023-11-16 09:46:02,781 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc_NoEng_relu.h5
+2023-11-16 09:46:02,781 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc_NoEng_relu.h5
+2023-11-16 09:46:03,344 - INFO - Saved model: NNH_model_RepeatedKFold_6_compo_features_XAI_swish.h5
+2023-11-16 09:46:03,346 - INFO - Saved model: NNC_model_RepeatedKFold_6_compo_features_XAI_swish.h5
+2023-11-16 09:46:03,838 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc_NoEng_relu.h5
+2023-11-16 09:46:03,838 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc_NoEng_relu.h5
+2023-11-16 09:46:03,988 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc_NoEng_relu.h5
+2023-11-16 09:46:03,988 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc_NoEng_relu.h5
+2023-11-16 09:46:04,349 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc_shared_relu.h5
+2023-11-16 09:46:04,350 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc_shared_relu.h5
+2023-11-16 09:46:04,354 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc_shared_relu.h5
+2023-11-16 09:46:04,412 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc_shared_relu.h5
+2023-11-16 09:46:04,673 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc_shared_relu.h5
+2023-11-16 09:46:04,674 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc_shared_relu.h5
+2023-11-16 09:46:04,957 - INFO - Saved model: NNH_model_RepeatedKFold_9_compo_XAI_swish.h5
+2023-11-16 09:46:04,958 - INFO - Saved model: NNC_model_RepeatedKFold_9_compo_XAI_swish.h5
+2023-11-16 09:46:05,038 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc_NoEng_relu.h5
+2023-11-16 09:46:05,038 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc_NoEng_relu.h5
+2023-11-16 09:46:05,104 - INFO - Saved model: NNH_model_RepeatedKFold_3_compo_features_XAI_swish.h5
+2023-11-16 09:46:05,104 - INFO - Saved model: NNC_model_RepeatedKFold_3_compo_features_XAI_swish.h5
+2023-11-16 09:46:05,525 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc_separate_relu.h5
+2023-11-16 09:46:05,525 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc_separate_relu.h5
+2023-11-16 09:46:05,640 - INFO - Saved model: NNH_model_RepeatedKFold_3_compo_XAI_swish.h5
+2023-11-16 09:46:05,640 - INFO - Saved model: NNC_model_RepeatedKFold_3_compo_XAI_swish.h5
+2023-11-16 09:46:05,748 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc_NoEng_relu.h5
+2023-11-16 09:46:05,749 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc_NoEng_relu.h5
+2023-11-16 09:46:05,754 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc_shared_relu.h5
+2023-11-16 09:46:05,816 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc_shared_relu.h5
+2023-11-16 09:46:05,791 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc_NoEng_relu.h5
+2023-11-16 09:46:05,826 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc_NoEng_relu.h5
+2023-11-16 09:46:05,898 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc_NoEng_relu.h5
+2023-11-16 09:46:05,898 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc_NoEng_relu.h5
+2023-11-16 09:46:06,091 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc_shared_relu.h5
+2023-11-16 09:46:06,092 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc_shared_relu.h5
+2023-11-16 09:46:06,191 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc_shared_relu.h5
+2023-11-16 09:46:06,191 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc_shared_relu.h5
+2023-11-16 09:46:06,230 - INFO - Saved model: NNH_model_RepeatedKFold_12_compo_XAI_swish.h5
+2023-11-16 09:46:06,285 - INFO - Saved model: NNC_model_RepeatedKFold_12_compo_XAI_swish.h5
+2023-11-16 09:46:06,231 - INFO - Saved model: NNH_model_RepeatedKFold_7_compo_XAI_swish.h5
+2023-11-16 09:46:06,292 - INFO - Saved model: NNC_model_RepeatedKFold_7_compo_XAI_swish.h5
+2023-11-16 09:46:06,338 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc_separate_relu.h5
+2023-11-16 09:46:06,339 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc_separate_relu.h5
+2023-11-16 09:46:06,367 - INFO - Saved model: NNH_model_RepeatedKFold_10_compo_XAI_swish.h5
+2023-11-16 09:46:06,367 - INFO - Saved model: NNC_model_RepeatedKFold_10_compo_XAI_swish.h5
+2023-11-16 09:46:06,367 - INFO - Saved model: NNH_model_RepeatedKFold_2_compo_features_XAI_swish.h5
+2023-11-16 09:46:06,381 - INFO - Saved model: NNC_model_RepeatedKFold_2_compo_features_XAI_swish.h5
+2023-11-16 09:46:06,400 - INFO - Saved model: NNH_model_RepeatedKFold_6_compo_XAI_swish.h5
+2023-11-16 09:46:06,400 - INFO - Saved model: NNC_model_RepeatedKFold_6_compo_XAI_swish.h5
+2023-11-16 09:46:06,513 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc_separate_relu.h5
+2023-11-16 09:46:06,514 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc_separate_relu.h5
+2023-11-16 09:46:06,597 - INFO - Saved model: NNH_model_RepeatedKFold_12_mc_shared_relu.h5
+2023-11-16 09:46:06,597 - INFO - Saved model: NNC_model_RepeatedKFold_12_mc_shared_relu.h5
+2023-11-16 09:46:06,645 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc_shared_relu.h5
+2023-11-16 09:46:06,645 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc_shared_relu.h5
+2023-11-16 09:46:06,651 - INFO - Saved model: NNH_model_RepeatedKFold_11_compo_features_XAI_swish.h5
+2023-11-16 09:46:06,652 - INFO - Saved model: NNC_model_RepeatedKFold_11_compo_features_XAI_swish.h5
+2023-11-16 09:46:06,713 - INFO - Saved model: NNH_model_RepeatedKFold_11_compo_XAI_swish.h5
+2023-11-16 09:46:06,713 - INFO - Saved model: NNC_model_RepeatedKFold_11_compo_XAI_swish.h5
+2023-11-16 09:46:06,797 - INFO - Saved model: NNH_model_RepeatedKFold_7_mc_separate_relu.h5
+2023-11-16 09:46:06,797 - INFO - Saved model: NNC_model_RepeatedKFold_7_mc_separate_relu.h5
+2023-11-16 09:46:06,981 - INFO - Saved model: NNH_model_RepeatedKFold_4_compo_features_XAI_swish.h5
+2023-11-16 09:46:06,982 - INFO - Saved model: NNC_model_RepeatedKFold_4_compo_features_XAI_swish.h5
+2023-11-16 09:46:07,049 - INFO - Saved model: NNH_model_RepeatedKFold_10_compo_features_XAI_swish.h5
+2023-11-16 09:46:07,050 - INFO - Saved model: NNC_model_RepeatedKFold_10_compo_features_XAI_swish.h5
+2023-11-16 09:46:07,241 - INFO - Saved model: NNH_model_RepeatedKFold_8_compo_features_XAI_swish.h5
+2023-11-16 09:46:07,242 - INFO - Saved model: NNC_model_RepeatedKFold_8_compo_features_XAI_swish.h5
+2023-11-16 09:46:07,322 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc_NoEng_relu.h5
+2023-11-16 09:46:07,322 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc_NoEng_relu.h5
+2023-11-16 09:46:07,383 - INFO - Saved model: NNH_model_RepeatedKFold_2_compo_XAI_swish.h5
+2023-11-16 09:46:07,383 - INFO - Saved model: NNC_model_RepeatedKFold_2_compo_XAI_swish.h5
+2023-11-16 09:46:07,460 - INFO - Saved model: NNH_model_RepeatedKFold_9_compo_features_XAI_swish.h5
+2023-11-16 09:46:07,460 - INFO - Saved model: NNC_model_RepeatedKFold_9_compo_features_XAI_swish.h5
+2023-11-16 09:46:07,460 - INFO - Saved model: NNH_model_RepeatedKFold_10_mc_separate_relu.h5
+2023-11-16 09:46:07,461 - INFO - Saved model: NNC_model_RepeatedKFold_10_mc_separate_relu.h5
+2023-11-16 09:46:07,483 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc_separate_relu.h5
+2023-11-16 09:46:07,483 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc_separate_relu.h5
+2023-11-16 09:46:07,518 - INFO - Saved model: NNH_model_RepeatedKFold_11_mc_shared_relu.h5
+2023-11-16 09:46:07,519 - INFO - Saved model: NNC_model_RepeatedKFold_11_mc_shared_relu.h5
+2023-11-16 09:46:07,744 - INFO - Saved model: NNH_model_RepeatedKFold_5_mc_separate_relu.h5
+2023-11-16 09:46:07,744 - INFO - Saved model: NNC_model_RepeatedKFold_5_mc_separate_relu.h5
+2023-11-16 09:46:07,744 - INFO - Saved model: NNH_model_RepeatedKFold_9_mc_shared_relu.h5
+2023-11-16 09:46:07,793 - INFO - Saved model: NNC_model_RepeatedKFold_9_mc_shared_relu.h5
+2023-11-16 09:46:07,758 - INFO - Saved model: NNH_model_RepeatedKFold_5_compo_XAI_swish.h5
+2023-11-16 09:46:07,793 - INFO - Saved model: NNC_model_RepeatedKFold_5_compo_XAI_swish.h5
+2023-11-16 09:46:08,051 - INFO - Saved model: NNH_model_RepeatedKFold_8_compo_XAI_swish.h5
+2023-11-16 09:46:08,052 - INFO - Saved model: NNC_model_RepeatedKFold_8_compo_XAI_swish.h5
+2023-11-16 09:46:08,051 - INFO - Saved model: NNH_model_RepeatedKFold_6_mc_NoEng_relu.h5
+2023-11-16 09:46:08,052 - INFO - Saved model: NNC_model_RepeatedKFold_6_mc_NoEng_relu.h5
+2023-11-16 09:46:08,052 - INFO - Saved model: NNH_model_RepeatedKFold_5_compo_features_XAI_swish.h5
+2023-11-16 09:46:08,052 - INFO - Saved model: NNC_model_RepeatedKFold_5_compo_features_XAI_swish.h5
+2023-11-16 09:46:08,235 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc_separate_relu.h5
+2023-11-16 09:46:08,235 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc_separate_relu.h5
+2023-11-16 09:46:08,277 - INFO - Saved model: NNH_model_RepeatedKFold_4_mc_NoEng_relu.h5
+2023-11-16 09:46:08,277 - INFO - Saved model: NNC_model_RepeatedKFold_4_mc_NoEng_relu.h5
+2023-11-16 09:46:08,565 - INFO - Saved model: NNH_model_RepeatedKFold_3_mc_separate_relu.h5
+2023-11-16 09:46:08,566 - INFO - Saved model: NNC_model_RepeatedKFold_3_mc_separate_relu.h5
+2023-11-16 09:46:08,620 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc_separate_relu.h5
+2023-11-16 09:46:08,640 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc_separate_relu.h5
+2023-11-16 09:46:08,679 - INFO - Saved model: NNH_model_RepeatedKFold_2_mc_shared_relu.h5
+2023-11-16 09:46:08,744 - INFO - Saved model: NNC_model_RepeatedKFold_2_mc_shared_relu.h5
+2023-11-16 09:46:09,112 - INFO - Saved model: NNH_model_RepeatedKFold_1_compo_XAI_swish.h5
+2023-11-16 09:46:09,112 - INFO - Saved model: NNC_model_RepeatedKFold_1_compo_XAI_swish.h5
+2023-11-16 09:46:09,286 - INFO - Saved model: NNH_model_RepeatedKFold_7_compo_features_XAI_swish.h5
+2023-11-16 09:46:09,286 - INFO - Saved model: NNC_model_RepeatedKFold_7_compo_features_XAI_swish.h5
+2023-11-16 09:46:09,529 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc_separate_relu.h5
+2023-11-16 09:46:09,530 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc_separate_relu.h5
+2023-11-16 09:46:09,530 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc_shared_relu.h5
+2023-11-16 09:46:09,607 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc_shared_relu.h5
+2023-11-16 09:46:09,775 - INFO - Saved model: NNH_model_RepeatedKFold_4_compo_XAI_swish.h5
+2023-11-16 09:46:09,776 - INFO - Saved model: NNC_model_RepeatedKFold_4_compo_XAI_swish.h5
+2023-11-16 09:46:09,784 - INFO - Saved model: NNH_model_RepeatedKFold_12_compo_features_XAI_swish.h5
+2023-11-16 09:46:09,827 - INFO - Saved model: NNC_model_RepeatedKFold_12_compo_features_XAI_swish.h5
+2023-11-16 09:46:09,826 - INFO - Saved model: NNH_model_RepeatedKFold_8_mc_separate_relu.h5
+2023-11-16 09:46:09,828 - INFO - Saved model: NNC_model_RepeatedKFold_8_mc_separate_relu.h5
+2023-11-16 09:46:10,261 - INFO - Saved model: NNH_model_RepeatedKFold_1_mc_NoEng_relu.h5
+2023-11-16 09:46:10,261 - INFO - Saved model: NNC_model_RepeatedKFold_1_mc_NoEng_relu.h5
+2023-11-16 09:46:10,453 - INFO - Saved model: NNH_model_RepeatedKFold_1_compo_features_XAI_swish.h5
+2023-11-16 09:46:10,454 - INFO - Saved model: NNC_model_RepeatedKFold_1_compo_features_XAI_swish.h5

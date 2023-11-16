@@ -9,7 +9,7 @@ import time
 import os
 
 # Constants
-NOTEBOOK_MASTER = 'NN_full_v3_BO_Train_Eval_Pred_master_test'
+NOTEBOOK_MASTER = 'NN_full_v3_BO_Train_Eval_Pred_master'
 # dir in respect to this batch script
 MASTER_PATH = '../03_Model_Train_Evaluate_Predict/'
 MODEL_PATH = '../04_Model_Saved/'
@@ -19,7 +19,7 @@ CONDA_ENV = '/nethome/yuxiang.wu/anaconda3/envs/tf-env/bin/python'
 def execute_notebook(i):
     """Execute a specific Jupyter notebook using Papermill."""
 
-    notebook_fname = f'NN_full_v3_BO_test_{i}'
+    notebook_fname = f'NN_full_v3_BO_{i}'
     model_path_bo = os.path.join(MODEL_PATH, notebook_fname)
     print('full path:', os.path.abspath(model_path_bo))
 
@@ -49,7 +49,7 @@ def main():
 
     start_time = time.time()
 
-    file_nums = np.array([9])
+    file_nums = np.array([3, 4])
     cpu_count = os.cpu_count()
     cpu_count_use = max(1, cpu_count // len(file_nums)
                         )  # Avoid dividing by zero
