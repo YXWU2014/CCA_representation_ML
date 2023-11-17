@@ -329,6 +329,7 @@ def plot_test_true_vs_pred(k_folds, n_CVrepeats,
         ax[row_idx, col_idx].set_xlabel(
             'True values\nin the testing datasets', fontsize=14)
         ax[row_idx, col_idx].set_ylabel('Predictions', fontsize=14)
+        ax[row_idx, col_idx].set_title(f'model_{i+1}', fontsize=14)
         ax[row_idx, col_idx].set_aspect('equal', 'box')
 
         # Add a legend to the subplot
@@ -339,9 +340,9 @@ def plot_test_true_vs_pred(k_folds, n_CVrepeats,
                                   color='grey', alpha=.25)
 
     # Adjust spacing and add title
-    fig.tight_layout()
     axs_title = figname
-    fig.suptitle(axs_title, fontsize=18)
+    fig.suptitle(axs_title, fontsize=18, y=1.05)
+    fig.tight_layout()
 
     if plot_flag:
         # Save the figure and display the plot
@@ -384,7 +385,7 @@ def plot_full_true_vs_pred(HC_list, HC_pred_stack_list, model_path_bo, lims,
     C2_pred_X2_KFold_std = np.std(C2_pred_X2_conc, axis=0).reshape(-1)
 
     # Initialize a new matplotlib figure
-    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(6, 3))
+    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(8, 4))
 
     # Data, labels and colors for each subplot
     data_labels_colors = [
@@ -407,7 +408,7 @@ def plot_full_true_vs_pred(HC_list, HC_pred_stack_list, model_path_bo, lims,
         #           xlabel='True values in the testing datasets', ylabel='Predictions',
         #           title=f'{label} - r2={r2_score(data[0], data[1]):.2f}')
         ax[i].set(xlim=lims[i], ylim=lims[i], aspect='equal', box_aspect=1,
-                  xlabel='True values in the testing datasets', ylabel='Predictions',
+                  xlabel='True values', ylabel='Predictions',
                   title=r'{} - $R^2={:.2f}$'.format(label, r2_score(data[0], data[1])))
         ax[i].plot(lims[i], lims[i], color='grey')
         ax[i].scatter(*data[:2], label=label, color=color, alpha=0.5)

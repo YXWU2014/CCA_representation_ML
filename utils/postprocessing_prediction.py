@@ -93,7 +93,7 @@ def prediction_new_composition(fname, compo, data_path, model_path_bo,
     """
 
     # Load the input data
-    file_name_input = f'{data_path}MultiTaskModel_{fname}_wt_pct.xlsx'
+    file_name_input = f'{data_path}{fname}'
     df_new_wt = pd.read_excel(file_name_input)
 
     # Extract and calculate features from the new data
@@ -149,14 +149,11 @@ def prediction_new_composition(fname, compo, data_path, model_path_bo,
     df_new_wt['C2_new_pred_KFold_mean'] = C2_new_pred_KFold_mean
     df_new_wt['C2_new_pred_KFold_std'] = C2_new_pred_KFold_std
 
-    # Save the updated dataframe
-    file_name_output = f'{model_path_bo}MultiTaskModel_{fname}_wt_pct_ML.xlsx'
-    df_new_wt.to_excel(file_name_output, index=False)
-
     return (compo_data, H_testing_data, C_testing_data, HC_feature_data,
             H1_new_pred_mean, H1_new_pred_std, C2_new_pred_mean, C2_new_pred_std,
             H1_new_pred_KFold_mean, H1_new_pred_KFold_std,
-            C2_new_pred_KFold_mean, C2_new_pred_KFold_std)
+            C2_new_pred_KFold_mean, C2_new_pred_KFold_std,
+            df_new_wt)
 
 
 def predict_bootstrap_NNH_NNC(model_path_bo, NNH_model_name, NNC_model_name,
@@ -269,7 +266,7 @@ def plot_prediction_uncertainty(model_path_bo, coord_x, coord_y, index_PVD_x_y,
         ax_pred.yaxis.set_major_locator(plt.MultipleLocator(10))
         ax_pred.tick_params(axis='x', labelrotation=45, labelsize=10)
         ax_pred.tick_params(axis='y', labelsize=10)
-        ax_pred.set_title(f'Model Ensemble {i+1}', fontsize=12)
+        ax_pred.set_title(f'prediction: model_{i+1}', fontsize=12)
         ax_pred.set_aspect('equal', 'box')
 
         # Annotating each point with its corresponding label
@@ -296,7 +293,7 @@ def plot_prediction_uncertainty(model_path_bo, coord_x, coord_y, index_PVD_x_y,
         ax_unc.yaxis.set_major_locator(plt.MultipleLocator(10))
         ax_unc.tick_params(axis='x', labelrotation=45, labelsize=10)
         ax_unc.tick_params(axis='y', labelsize=10)
-        ax_unc.set_title(f'Model Uncertainty {i+1}', fontsize=12)
+        ax_unc.set_title(f'uncertainty: model_{i+1}', fontsize=12)
         ax_unc.set_aspect('equal', 'box')
 
         # Annotating each point with its corresponding label
@@ -310,7 +307,7 @@ def plot_prediction_uncertainty(model_path_bo, coord_x, coord_y, index_PVD_x_y,
         cbar2.ax.tick_params(labelsize=12)
 
     # Setting main title for all plots and adjusting layout
-    plt.suptitle(title, fontsize=14)
+    plt.suptitle(title, fontsize=14, y=1.05)
     fig.tight_layout()
 
     # Saving figure as .png image
