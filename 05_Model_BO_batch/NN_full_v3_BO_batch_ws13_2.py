@@ -49,7 +49,7 @@ def main():
 
     start_time = time.time()
 
-    file_nums = np.array([13])
+    file_nums = np.array([4])
     cpu_count = os.cpu_count()
     cpu_count_use = max(1, cpu_count // len(file_nums)
                         )  # Avoid dividing by zero

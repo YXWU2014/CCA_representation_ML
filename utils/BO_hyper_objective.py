@@ -133,39 +133,6 @@ class BayesianOptimizationObjective:
 
         return score_r2_HC, score_loss_HC
 
-    # def update_hypertable(self, fixed_hyper_space,
-    #                       bo, score_r2_HC_list, score_loss_HC_list,
-    #                       score_r2_H_list, score_r2_C_list, score_loss_H_list, score_loss_C_list):
-    #     """
-    #     This function updates the hypertable with the current Bayesian Optimization scores.
-
-    #     Args:
-    #         bo: The BayesianOptimization object.
-    #         score_r2_HC_list, score_loss_HC_list, etc.: Lists to store scores for different tasks.
-    #     """
-
-    #     # print(self.hypertable)
-
-    #     # reformat the fixed_hyper_space_dict
-    #     fixed_hyper_space_dict = {
-    #         entry['name']: entry['domain'] for entry in fixed_hyper_space}
-
-    #     for i in range(len(bo.X)):
-    #         row = dict(zip(self.search_hyper_names, bo.X[i]))
-
-    #         # adding fixed_space parameters to the row
-    #         row.update(fixed_hyper_space_dict)
-
-    #         row['score_r2_HC_best'] = -bo.Y_best.flatten()[i]
-    #         row['score_r2_HC'] = np.array(score_r2_HC_list)[i]
-    #         row['score_loss_HC'] = np.array(score_loss_HC_list)[i]
-    #         row['score_r2_H'] = np.array(score_r2_H_list)[i]
-    #         row['score_r2_C'] = np.array(score_r2_C_list)[i]
-    #         row['score_loss_H'] = np.array(score_loss_H_list)[i]
-    #         row['score_loss_C'] = np.array(score_loss_C_list)[i]
-
-    #         self.hypertable.loc[len(self.hypertable)] = row
-
     def update_hypertable(self, fixed_hyper_space, bo, score_r2_HC_list, score_loss_HC_list,
                           score_r2_H_list, score_r2_C_list, score_loss_H_list, score_loss_C_list):
         """
@@ -173,7 +140,9 @@ class BayesianOptimizationObjective:
         """
         # Define a list or dictionary of parameters that need rounding
         parameters_to_round = ['NNS_num_nodes', 'NNS_num_layers', 'NNH_num_nodes', 'NNH_num_layers',
-                               'NNC_num_nodes', 'NNC_num_layers', 'batch_size_H', 'N_epochs_local']
+                               'NNC_num_nodes', 'NNC_num_layers',
+                               'loss_encoder',
+                               'batch_size_H', 'N_epochs_local']
 
         fixed_hyper_space_dict = {
             entry['name']: entry['domain'] for entry in fixed_hyper_space}

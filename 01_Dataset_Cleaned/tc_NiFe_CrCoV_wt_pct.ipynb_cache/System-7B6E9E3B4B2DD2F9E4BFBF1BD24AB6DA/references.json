@@ -1,0 +1,30 @@
+{
+  "tchea4": [
+    "\u0027B. Uhrenius, Evaluation of molar volumes in the C-Co-W system and calculation of volume fraction of phases in cemented carbides, International journal of refractory metals and hard mater, vol.12, no.3, 1993-1994, pp.121-127\u0027",
+    "\u0027Alan Dinsdale, SGTE Data for Pure Elements, Calphad Vol 15(1991) p 317-425, also in NPL Report DMA(A)195 Rev. August 1990\u0027",
+    "\u0027A. Markstrom, Swerea KIMAB, Sweden; Molar volumes\u0027",
+    "\u0027X.-G. Lu, M. Selleby and B. Sundman, CALPHAD, Vol. 29, 2005, pp. 68-89; Molar volumes\u0027",
+    "\u0027J. Brillo, I.Egry, Int.J.Thermophysics, vol24,no.4,pp.1155-1170\u0027",
+    "\u0027A.T. Dinsdale, SGTE Data for Pure Elements, NPL Report DMA(A) 195 Rev. August 1990\u0027",
+    "\u0027 A. Kussofsky, B. Jansson, Calphad, 21 (3), 321-333 (1997); Co-Cr, C-Co-Cr\u0027",
+    "\u0027 Guillermet Co-Fe\u0027",
+    "\u0027L. Kjellqvist, Thermo-Calc Software AB,Stockholm, 2010; Molar volumes\u0027",
+    "\u0027A. Fernandez Guillermet, Z metallkde, Vol 78 (1987) p 639-647, TRITA-MAC 324B (1986); CO-NI\u0027",
+    "\u0027J. Bratberg, B. Sundman, J. Ph. Eq., 24 (6), 2003, 495-503; Co-V\u0027",
+    "\u0027B.-J. Lee, Calphad (1993); revison of Fe-Cr and Fe-Ni LIQUID\u0027",
+    "\u0027Byeong-Joo Lee, unpublished revision (1991); C-Cr-Fe-Ni\u0027",
+    "\u0027B J Lee, Z Metallkde 83(1992)5 p 292-299; Cr-Fe-V\u0027",
+    "\u0027W. Huang, TRITA-MAC 432 (Rev 1989,1990); FE-V\u0027",
+    "\u0027A. Watson, F. Hayes, J. All. Comp., 320 (2001), 199-206.\u0027",
+    "\u0027H.L. Chen, modifications and refinements, (2015)\u0027",
+    "\u0027New sigma using combined CEF\u0027",
+    "\u0027A. Fernandez Guillermet, Calphad 13 (1989) 1-22; Co-Fe-Ni\u0027",
+    "\u0027H. Mao, Thermo-Calc Software AB, Sweden, 2019; unpublished assessment of Co-Ni-V. \u0027",
+    "\u0027Volume data for TCFE4, 2006\u0027",
+    "\u0027M J Assael, J Phys Chem VISCREF Data 41 (2012) 033101; Cd, Co, Ga, In, Hg, Si, Tl, Zn\u0027",
+    "\u0027M Ghasemi, Thermo-Calc Software AB\u0027",
+    "\u0027M J Assael, J Phys Chem VISCREF Data 35 (2006) 285; Fe, Al\u0027",
+    "\u0027M J Assael, High Temp High Press 41 (2012); Sb, Pb, Bi, Ni, Ag\u0027",
+    "\u0027J T Okada, J Chem Thermodynamics 42 (2010) 856; V\u0027"
+  ]
+}

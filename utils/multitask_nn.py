@@ -653,7 +653,7 @@ def plot_losses_avg(model_path_bo, train_loss_H, val_loss_H, train_loss_C, val_l
                linewidth=2, color='#ff7f0e')
     ax[0].fill_between(epochs, mean_val_loss_H - std_val_loss_H,
                        mean_val_loss_H + std_val_loss_H, color='#ff7f0e', alpha=0.2)
-    ax[0].set_title("Hardness network")
+    ax[0].set_title("hardness network")
 
     # Plot the averaged training and validation losses for task C
     ax[1].plot(epochs, mean_train_loss_C, label=f"Avg Train Loss",
@@ -664,7 +664,7 @@ def plot_losses_avg(model_path_bo, train_loss_H, val_loss_H, train_loss_C, val_l
                linewidth=2, color='#ff7f0e')
     ax[1].fill_between(epochs, mean_val_loss_C - std_val_loss_C,
                        mean_val_loss_C + std_val_loss_C, color='#ff7f0e', alpha=0.2)
-    ax[1].set_title("Corrosion network")
+    ax[1].set_title("corrosion network")
 
     # Set labels, title, legend, and grid for each subplot
     for axi in ax.flat:
@@ -780,7 +780,7 @@ def plot_R2_avg(model_path_bo, H_scores, C_scores, ymin, ymax, x_labels=None,
     x_pos = np.arange(len(r2_means))
 
     # Set up the figure and axis for the plot
-    fig, ax = plt.subplots(figsize=(3.5, 3.5))
+    fig, ax = plt.subplots(figsize=(4, 3.5))
 
     bars = ax.bar(x_pos, r2_means, color=colors, width=bar_width, alpha=0.6)
 

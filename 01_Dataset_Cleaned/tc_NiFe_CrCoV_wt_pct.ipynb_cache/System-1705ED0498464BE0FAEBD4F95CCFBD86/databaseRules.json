@@ -1,0 +1,28 @@
+[
+  {
+    "elements": [
+      "Co",
+      "Cr",
+      "Fe",
+      "Ni",
+      "V"
+    ],
+    "speciesToCreateAndSelect": [],
+    "speciesToAdd": [],
+    "speciesToRemove": [],
+    "phasesToAdd": [
+      "HEUSLER_L21"
+    ],
+    "addedCompositionSets": [],
+    "phasesToRemove": [
+      "*"
+    ],
+    "constituentsToRejectFromSublattice": [],
+    "constituentsToSelectFromSublattice": [],
+    "name": "tchea4",
+    "deSelectDefaultPhases": false,
+    "lastChanged": 0,
+    "isUserDatabase": false,
+    "databaseLoadCommand": "tchea4"
+  }
+]

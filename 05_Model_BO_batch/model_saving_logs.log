@@ -250,3 +250,84 @@
 2023-11-16 21:50:09,756 - INFO - initializing Y
 2023-11-16 21:50:09,757 - INFO - initializing inference method
 2023-11-16 21:50:09,757 - INFO - adding kernel and likelihood as parameters
+                                                                                                                                                                                                                                                                                2023-11-17 12:03:14,779 - INFO - initializing Y
+2023-11-17 12:03:14,780 - INFO - initializing inference method
+2023-11-17 12:03:14,780 - INFO - adding kernel and likelihood as parameters
+2023-11-17 12:03:14,783 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 12:03:35,751 - INFO - initializing Y
+2023-11-17 12:03:35,752 - INFO - initializing inference method
+2023-11-17 12:03:35,752 - INFO - adding kernel and likelihood as parameters
+2023-11-17 12:03:35,770 - INFO - Warning: changing parameters to satisfy constraints
+                                                                                                                                                                                                                                                                           ints
+2023-11-17 12:04:24,724 - INFO - initializing Y
+2023-11-17 12:04:24,725 - INFO - initializing inference method
+2023-11-17 12:04:24,725 - INFO - adding kernel and likelihood as parameters
+2023-11-17 12:04:24,730 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 12:05:18,340 - INFO - initializing Y
+2023-11-17 12:05:18,342 - INFO - initializing inference method
+2023-11-17 12:05:18,342 - INFO - adding kernel and likelihood as parameters
+2023-11-17 12:05:18,346 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 12:05:34,090 - INFO - initializing Y
+2023-11-17 12:05:34,091 - INFO - initializing inference method
+2023-11-17 12:05:34,091 - INFO - adding kernel and likelihood as parameters
+2023-11-17 12:05:34,095 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 12:05:52,218 - INFO - initializing Y
+2023-11-17 12:05:52,219 - INFO - initializing inference method
+2023-11-17 12:05:52,219 - INFO - adding kernel and likelihood as parameters
+2023-11-17 12:05:52,223 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 12:06:50,506 - INFO - initializing Y
+2023-11-17 12:06:50,507 - INFO - initializing inference method
+2023-11-17 12:06:50,507 - INFO - adding kernel and likelihood as parameters
+2023-11-17 12:06:50,511 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 12:06:58,692 - INFO - initializing Y
+2023-11-17 12:06:58,693 - INFO - initializing inference method
+2023-11-17 12:06:58,693 - INFO - adding kernel and likelihood as parameters
+2023-11-17 12:06:58,697 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 12:13:34,109 - INFO - initializing Y
+2023-11-17 12:13:34,110 - INFO - initializing inference method
+2023-11-17 12:13:34,110 - INFO - adding kernel and likelihood as parameters
+2023-11-17 12:13:34,114 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 12:13:48,369 - INFO - initializing Y
+2023-11-17 12:13:48,370 - INFO - initializing inference method
+2023-11-17 12:13:48,370 - INFO - adding kernel and likelihood as parameters
+2023-11-17 12:13:48,374 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 12:14:00,790 - INFO - initializing Y
+2023-11-17 12:14:00,790 - INFO - initializing inference method
+2023-11-17 12:14:00,790 - INFO - adding kernel and likelihood as parameters
+2023-11-17 12:14:00,794 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 23:58:27,905 - INFO - initializing Y
+2023-11-17 23:58:27,906 - INFO - initializing inference method
+2023-11-17 23:58:27,906 - INFO - adding kernel and likelihood as parameters
+2023-11-17 23:58:27,911 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 23:58:28,122 - INFO - initializing Y
+2023-11-17 23:58:28,122 - INFO - initializing inference method
+2023-11-17 23:58:28,122 - INFO - adding kernel and likelihood as parameters
+2023-11-17 23:58:28,126 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 23:59:20,714 - INFO - initializing Y
+2023-11-17 23:59:20,715 - INFO - initializing inference method
+2023-11-17 23:59:20,715 - INFO - adding kernel and likelihood as parameters
+2023-11-17 23:59:20,718 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-17 23:59:22,954 - INFO - initializing Y
+2023-11-17 23:59:22,954 - INFO - initializing inference method
+2023-11-17 23:59:22,954 - INFO - adding kernel and likelihood as parameters
+2023-11-17 23:59:22,984 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-18 00:11:58,820 - INFO - initializing Y
+2023-11-18 00:11:58,820 - INFO - initializing inference method
+2023-11-18 00:11:58,821 - INFO - adding kernel and likelihood as parameters
+2023-11-18 00:11:58,824 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-18 00:12:04,673 - INFO - initializing Y
+2023-11-18 00:12:04,673 - INFO - initializing inference method
+2023-11-18 00:12:04,674 - INFO - adding kernel and likelihood as parameters
+2023-11-18 00:12:04,676 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-18 00:12:09,398 - INFO - initializing Y
+2023-11-18 00:12:09,398 - INFO - initializing inference method
+2023-11-18 00:12:09,398 - INFO - adding kernel and likelihood as parameters
+2023-11-18 00:12:09,428 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-18 00:12:16,895 - INFO - initializing Y
+2023-11-18 00:12:16,896 - INFO - initializing inference method
+2023-11-18 00:12:16,896 - INFO - adding kernel and likelihood as parameters
+2023-11-18 00:12:16,900 - INFO - Warning: changing parameters to satisfy constraints
+2023-11-18 00:12:36,411 - INFO - initializing Y
+2023-11-18 00:12:36,412 - INFO - initializing inference method
+2023-11-18 00:12:36,412 - INFO - adding kernel and likelihood as parameters
+2023-11-18 00:12:36,416 - INFO - Warning: changing parameters to satisfy constraints
