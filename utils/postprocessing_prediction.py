@@ -5,6 +5,7 @@ from utils.feature_calculator import FeatureCalculator
 from utils.postprocessing_evalutation import predict_bootstrap
 import concurrent.futures
 from matplotlib import pyplot as plt
+import matplotlib.colors as mcolors
 
 
 def read_new_data_feature_calc(df_new_wt: pd.DataFrame, vars_ele: List[str],
@@ -254,8 +255,12 @@ def plot_prediction_uncertainty(model_path_bo, coord_x, coord_y, index_PVD_x_y,
     for i, (ax_pred, ax_unc) in enumerate(zip(axs[::2].flat, axs[1::2].flat)):
         # ----- Subplot 1: Prediction -----
         # Scatter plot where color represents predicted mean.
-        cax1 = ax_pred.scatter(
-            coord_x, coord_y, c=pred_mean[i], s=400, marker='.', cmap='RdBu_r', vmin=vmin1, vmax=vmax1)
+        if pred_label == "Hardness":
+            cax1 = ax_pred.scatter(
+                coord_x, coord_y, c=pred_mean[i], s=400, marker='.', cmap='RdYlBu_r', vmin=vmin1, vmax=vmax1)
+        elif pred_label == "Pitting potential (mV)":
+            cax1 = ax_pred.scatter(
+                coord_x, coord_y, c=pred_mean[i], s=400, marker='.', cmap='RdBu_r', vmin=vmin1, vmax=vmax1)
 
         # Setting labels and titles
         ax_pred.set_xlabel('position x', fontsize=10)
@@ -317,9 +322,11 @@ def plot_prediction_uncertainty(model_path_bo, coord_x, coord_y, index_PVD_x_y,
     plt.show()
 
 
-def plot_prediction_uncertainty_AVG(model_path_bo, coord_x, coord_y, index_PVD_x_y,
+def plot_prediction_uncertainty_AVG(model_path_bo, coord_x, coord_y, index_PVD_x_y, index_PVD_x_y_sel,
                                     H1_new_pred_KFold_mean, H1_new_pred_KFold_std,
                                     C2_new_pred_KFold_mean, C2_new_pred_KFold_std,
+                                    H1_mean_range, H1_std_range,
+                                    C2_mean_range, C2_std_range,
                                     title):
     """
     This function plots the average prediction uncertainty for two types of predictions (Hardness and Pitting Potential).
@@ -349,13 +356,35 @@ def plot_prediction_uncertainty_AVG(model_path_bo, coord_x, coord_y, index_PVD_x
     # Iterate through each subplot and populate with data and details
     for i, (mean, std, name, unit) in enumerate(plot_details):
         row, col = i // 2, i % 2
-        cmap1, cmap2 = plt.get_cmap('RdBu_r'), plt.get_cmap('RdGy_r')
 
-        # Scatter plots for mean and standard deviation
-        cax1 = ax[row, col].scatter(
-            coord_x, coord_y, c=mean, s=400, marker='.', cmap=cmap1)
-        cax2 = ax[row+1, col].scatter(coord_x, coord_y,
-                                      c=std, s=400, marker='.', cmap=cmap2)
+        # cmap_red_black = mcolors.LinearSegmentedColormap.from_list("red_black", [
+        #                                                            "red", "black"])
+
+        cmap1, cmap2, cmap3 = plt.get_cmap('RdYlBu_r'), plt.get_cmap(
+            'RdBu_r'), plt.get_cmap('RdGy_r')  # 
+
+        # Scatter plots for mean
+        if index_PVD_x_y_sel.size > 0:
+            cax1 = ax[row, col].scatter(
+                coord_x[index_PVD_x_y_sel], coord_y[index_PVD_x_y_sel], s=450, marker='.', facecolors='none', edgecolors='black', linewidths=2)
+        if name == 'Hardness':
+            cax1 = ax[row, col].scatter(
+                coord_x, coord_y, c=mean, s=310, marker='.', cmap=cmap1, vmin=H1_mean_range[0], vmax=H1_mean_range[1])
+        else:
+            cax1 = ax[row, col].scatter(
+                coord_x, coord_y, c=mean, s=310, marker='.', cmap=cmap2, vmin=C2_mean_range[0], vmax=C2_mean_range[1])
+
+        # Scatter plots for std
+        if index_PVD_x_y_sel.size > 0:
+            cax2 = ax[row+1, col].scatter(
+                coord_x[index_PVD_x_y_sel], coord_y[index_PVD_x_y_sel], s=450, marker='.', facecolors='none', edgecolors='black', linewidths=2)
+
+        if name == "Hardness":
+            cax2 = ax[row+1, col].scatter(coord_x, coord_y,
+                                          c=std, s=310, marker='.', cmap=cmap3, vmin=H1_std_range[0], vmax=H1_std_range[1])
+        else:
+            cax2 = ax[row+1, col].scatter(coord_x, coord_y,
+                                          c=std, s=310, marker='.', cmap=cmap3, vmin=C2_std_range[0], vmax=C2_std_range[1])
 
         # Set titles and aspect ratios
         ax[row, col].set_title(f'{name} ')
@@ -382,18 +411,18 @@ def plot_prediction_uncertainty_AVG(model_path_bo, coord_x, coord_y, index_PVD_x
         ax[row+1, col].tick_params(axis='x', labelrotation=45, labelsize=10)
         ax[row+1, col].tick_params(axis='y', labelsize=10)
 
-        # Annotate the data points
-        for i_pvd, txt in enumerate(index_PVD_x_y):
-            ax[row, col].annotate(
-                txt, (coord_x[i_pvd]-3, coord_y[i_pvd]-1.5), color="grey", alpha=1, fontsize=8, fontweight='bold')
-            ax[row+1, col].annotate(txt, (coord_x[i_pvd]-3,
-                                    coord_y[i_pvd]-1.5), color="grey", alpha=1, fontsize=8, fontweight='bold')
-
         # Add colorbars to the plots
         cbar1, cbar2 = fig.colorbar(
             cax1, ax=ax[row, col]), fig.colorbar(cax2, ax=ax[row+1, col])
         cbar1.set_label(f'{name}  {unit}', fontsize=10)
         cbar2.set_label(f'{name}  uncertainty {unit}', fontsize=10)
+
+        # Annotate the data points
+        for i_pvd, txt in enumerate(index_PVD_x_y):
+            ax[row, col].annotate(
+                txt, (coord_x[i_pvd]-3, coord_y[i_pvd]-1.5), color=[0.6, 0.6, 0.6], alpha=1, fontsize=8, fontweight='bold')
+            ax[row+1, col].annotate(txt, (coord_x[i_pvd]-3,
+                                    coord_y[i_pvd]-1.5), color=[0.6, 0.6, 0.6], alpha=1, fontsize=8, fontweight='bold')
 
     # Set the main title for the figure
     plt.suptitle(title, fontsize=10)

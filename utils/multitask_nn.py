@@ -316,11 +316,25 @@ class MultiTaskNN:
 
         for N in range(self.N_epochs_global):
 
+            #  Shuffle indices for each dataset
+            shuffled_indices_H = np.random.permutation(
+                H1_train_norm_temp.shape[0])
+            shuffled_indices_C = np.random.permutation(
+                C2_train_norm_temp.shape[0])
+
+            # Shuffle the training data
+            X1_V1_train_norm_temp_shuffled = X1_V1_train_norm_temp[shuffled_indices_H]
+            H1_train_norm_temp_shuffled = H1_train_norm_temp[shuffled_indices_H]
+
+            X2_W2_train_norm_temp_shuffled = X2_W2_train_norm_temp[shuffled_indices_C]
+            Z2_train_norm_temp_shuffled = Z2_train_norm_temp[shuffled_indices_C]
+            C2_train_norm_temp_shuffled = C2_train_norm_temp[shuffled_indices_C]
+
             # NNH_model
             X1_V1_train_norm_concat = np.concatenate(
-                [X1_V1_train_norm_temp[i*self.batch_size_H: (i+1)*self.batch_size_H] for i in range(N_batches)])
+                [X1_V1_train_norm_temp_shuffled[i*self.batch_size_H: (i+1)*self.batch_size_H] for i in range(N_batches)])
             H1_train_norm_concat = np.concatenate(
-                [H1_train_norm_temp[i*self.batch_size_H: (i+1)*self.batch_size_H] for i in range(N_batches)])
+                [H1_train_norm_temp_shuffled[i*self.batch_size_H: (i+1)*self.batch_size_H] for i in range(N_batches)])
 
             if input2_H_specific_shape == (0,):  # no H_testing input
                 history_H_temp = NNH_model.fit(X1_V1_train_norm_concat, H1_train_norm_concat,
@@ -332,11 +346,11 @@ class MultiTaskNN:
 
             # NNC_model
             X2_W2_train_norm_concat = np.concatenate(
-                [X2_W2_train_norm_temp[i*batch_size_C: (i+1)*batch_size_C] for i in range(N_batches)])
+                [X2_W2_train_norm_temp_shuffled[i*batch_size_C: (i+1)*batch_size_C] for i in range(N_batches)])
             Z2_train_norm_concat = np.concatenate(
-                [Z2_train_norm_temp[i*batch_size_C: (i+1)*batch_size_C] for i in range(N_batches)])
+                [Z2_train_norm_temp_shuffled[i*batch_size_C: (i+1)*batch_size_C] for i in range(N_batches)])
             C2_train_norm_concat = np.concatenate(
-                [C2_train_norm_temp[i*batch_size_C: (i+1)*batch_size_C] for i in range(N_batches)])
+                [C2_train_norm_temp_shuffled[i*batch_size_C: (i+1)*batch_size_C] for i in range(N_batches)])
 
             if input3_C_specific_shape == (0,):  # no C_testing input
                 history_C_temp = NNC_model.fit(X2_W2_train_norm_concat, C2_train_norm_concat,

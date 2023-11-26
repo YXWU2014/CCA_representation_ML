@@ -1,9 +1,12 @@
 from sklearn.model_selection import RepeatedKFold
 from matplotlib import cm
 import matplotlib.pyplot as plt
+import numpy as np
 
 
-def kfold_split_and_normalize(data_list, scalers_list, n_splits=2, n_repeats=6, random_state=None):
+def kfold_with_norm(X, Z, W, C,
+                    scaler_compo, scaler_testing, scaler_features, scaler_output,
+                    n_splits=2, n_repeats=6, random_state=None):
     """
     Perform k-fold cross-validation on the given data sets and apply normalization using the provided scalers.
 
@@ -25,6 +28,10 @@ def kfold_split_and_normalize(data_list, scalers_list, n_splits=2, n_repeats=6, 
     Tuple of lists
         The train/test split data for each data set in data_list and their normalized versions.
     """
+
+    data_list = [X, Z, W, C]
+    scalers_list = [scaler_compo, scaler_testing,
+                    scaler_features, scaler_output]
 
     cv = RepeatedKFold(n_splits=n_splits, n_repeats=n_repeats,
                        random_state=random_state)
@@ -69,18 +76,84 @@ def kfold_split_and_normalize(data_list, scalers_list, n_splits=2, n_repeats=6, 
     return train_KFold_list, test_KFold_list, train_norm_KFold_list, test_norm_KFold_list
 
 
-def kfold_with_norm(X, Z, W, C,
-                    scaler_compo, scaler_testing, scaler_features, scaler_output,
-                    n_splits, n_repeats, random_state):
+def kfold_with_norm_new(X, Z, W, C,
+                        X_new, Z_new, W_new, C_new,
+                        scaler_compo, scaler_testing, scaler_features, scaler_output,
+                        n_splits=2, n_repeats=6, random_state=None):
     """
-    Wrapper function for kfold_split_and_normalize. Applies k-fold cross-validation and normalization to the input data sets.
+    Perform k-fold cross-validation on the given data sets and apply normalization using the provided scalers.
 
-    Returns four lists containing the split and normalized data for X, Z, W, and C respectively.
+    Parameters
+    ----------
+    data_list : list of ndarray
+        List of data sets to be split. Each data set is expected to be an ndarray.
+    scalers_list : list of sklearn.preprocessing scaler
+        List of scalers corresponding to the data sets in data_list. Each scaler is used to normalize the corresponding data set.
+    n_splits : int, default=2
+        Number of folds for cross-validation.
+    n_repeats : int, default=6
+        Number of times cross-validator needs to be repeated.
+    random_state : int or RandomState instance, default=None
+        Controls the randomness of the cv splitter.
+
+    Returns
+    -------
+    Tuple of lists
+        The train/test split data for each data set in data_list and their normalized versions.
     """
-    return kfold_split_and_normalize([X, Z, W, C],
-                                     [scaler_compo, scaler_testing,
-                                         scaler_features, scaler_output],
-                                     n_splits, n_repeats, random_state)
+
+    data_list = [X, Z, W, C]
+    new_data_list = [X_new, Z_new, W_new, C_new]
+    scalers_list = [scaler_compo, scaler_testing,
+                    scaler_features, scaler_output]
+
+    cv = RepeatedKFold(n_splits=n_splits, n_repeats=n_repeats,
+                       random_state=random_state)
+
+    train_KFold_list, test_KFold_list = [], []
+    train_norm_KFold_list, test_norm_KFold_list = [], []
+
+    for data, new_data, scaler in zip(data_list, new_data_list, scalers_list):
+
+        # temporary lists to store split data and normalized data for each data set
+        temp_train_KFold, temp_test_KFold, temp_train_norm_KFold, temp_test_norm_KFold = [], [], [], []
+
+        # split is based on the first data set
+        for _, (train_ix, test_ix) in enumerate(cv.split(data_list[0])):
+
+            # prepare that Y1 can be empty np array
+            if data.size == 0:  # Check if the array is empty
+                temp_train_KFold.append(data)
+                temp_test_KFold.append(data)
+                temp_train_norm_KFold.append(data)
+                temp_test_norm_KFold.append(data)
+                continue  # Skip the rest of the loop for this empty array
+
+            # split data set
+            train_array, test_array = data[train_ix], data[test_ix]
+            # print("before adding new data: ",  train_array.shape)
+
+            # -----> Add new data only to the training array <-----
+            train_array = np.concatenate([train_array, new_data], axis=0)
+            # print("after adding new data: ",  train_array.shape)
+
+            # normalize split data
+            train_norm = scaler.transform(train_array)
+            test_norm = scaler.transform(test_array)
+
+            # store split data and normalized data
+            temp_train_KFold.append(train_array)
+            temp_test_KFold.append(test_array)
+            temp_train_norm_KFold.append(train_norm)
+            temp_test_norm_KFold.append(test_norm)
+
+        # add the split and normalized data for each data set to the output lists
+        train_KFold_list.append(temp_train_KFold)
+        test_KFold_list.append(temp_test_KFold)
+        train_norm_KFold_list.append(temp_train_norm_KFold)
+        test_norm_KFold_list.append(temp_test_norm_KFold)
+
+    return train_KFold_list, test_KFold_list, train_norm_KFold_list, test_norm_KFold_list
 
 
 def plot_hist_kfold_with_norm(train_data, test_data, x_min, x_max, axs_title, n_splits, n_repeats, nrows=3):

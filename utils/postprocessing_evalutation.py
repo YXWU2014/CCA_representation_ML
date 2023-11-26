@@ -385,7 +385,7 @@ def plot_full_true_vs_pred(HC_list, HC_pred_stack_list, model_path_bo, lims,
     C2_pred_X2_KFold_std = np.std(C2_pred_X2_conc, axis=0).reshape(-1)
 
     # Initialize a new matplotlib figure
-    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(8, 4))
+    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(7, 3.5))
 
     # Data, labels and colors for each subplot
     data_labels_colors = [

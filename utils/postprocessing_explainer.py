@@ -13,14 +13,150 @@ import warnings
 from utils.path_explainer_tf import PathExplainerTF
 
 
-def compute_shap_attributions_interactions(model, X1_base_normalized, X1_shap_normalized):
+def compute_X_Z_W_shap(model,
+                       X2_base_data, Z2_base_data, W2_base_data,
+                       X2_shap_data, Z2_shap_data, W2_shap_data,
+                       scaler_compo, scaler_testing, scaler_specific):
+
+    if Z2_base_data.size == 0 and W2_base_data.size != 0:
+        # Normalize the base data using the respective scalers
+        X2_base_normalised = scaler_compo.transform(
+            X2_base_data).astype(np.float32)
+        W2_base_normalised = scaler_specific.transform(
+            W2_base_data).astype(np.float32)
+
+        X2_shap_normalised = scaler_compo.transform(
+            X2_shap_data).astype(np.float32)
+        W2_shap_normalised = scaler_specific.transform(
+            W2_shap_data).astype(np.float32)
+
+        # Concatenate normalized base data for input to the model
+        X2_W2_base_normalised = np.concatenate(
+            [X2_base_normalised, W2_base_normalised], axis=1)
+
+        # Concatenate normalized SHAP data for calculation of SHAP values
+        X2_W2_shap_normalised = np.concatenate(
+            [X2_shap_normalised, W2_shap_normalised], axis=1)
+
+        # Initialize SHAP GradientExplainer with the model and base data
+        explainer = shap.GradientExplainer(model, [X2_W2_base_normalised])
+
+        # Calculate SHAP values for the SHAP data
+        shap_values_all = explainer.shap_values(X2_W2_shap_normalised)
+
+        # Return the SHAP values for the first output of the model
+        return shap_values_all[0]
+
+    elif Z2_base_data.size == 0 and W2_base_data.size == 0:
+        # Normalize the base data using the respective scalers
+        X2_base_normalised = scaler_compo.transform(
+            X2_base_data).astype(np.float32)
+
+        # Normalize the SHAP data using the respective scalers
+        X2_shap_normalised = scaler_compo.transform(
+            X2_shap_data).astype(np.float32)
+
+        # Initialize SHAP GradientExplainer with the model and base data
+        explainer = shap.GradientExplainer(model, [X2_base_normalised])
+
+        # Calculate SHAP values for the SHAP data
+        shap_values_all = explainer.shap_values(X2_shap_normalised)
+
+        # Return the SHAP values for the first output of the model
+        return shap_values_all[0]
+
+    elif Z2_base_data.size != 0 and W2_base_data.size != 0:
+
+        X2_base_normalised = scaler_compo.transform(
+            X2_base_data).astype(np.float32)
+        Z2_base_normalised = scaler_testing.transform(
+            Z2_base_data).astype(np.float32)
+        W2_base_normalised = scaler_specific.transform(
+            W2_base_data).astype(np.float32)
+
+        X2_shap_normalised = scaler_compo.transform(
+            X2_shap_data).astype(np.float32)
+        Z2_shap_normalised = scaler_testing.transform(
+            Z2_shap_data).astype(np.float32)
+        W2_shap_normalised = scaler_specific.transform(
+            W2_shap_data).astype(np.float32)
+
+        # Concatenate X2 and W2 data for base and SHAP-normalised data
+        X2_W2_base_normalised = np.concatenate(
+            [X2_base_normalised, W2_base_normalised], axis=1)
+        X2_W2_shap_normalised = np.concatenate(
+            [X2_shap_normalised, W2_shap_normalised], axis=1)
+
+        # Initialize SHAP GradientExplainer with model and background data
+        explainer = shap.GradientExplainer(
+            model, [X2_W2_base_normalised, Z2_base_normalised])
+
+        # Compute SHAP values for the normalised data
+        shap_values_all = explainer.shap_values(
+            [X2_W2_shap_normalised, Z2_shap_normalised])
+
+        # Combine SHAP values for X2_W2 and Z2 and return
+        return np.concatenate([shap_values_all[0][0], shap_values_all[0][1]], axis=1)
+
+    elif Z2_base_data.size != 0 and W2_base_data.size == 0:
+
+        X2_base_normalised = scaler_compo.transform(
+            X2_base_data).astype(np.float32)
+        Z2_base_normalised = scaler_testing.transform(
+            Z2_base_data).astype(np.float32)
+
+        X2_shap_normalised = scaler_compo.transform(
+            X2_shap_data).astype(np.float32)
+        Z2_shap_normalised = scaler_testing.transform(
+            Z2_shap_data).astype(np.float32)
+
+        # Initialize SHAP GradientExplainer with model and background data
+        explainer = shap.GradientExplainer(
+            model, [X2_base_normalised, Z2_base_normalised])
+
+        # Compute SHAP values for the normalised data
+        shap_values_all = explainer.shap_values(
+            [X2_shap_normalised, Z2_shap_normalised])
+
+        # Combine SHAP values for X2_W2 and Z2 and return
+        return np.concatenate([shap_values_all[0][0], shap_values_all[0][1]], axis=1)
+
+
+def plot_shap(shap_values, i_sample,
+              X1_shap_data, Y1_shap_data, V1_shap_data,
+              compo_column, specific_testing_column, specific_features_sel_column):
+
+    print(
+        f"Sum of Shapley values for sample {i_sample}: {shap_values[i_sample, :].sum()}")
+
+    # Determine columns based on input data
+    if Y1_shap_data.size == 0 and V1_shap_data.size == 0:
+        columns = compo_column
+    if Y1_shap_data.size != 0 and V1_shap_data.size != 0:
+        columns = compo_column + specific_features_sel_column + specific_testing_column
+    if Y1_shap_data.size == 0 and V1_shap_data.size != 0:
+        columns = compo_column + specific_features_sel_column
+    if Y1_shap_data.size != 0 and V1_shap_data.size == 0:
+        columns = compo_column + specific_testing_column
+
+    fig, axs = plt.subplots(1, 1, figsize=(
+        4, 4), sharex=True, constrained_layout=True)
+    axs.barh(columns, shap_values[i_sample, :], color='steelblue')
+    axs.set_title("SHAP")
+    axs.invert_yaxis()
+    axs.set_box_aspect(1)
+
+    plt.show()
+
+
+def compute_shap_attributions_interactions(model, X1_base_normalised, X1_shap_normalised):
     """
     Compute Shapley values, attributions, and interactions for the provided model and data.
 
     Parameters:
     - model: Trained model for which explanations are needed.
-    - X1_base_normalized (array): Data for background/reference set.
-    - X1_shap_normalized (array): Data for which explanations are computed.
+    - X1_base_normalised (array): Data for background/reference set.
+    - X1_shap_normalised (array): Data for which explanations are computed.
 
     Returns:
     - tuple: Shapley values, attributions, and interactions.
@@ -29,20 +165,20 @@ def compute_shap_attributions_interactions(model, X1_base_normalized, X1_shap_no
     np.random.seed(42)  # Ensure reproducibility
 
     # Create random background data subset
-    background_X = X1_base_normalized[np.random.permutation(
-        X1_base_normalized.shape[0])]
+    background_X = X1_base_normalised[np.random.permutation(
+        X1_base_normalised.shape[0])]
 
     # Obtain Shapley values using KernelExplainer
     shap_values_all = shap.KernelExplainer(
-        model, background_X).shap_values(X1_shap_normalized)
+        model, background_X).shap_values(X1_shap_normalised)
     # shap_values_all = shap.DeepExplainer(
-    #     model, background_X).shap_values(X1_shap_normalized)
+    #     model, background_X).shap_values(X1_shap_normalised)
 
     # Use PathExplainerTF for attributions and interactions
     explainer = PathExplainerTF(model)
 
     attributions = explainer.attributions(
-        inputs=X1_shap_normalized,
+        inputs=X1_shap_normalised,
         baseline=background_X,
         batch_size=500,
         num_samples=1000,
@@ -52,7 +188,7 @@ def compute_shap_attributions_interactions(model, X1_base_normalized, X1_shap_no
     )
 
     interactions = explainer.interactions(
-        inputs=X1_shap_normalized,
+        inputs=X1_shap_normalised,
         baseline=background_X,
         batch_size=500,
         num_samples=1000,
@@ -280,19 +416,19 @@ class ModelExplainer:
         return keras.models.load_model(os.path.join(self.model_path_bo, self.model_name.format(i+1)))
 
     def _prepare_input_data(self, X_list, V_list, i):
-        """Prepare and normalize input data for prediction."""
+        """Prepare and normalise input data for prediction."""
         if V_list[i].size != 0:
-            X_normalized = self.scaler_compo.transform(X_list[i])
-            V_normalized = self.scaler_specific.transform(V_list[i])
-            return np.concatenate([X_normalized, V_normalized], axis=1)
+            X_normalised = self.scaler_compo.transform(X_list[i])
+            V_normalised = self.scaler_specific.transform(V_list[i])
+            return np.concatenate([X_normalised, V_normalised], axis=1)
         else:
             return self.scaler_compo.transform(X_list[i])
 
     def _define_predict_norm_function(self, model, input_data, Y_list, i):
-        """Define the normalized prediction function for the model."""
+        """Define the normalised prediction function for the model."""
         if Y_list[i].size != 0:
-            Y_normalized = self.scaler_testing.transform(Y_list[i])
-            return lambda: model.predict([input_data, Y_normalized], verbose=0)
+            Y_normalised = self.scaler_testing.transform(Y_list[i])
+            return lambda: model.predict([input_data, Y_normalised], verbose=0)
         else:
             return lambda: model.predict(input_data, verbose=0)
 
@@ -312,40 +448,89 @@ class ModelExplainer:
             X_list, V_list, i)
         predict_func = self._define_predict_norm_function(
             model, input_data, Y_list, i)
+
         return self._predict_monte_carlo_sampling(predict_func)
+
+    # def _shap_for_one_fold(self,
+    #                        X_base_list, Y_base_list, V_base_list,
+    #                        X_shap_list, Y_shap_list, V_shap_list, i):
+    #     """Compute averaged SHAP values for a specific fold, over multiple iterations with Monte Carlo dropout."""
+
+    #     model = self._load_model(i)
+    #     input_base_data = self._prepare_input_data(X_base_list, V_base_list, i)
+    #     input_shap_data = self._prepare_input_data(X_shap_list, V_shap_list, i)
+
+    #     # ===== create an explainer based on base_data =====
+    #     if Y_base_list[i].size != 0:
+    #         Y_base_normalised = self.scaler_testing.transform(Y_base_list[i])
+    #         explainer = shap.KernelExplainer(
+    #             model, [input_base_data, Y_base_normalised])
+    #     else:
+    #         explainer = shap.KernelExplainer(model, input_base_data)
+
+    #     # Calculate shap values for one fold
+    #     if Y_shap_list[i].size != 0:
+    #         Y_shap_normalised = self.scaler_testing.transform(Y_shap_list[i])
+    #         shap_values_oneFold = explainer.shap_values(
+    #             [input_shap_data, Y_shap_normalised])
+    #     else:
+    #         shap_values_oneFold = explainer.shap_values(input_shap_data)
+
+    #     # when model contains 2 inputs, the shap_for_one_fold provides a list of 2 shap arrays
+    #     # so I will concatenate the 2 shap arrays into 1
+    #     if Y_shap_list[i].size != 0:
+    #         # print(len(shap_values_oneFold[0]))
+    #         return np.concatenate([shap_values_oneFold[0][0], shap_values_oneFold[0][1]], axis=1)
+    #     else:
+    #         # print('SHAP shape : ', shap_values_oneFold[0].shape)
+    #         return shap_values_oneFold[0]
 
     def _shap_for_one_fold(self,
                            X_base_list, Y_base_list, V_base_list,
-                           X_shap_list, Y_shap_list, V_shap_list, i):
-        """Compute SHAP values for a specific fold."""
+                           X_shap_list, Y_shap_list, V_shap_list,
+                           i):
+        """Compute averaged SHAP values for a specific fold, over multiple iterations with Monte Carlo dropout."""
         model = self._load_model(i)
         input_base_data = self._prepare_input_data(X_base_list, V_base_list, i)
         input_shap_data = self._prepare_input_data(X_shap_list, V_shap_list, i)
 
-        # ===== create an explainer based on base_data =====
-        if Y_base_list[i].size != 0:
-            Y_base_normalized = self.scaler_testing.transform(Y_base_list[i])
-            explainer = shap.KernelExplainer(
-                model, [input_base_data, Y_base_normalized])
-        else:
-            explainer = shap.KernelExplainer(model, input_base_data)
+        # Initialize an array to store SHAP values for each repeat
+        shap_values_all_repeats = []
 
-        # Calculate shap values for one fold
-        if Y_shap_list[i].size != 0:
-            Y_shap_normalized = self.scaler_testing.transform(Y_shap_list[i])
-            shap_values_oneFold = explainer.shap_values(
-                [input_shap_data, Y_shap_normalized])
-        else:
-            shap_values_oneFold = explainer.shap_values(input_shap_data)
+        for _ in range(self.mc_repeat):
+            # Enable dropout in your model here if it's not enabled by default
 
-        # when model contains 2 inputs, the shap_for_one_fold provides a list of 2 shap arrays
-        # so I will concatenate the 2 shap arrays into 1
-        if Y_shap_list[i].size != 0:
-            # print(len(shap_values_oneFold[0]))
-            return np.concatenate([shap_values_oneFold[0][0], shap_values_oneFold[0][1]], axis=1)
-        else:
-            # print('SHAP shape : ', shap_values_oneFold[0].shape)
-            return shap_values_oneFold[0]
+            # ----- Create an explainer based on base_data -----
+            if Y_base_list[i].size != 0:
+                Y_base_normalised = self.scaler_testing.transform(
+                    Y_base_list[i])
+                explainer = shap.GradientExplainer(
+                    model, [input_base_data, Y_base_normalised])
+            else:
+                explainer = shap.GradientExplainer(model, [input_base_data])
+
+            # Calculate SHAP values for one iteration
+            if Y_shap_list[i].size != 0:
+                Y_shap_normalised = self.scaler_testing.transform(
+                    Y_shap_list[i])
+                shap_values = explainer.shap_values(
+                    [input_shap_data, Y_shap_normalised])
+            else:
+                shap_values = explainer.shap_values(input_shap_data)
+
+            # Concatenate the SHAP arrays if there are 2 inputs
+            if Y_shap_list[i].size != 0:
+                shap_values = np.concatenate(
+                    [shap_values[0][0], shap_values[0][1]], axis=1)
+            else:
+                shap_values = shap_values[0]
+
+            shap_values_all_repeats.append(shap_values)
+
+        # Average the SHAP values over all repeats
+        averaged_shap_values = np.mean(shap_values_all_repeats, axis=0)
+
+        return averaged_shap_values
 
     def _attributions_interactions_for_one_fold(self,
                                                 X_base_list, Y_base_list, V_base_list,
@@ -397,9 +582,35 @@ class ModelExplainer:
             #       attributions_values_oneFold.shape)
             return attributions_values_oneFold, interactions_values_oneFold
 
-    def predict_norm_shap_bootstrap(self,
+    def predict_shap_bootstrap_norm(self,
                                     X1_base_list, Y1_base_list, V1_base_list,
                                     X1_shap_list, Y1_shap_list, V1_shap_list):
+        """Predict, compute SHAP values, attributions, and interactions using bootstrap method."""
+        results_predict_base = Parallel(n_jobs=-1)(delayed(self._predict_for_one_fold)(X1_base_list, Y1_base_list, V1_base_list, i)
+                                                   for i in range(self.k_folds * self.n_CVrepeats))
+
+        results_predict_shap = Parallel(n_jobs=-1)(delayed(self._predict_for_one_fold)(X1_shap_list, Y1_shap_list, V1_shap_list, i)
+                                                   for i in range(self.k_folds * self.n_CVrepeats))
+
+        results_shap = Parallel(n_jobs=-1)(delayed(self._shap_for_one_fold)(X1_base_list, Y1_base_list, V1_base_list,
+                                                                            X1_shap_list, Y1_shap_list, V1_shap_list, i)
+                                           for i in range(self.k_folds * self.n_CVrepeats))
+
+        predictions_base_list, predictions_base_mc_mean, predictions_base_mc_std = zip(
+            *results_predict_base)
+        predictions_shap_list, predictions_shap_mc_mean, predictions_shap_mc_std = zip(
+            *results_predict_shap)
+        shap_list = results_shap
+
+        tf.keras.backend.clear_session()
+
+        return (predictions_base_list, predictions_base_mc_mean, predictions_base_mc_std,
+                predictions_shap_list, predictions_shap_mc_mean, predictions_shap_mc_std,
+                shap_list)
+
+    def predict_shap_attributions_interactions_bootstrap_norm(self,
+                                                              X1_base_list, Y1_base_list, V1_base_list,
+                                                              X1_shap_list, Y1_shap_list, V1_shap_list):
         """Predict, compute SHAP values, attributions, and interactions using bootstrap method."""
         results_predict_base = Parallel(n_jobs=-1)(delayed(self._predict_for_one_fold)(X1_base_list, Y1_base_list, V1_base_list, i)
                                                    for i in range(self.k_folds * self.n_CVrepeats))
@@ -429,27 +640,27 @@ class ModelExplainer:
                 predictions_shap_list, predictions_shap_mc_mean, predictions_shap_mc_std,
                 shap_list, attributions_list, interactions_list)
 
+# end of the ModelExplainer class
 
-def process_inverse_norm_explainer_data(pred_norm_base_stack, pred_norm_shap_stack,
-                                        shap_norm_stack,
-                                        attributions_norm_stack,
-                                        interactions_norm_stack, scaler_output):
+
+def inverse_norm_shap(pred_norm_base_stack,
+                      pred_norm_shap_stack,
+                      shap_norm_stack,
+                      scaler_output):
     """
-    Transform predictions and Shapley values from normalized to original space.
+    Transform predictions and Shapley values from normalised to original space.
 
     Parameters:
-    - pred_norm_base_stack (list of np.array): Normalized predictions for base data.
-    - pred_norm_shap_stack (list of np.array): Normalized predictions for Shap data.
-    - shap_norm_stack (list of np.array): Normalized Shapley values.
-    - attributions_norm_stack (list of np.array): Normalized attribution values.
-    - interactions_norm_stack (list of np.array): Normalized interaction values.
+    - pred_norm_base_stack (list of np.array): normalised predictions for base data.
+    - pred_norm_shap_stack (list of np.array): normalised predictions for Shap data.
+    - shap_norm_stack (list of np.array): normalised Shapley values.
     - scaler_output: Scaler for the model output.
 
     Returns:
     - tuple: Mean and standard deviation of predictions, Shapley values, attribution and interactions values in both spaces.
     """
 
-    # Process normalized predictions for base input data (baseline)
+    # Process normalised predictions for base input data (baseline)
     pred_norm_base_conc = np.concatenate(pred_norm_base_stack, axis=0)
     pred_norm_base_mean = np.mean(pred_norm_base_conc, axis=0).reshape(-1)
     pred_norm_base_std = np.std(pred_norm_base_conc, axis=0).reshape(-1)
@@ -460,7 +671,7 @@ def process_inverse_norm_explainer_data(pred_norm_base_stack, pred_norm_shap_sta
     pred_base_mean = np.mean(pred_base_list, axis=0)
     pred_base_std = np.std(pred_base_list, axis=0)
 
-    # Process normalized predictions for Shap input data (target)
+    # Process normalised predictions for Shap input data (target)
     pred_norm_shap_conc = np.concatenate(pred_norm_shap_stack, axis=0)
     pred_norm_shap_mean = np.mean(pred_norm_shap_conc, axis=0).reshape(-1)
     pred_norm_shap_std = np.std(pred_norm_shap_conc, axis=0).reshape(-1)
@@ -471,20 +682,85 @@ def process_inverse_norm_explainer_data(pred_norm_base_stack, pred_norm_shap_sta
     pred_shap_mean = np.mean(pred_shap_list, axis=0)
     pred_shap_std = np.std(pred_shap_list, axis=0)
 
-    # Compute mean and standard deviation of Shapley values in the normalized space
+    # Compute mean and standard deviation of Shapley values in the normalised space
     shap_norm_mean = np.mean(shap_norm_stack, axis=0)
     shap_norm_std = np.std(shap_norm_stack, axis=0)
 
-    # Compute mean and standard deviation of Attribution values in the normalized space
+    # Sanity check: Ensure that the sum of Shapley values and the mean prediction for the base input data
+    # is approximately equal to the mean prediction for the Shap input data in the normalised space
+    pred_norm_base_mean_AVG = pred_norm_base_mean.mean()
+    epsilon = 1e-1
+    assert (np.abs(pred_norm_base_mean_AVG +
+            shap_norm_mean.sum(axis=1) - pred_norm_shap_mean) < epsilon).all()
+
+    # Inverse transform the Shapley values
+    pred_base_mean_AVG = pred_base_mean.mean()
+    diff = pred_shap_mean - pred_base_mean_AVG
+    shapley_scaler = np.divide(diff, shap_norm_mean.sum(axis=1).reshape(-1, 1))
+    # print(shap_norm_mean.shape, shapley_scaler.shape)
+
+    # I now use the shapley_scaler to inverse normalise both the shap
+    shap_mean = np.multiply(shap_norm_mean, shapley_scaler)
+
+    return (pred_norm_base_mean, pred_norm_shap_mean, shap_norm_mean,
+            pred_base_mean, pred_shap_mean, shap_mean)
+
+
+def process_inverse_norm_explainer_data(pred_norm_base_stack, pred_norm_shap_stack,
+                                        shap_norm_stack,
+                                        attributions_norm_stack,
+                                        interactions_norm_stack, scaler_output):
+    """
+    Transform predictions and Shapley values from normalised to original space.
+
+    Parameters:
+    - pred_norm_base_stack (list of np.array): normalised predictions for base data.
+    - pred_norm_shap_stack (list of np.array): normalised predictions for Shap data.
+    - shap_norm_stack (list of np.array): normalised Shapley values.
+    - attributions_norm_stack (list of np.array): normalised attribution values.
+    - interactions_norm_stack (list of np.array): normalised interaction values.
+    - scaler_output: Scaler for the model output.
+
+    Returns:
+    - tuple: Mean and standard deviation of predictions, Shapley values, attribution and interactions values in both spaces.
+    """
+
+    # Process normalised predictions for base input data (baseline)
+    pred_norm_base_conc = np.concatenate(pred_norm_base_stack, axis=0)
+    pred_norm_base_mean = np.mean(pred_norm_base_conc, axis=0).reshape(-1)
+    pred_norm_base_std = np.std(pred_norm_base_conc, axis=0).reshape(-1)
+
+    # Inverse transform the predictions for the base input data
+    pred_base_list = [scaler_output.inverse_transform(
+        pred) for pred in pred_norm_base_conc]
+    pred_base_mean = np.mean(pred_base_list, axis=0)
+    pred_base_std = np.std(pred_base_list, axis=0)
+
+    # Process normalised predictions for Shap input data (target)
+    pred_norm_shap_conc = np.concatenate(pred_norm_shap_stack, axis=0)
+    pred_norm_shap_mean = np.mean(pred_norm_shap_conc, axis=0).reshape(-1)
+    pred_norm_shap_std = np.std(pred_norm_shap_conc, axis=0).reshape(-1)
+
+    # Inverse transform the predictions for the Shap input data
+    pred_shap_list = [scaler_output.inverse_transform(
+        pred) for pred in pred_norm_shap_conc]
+    pred_shap_mean = np.mean(pred_shap_list, axis=0)
+    pred_shap_std = np.std(pred_shap_list, axis=0)
+
+    # Compute mean and standard deviation of Shapley values in the normalised space
+    shap_norm_mean = np.mean(shap_norm_stack, axis=0)
+    shap_norm_std = np.std(shap_norm_stack, axis=0)
+
+    # Compute mean and standard deviation of Attribution values in the normalised space
     attributions_norm_mean = np.mean(attributions_norm_stack, axis=0)
     attributions_norm_std = np.std(attributions_norm_stack, axis=0)
 
-    # Compute mean and standard deviation of Interaction values values in the normalized space
+    # Compute mean and standard deviation of Interaction values values in the normalised space
     interactions_norm_mean = np.mean(interactions_norm_stack, axis=0)
     interactions_norm_std = np.std(interactions_norm_stack, axis=0)
 
     # Sanity check: Ensure that the sum of Shapley values and the mean prediction for the base input data
-    # is approximately equal to the mean prediction for the Shap input data in the normalized space
+    # is approximately equal to the mean prediction for the Shap input data in the normalised space
     pred_norm_base_mean_AVG = pred_norm_base_mean.mean()
     epsilon = 1e-4
     assert (np.abs(pred_norm_base_mean_AVG +
@@ -496,11 +772,11 @@ def process_inverse_norm_explainer_data(pred_norm_base_stack, pred_norm_shap_sta
     shapley_scaler = np.divide(diff, shap_norm_mean.sum(axis=1).reshape(-1, 1))
     # print(shap_norm_mean.shape, shapley_scaler.shape)
 
-    # I now use the shapley_scaler to inverse normalize both the shap and attributions because I know they are almost the same
+    # I now use the shapley_scaler to inverse normalise both the shap and attributions because I know they are almost the same
     shap_mean = np.multiply(shap_norm_mean, shapley_scaler)
     attributions_mean = np.multiply(attributions_norm_mean, shapley_scaler)
 
-    # I now use the shapley_scaler to inverse normalize the interactions (I always check if it is almost equivalent to the attributions by plotting)
+    # I now use the shapley_scaler to inverse normalise the interactions (I always check if it is almost equivalent to the attributions by plotting)
     # below I need to reshape the shapley scaler to work with the dimensions of interactions array
     shapley_scaler_reshaped = shapley_scaler[:, np.newaxis]
     # print(shapley_scaler_reshaped.shape)
@@ -536,15 +812,17 @@ def data_for_shap_force(X1_shap_data, Y1_shap_data, V1_shap_data,
     # Determine columns based on input data
     columns = compo_column
     if Y1_shap_data.size != 0 and V1_shap_data.size != 0:
-        columns = compo_column + C_specific_testing_column + specific_features_sel_column
+        columns = compo_column + specific_features_sel_column + C_specific_testing_column
     if Y1_shap_data.size == 0 and V1_shap_data.size != 0:
         columns = compo_column + specific_features_sel_column
+    if Y1_shap_data.size != 0 and V1_shap_data.size == 0:
+        columns = compo_column + C_specific_testing_column
 
     # Extract and display SHAP values for the selected samples
     sample_shap_values = shap_KFold_mean[sample_index, :]
     # print(sample_shap_values.shape)
     # print(len(columns))
-    display(pd.DataFrame(data=sample_shap_values, columns=columns))
+    # display(pd.DataFrame(data=sample_shap_values, columns=columns))
 
     return pred_norm_base_KFold_mean.mean(), sample_shap_values, columns
 
