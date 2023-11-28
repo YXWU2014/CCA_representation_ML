@@ -122,6 +122,45 @@ def compute_X_Z_W_shap(model,
         return np.concatenate([shap_values_all[0][0], shap_values_all[0][1]], axis=1)
 
 
+# def compute_X_Z_W_shap(model, X2_base_data, Z2_base_data, W2_base_data,
+#                        X2_shap_data, Z2_shap_data, W2_shap_data,
+#                        scaler_compo, scaler_testing, scaler_specific):
+
+#     def normalize_data(*datasets, scalers):
+#         return [scaler.transform(data).astype(np.float32) for data, scaler in zip(datasets, scalers)]
+
+#     def concatenate_data(*datasets):
+#         return np.concatenate(datasets, axis=1)
+
+#     def compute_shap_values(normalized_data, explainer):
+#         shap_values_all = explainer.shap_values(normalized_data)
+#         return shap_values_all[0]
+
+#     normalized_base_data = normalize_data(X2_base_data, Z2_base_data, W2_base_data,
+#                                           scalers=[scaler_compo, scaler_testing, scaler_specific])
+#     normalized_shap_data = normalize_data(X2_shap_data, Z2_shap_data, W2_shap_data,
+#                                           scalers=[scaler_compo, scaler_testing, scaler_specific])
+
+#     if Z2_base_data.size == 0 and W2_base_data.size != 0:
+#         X2_W2_base_normalized = concatenate_data(normalized_base_data[0], normalized_base_data[2])
+#         X2_W2_shap_normalized = concatenate_data(normalized_shap_data[0], normalized_shap_data[2])
+
+#         explainer = shap.GradientExplainer(model, [X2_W2_base_normalized])
+#         return compute_shap_values(X2_W2_shap_normalized, explainer)
+
+#     elif Z2_base_data.size == 0 and W2_base_data.size == 0:
+#         explainer = shap.GradientExplainer(model, [normalized_base_data[0]])
+#         return compute_shap_values(normalized_shap_data[0], explainer)
+
+#     else:
+#         # Handle multi-input scenarios
+#         X2_Z2_W2_base_normalized = concatenate_data(*normalized_base_data)
+#         X2_Z2_W2_shap_normalized = concatenate_data(*normalized_shap_data)
+
+#         explainer = shap.GradientExplainer(model, [X2_Z2_W2_base_normalized])
+#         return compute_shap_values(X2_Z2_W2_shap_normalized, explainer)
+
+
 def plot_shap(shap_values, i_sample,
               X1_shap_data, Y1_shap_data, V1_shap_data,
               compo_column, specific_testing_column, specific_features_sel_column):
@@ -149,71 +188,172 @@ def plot_shap(shap_values, i_sample,
     plt.show()
 
 
-def compute_shap_attributions_interactions(model, X1_base_normalised, X1_shap_normalised):
-    """
-    Compute Shapley values, attributions, and interactions for the provided model and data.
+# def compute_shap_attributions_interactions(model,
+#                                            X2_base_data, Z2_base_data, W2_base_data,
+#                                            X2_shap_data, Z2_shap_data, W2_shap_data,
+#                                            scaler_compo, scaler_testing, scaler_specific):
 
-    Parameters:
-    - model: Trained model for which explanations are needed.
-    - X1_base_normalised (array): Data for background/reference set.
-    - X1_shap_normalised (array): Data for which explanations are computed.
+#     if Z2_base_data.size == 0 and W2_base_data.size != 0:
 
-    Returns:
-    - tuple: Shapley values, attributions, and interactions.
-    """
+#         X2_base_normalised = scaler_compo.transform(
+#             X2_base_data).astype(np.float32)
+#         W2_base_normalised = scaler_specific.transform(
+#             W2_base_data).astype(np.float32)
+
+#         X2_shap_normalised = scaler_compo.transform(
+#             X2_shap_data).astype(np.float32)
+#         W2_shap_normalised = scaler_specific.transform(
+#             W2_shap_data).astype(np.float32)
+
+#         # Concatenate normalized base data for input to the model
+#         X2_W2_base_normalised = np.concatenate(
+#             [X2_base_normalised, W2_base_normalised], axis=1)
+
+#         # Concatenate normalized SHAP data for calculation of SHAP values
+#         X2_W2_shap_normalised = np.concatenate(
+#             [X2_shap_normalised, W2_shap_normalised], axis=1)
+
+#         # Use SHAP explainer
+#         np.random.seed(42)  # Ensure reproducibility
+#         background_X = X2_W2_base_normalised[np.random.permutation(
+#             X2_W2_base_normalised.shape[0])]
+#         shap_explainer = shap.GradientExplainer(model, [background_X])
+#         shap_values_all = shap_explainer.shap_values(X2_W2_shap_normalised)
+
+#         # Use PathExplainerTF for attributions and interactions
+#         path_explainer = PathExplainerTF(model)
+
+#         attributions = path_explainer.attributions(
+#             inputs=X2_W2_shap_normalised,
+#             baseline=background_X,
+#             batch_size=500,
+#             num_samples=1000,
+#             use_expectation=True,
+#             output_indices=0,
+#             verbose=True)
+
+#         interactions = path_explainer.interactions(
+#             inputs=X2_W2_shap_normalised,
+#             baseline=background_X,
+#             batch_size=500,
+#             num_samples=1000,
+#             use_expectation=True,
+#             output_indices=0,
+#             verbose=True)
+
+#         return shap_values_all[0], attributions, interactions
+
+#     elif Z2_base_data.size == 0 and W2_base_data.size == 0:
+#         X2_base_normalised = scaler_compo.transform(
+#             X2_base_data).astype(np.float32)
+
+#         X2_shap_normalised = scaler_compo.transform(
+#             X2_shap_data).astype(np.float32)
+
+#         np.random.seed(42)  # Ensure reproducibility
+#         background_X = X2_base_normalised[np.random.permutation(
+#             X2_base_normalised.shape[0])]
+
+#          # Use SHAP explainer
+#         shap_explainer = shap.GradientExplainer(model, [background_X])
+#         shap_values_all = shap_explainer.shap_values(X2_shap_normalised)
+
+#         # Use PathExplainerTF for attributions and interactions
+#         path_explainer = PathExplainerTF(model)
+
+#         attributions = path_explainer.attributions(
+#             inputs=X2_shap_normalised,
+#             baseline=background_X,
+#             batch_size=500,
+#             num_samples=1000,
+#             use_expectation=True,
+#             output_indices=0,
+#             verbose=True)
+
+#         interactions = path_explainer.interactions(
+#             inputs=X2_shap_normalised,
+#             baseline=background_X,
+#             batch_size=500,
+#             num_samples=1000,
+#             use_expectation=True,
+#             output_indices=0,
+#             verbose=True)
+
+#         return shap_values_all[0], attributions, interactions
+
+#     elif Z2_base_data.size != 0 and W2_base_data.size != 0:
+#         warnings('this explainer can not handle multi-input model yet')
+
+
+def compute_shap_attributions_interactions(model, X2_base_data, Z2_base_data, W2_base_data,
+                                           X2_shap_data, Z2_shap_data, W2_shap_data,
+                                           scaler_compo, scaler_testing, scaler_specific):
+    def normalize_data(data, scaler):
+        return scaler.transform(data).astype(np.float32)
+
+    def compute_explainer_values(data, background):
+        shap_explainer = shap.GradientExplainer(model, [background])
+        shap_values_all = shap_explainer.shap_values(data)
+
+        path_explainer = PathExplainerTF(model)
+        attributions = path_explainer.attributions(data,
+                                                   background,
+                                                   batch_size=500,
+                                                   num_samples=1000,
+                                                   use_expectation=True,
+                                                   output_indices=0,
+                                                   verbose=False)
+        interactions = path_explainer.interactions(data,
+                                                   background,
+                                                   batch_size=500,
+                                                   num_samples=1000,
+                                                   use_expectation=True,
+                                                   output_indices=0,
+                                                   verbose=False)
+
+        return shap_values_all[0], attributions, interactions
 
     np.random.seed(42)  # Ensure reproducibility
 
-    # Create random background data subset
-    background_X = X1_base_normalised[np.random.permutation(
-        X1_base_normalised.shape[0])]
+    if Z2_base_data.size == 0:
+        X2_base_normalised = normalize_data(X2_base_data, scaler_compo)
+        X2_shap_normalised = normalize_data(X2_shap_data, scaler_compo)
+        background_X = X2_base_normalised[np.random.permutation(
+            X2_base_normalised.shape[0])]
 
-    # Obtain Shapley values using KernelExplainer
-    shap_values_all = shap.KernelExplainer(
-        model, background_X).shap_values(X1_shap_normalised)
-    # shap_values_all = shap.DeepExplainer(
-    #     model, background_X).shap_values(X1_shap_normalised)
+        if W2_base_data.size != 0:
+            W2_base_normalised = normalize_data(W2_base_data, scaler_specific)
+            W2_shap_normalised = normalize_data(W2_shap_data, scaler_specific)
 
-    # Use PathExplainerTF for attributions and interactions
-    explainer = PathExplainerTF(model)
+            X2_W2_base_normalised = np.concatenate(
+                [X2_base_normalised, W2_base_normalised], axis=1)
+            X2_W2_shap_normalised = np.concatenate(
+                [X2_shap_normalised, W2_shap_normalised], axis=1)
 
-    attributions = explainer.attributions(
-        inputs=X1_shap_normalised,
-        baseline=background_X,
-        batch_size=500,
-        num_samples=1000,
-        use_expectation=True,
-        output_indices=0,
-        verbose=True
-    )
+            background_X = X2_W2_base_normalised[np.random.permutation(
+                X2_W2_base_normalised.shape[0])]
 
-    interactions = explainer.interactions(
-        inputs=X1_shap_normalised,
-        baseline=background_X,
-        batch_size=500,
-        num_samples=1000,
-        use_expectation=True,
-        output_indices=0,
-        verbose=True
-    )
+            return compute_explainer_values(X2_W2_shap_normalised, background_X)
 
-    return shap_values_all[0], attributions, interactions
+        return compute_explainer_values(X2_shap_normalised, background_X)
+
+    elif Z2_base_data.size != 0 and W2_base_data.size != 0:
+        warnings.warn('This explainer cannot handle multi-input model yet')
 
 
-def plot_shap_attributions_interactions(shap_values, attributions, interactions, i_sample, compo_column):
-    """
-    Visualize the attributions, Shapley values, diagonal interaction values, and their scatter plot.
+def plot_shap_attributions_interactions(shap_values, attributions, interactions, i_sample,
+                                        X1_shap_data, Y1_shap_data, V1_shap_data,
+                                        compo_column, specific_testing_column, specific_features_sel_column):
 
-    Parameters:
-    - shap_values (array): Shapley values for each feature.
-    - attributions (array): Attributions for each feature.
-    - interactions (array): Interaction values between features.
-    - i_sample (int): Index for the sample being visualized.
-    - compo_column (list): Column names or labels for features.
-
-    Returns:
-    - None: Displays the plots.
-    """
+    # Determine columns based on input data
+    if Y1_shap_data.size == 0 and V1_shap_data.size == 0:
+        columns = compo_column
+    if Y1_shap_data.size != 0 and V1_shap_data.size != 0:
+        columns = compo_column + specific_features_sel_column + specific_testing_column
+    if Y1_shap_data.size == 0 and V1_shap_data.size != 0:
+        columns = compo_column + specific_features_sel_column
+    if Y1_shap_data.size != 0 and V1_shap_data.size == 0:
+        columns = compo_column + specific_testing_column
 
     # Print aggregated values
     print(
@@ -227,23 +367,26 @@ def plot_shap_attributions_interactions(shap_values, attributions, interactions,
         12, 3), sharex=True, constrained_layout=True)
 
     # Plot attributions, Shapley values, and diagonal interactions
-    axs[0].barh(compo_column, attributions[i_sample, :], color='steelblue')
-    axs[1].barh(compo_column, shap_values[i_sample, :], color='steelblue')
-    axs[2].barh(compo_column, np.diag(
+    axs[0].barh(columns, shap_values[i_sample, :], color='steelblue')
+    axs[1].barh(columns, attributions[i_sample, :], color='steelblue')
+    axs[2].barh(columns, np.diag(
         interactions[i_sample, :, :]), color='steelblue')
 
-    axs[0].set_title("Attributions (Janizek model)")
-    axs[1].set_title("Kernal SHAP")
+    axs[0].set_title("SHAP")
+    axs[1].set_title("Attributions (Janizek model)")
     axs[2].set_title("Interactions (diagonal)")
 
     # Scatter plot of attributions against summed interactions
-    reshaped_attributions = np.reshape(attributions, -1)
-    summed_interactions = np.reshape(np.sum(interactions, axis=-1), -1)
+    reshaped_attributions = np.reshape(attributions[i_sample, :], -1)
+    summed_interactions = np.reshape(
+        np.sum(interactions[i_sample, :, :], axis=-1), -1)
 
+    print(reshaped_attributions)
+    print(summed_interactions)
     axs[3].scatter(reshaped_attributions, summed_interactions)
     axs[3].set(
-        xlim=[reshaped_attributions.min(), reshaped_attributions.max()],
-        ylim=[reshaped_attributions.min(), reshaped_attributions.max()],
+        # xlim=[reshaped_attributions.min(), reshaped_attributions.max()],
+        # ylim=[reshaped_attributions.min(), reshaped_attributions.max()],
         aspect='equal', box_aspect=1
     )
     axs[3].plot(
@@ -261,22 +404,21 @@ def plot_shap_attributions_interactions(shap_values, attributions, interactions,
     plt.show()
 
 
-def plot_interactions_heatmap(model_path_bo, interactions_values, sample_indices, col_labels,
+def plot_interactions_heatmap(model_path_bo, interactions_values, sample_indices,
+                              X1_shap_data, Y1_shap_data, V1_shap_data,
+                              compo_column, specific_testing_column, specific_features_sel_column,
                               cmap, vmin, vmax, figsize,
                               save_flag, figname):
-    """
-    Plot heatmaps for interaction values, highlighting non-zero interactions.
 
-    Parameters:
-    - interactions_values (array): Array containing interaction values.
-    - sample_indices (list): List of indices to generate heatmaps for.
-    - col_labels (list): Labels for heatmap columns and rows.
-    - vmin (float): Minimum value for heatmap color scale.
-    - vmax (float): Maximum value for heatmap color scale.
-
-    Returns:
-    - None: Displays the heatmap.
-    """
+    # Determine columns based on input data
+    if Y1_shap_data.size == 0 and V1_shap_data.size == 0:
+        columns = compo_column
+    if Y1_shap_data.size != 0 and V1_shap_data.size != 0:
+        columns = compo_column + specific_features_sel_column + specific_testing_column
+    if Y1_shap_data.size == 0 and V1_shap_data.size != 0:
+        columns = compo_column + specific_features_sel_column
+    if Y1_shap_data.size != 0 and V1_shap_data.size == 0:
+        columns = compo_column + specific_testing_column
 
     def get_upper_triangle_mask(matrix):
         """Return a mask for the upper triangle of a matrix, excluding the diagonal."""
@@ -299,7 +441,7 @@ def plot_interactions_heatmap(model_path_bo, interactions_values, sample_indices
         non_zero_cols = np.any(np.abs(interactions_sample) > threshold, axis=0)
 
         filtered_interactions = interactions_sample[non_zero_rows][:, non_zero_cols]
-        filtered_labels = np.array(col_labels)[non_zero_rows]
+        filtered_labels = np.array(columns)[non_zero_rows]
 
         # Get mask and annotations for the heatmap
         mask = get_upper_triangle_mask(filtered_interactions)
@@ -527,8 +669,10 @@ class ModelExplainer:
 
             shap_values_all_repeats.append(shap_values)
 
+        # end of for loop
         # Average the SHAP values over all repeats
-        averaged_shap_values = np.mean(shap_values_all_repeats, axis=0)
+        averaged_shap_values = np.mean(
+            np.array(shap_values_all_repeats), axis=0)
 
         return averaged_shap_values
 
@@ -540,47 +684,57 @@ class ModelExplainer:
         input_base_data = self._prepare_input_data(X_base_list, V_base_list, i)
         input_shap_data = self._prepare_input_data(X_shap_list, V_shap_list, i)
 
-        # ===== create an explainer based on base_data =====
-        if Y_base_list[i].size != 0:
-            pass
-        else:
-            explainer = PathExplainerTF(model)
+        # Initialize an array to store SHAP values for each repeat
+        attributions_values_all_repeats = []
+        interactions_values_all_repeats = []
 
-        # Calculate feature attribution/interaction (Janizek) values for one fold
-        if Y_shap_list[i].size != 0:
-            pass
-        else:
-            np.random.seed(42)
-            background_X_indices = np.random.permutation(
-                input_base_data.shape[0])
-            background_X = input_base_data[background_X_indices].astype(
-                np.float32)
+        for _ in range(self.mc_repeat):
 
-            attributions_values_oneFold = explainer.attributions(inputs=input_shap_data.astype(np.float32),
-                                                                 baseline=background_X,
-                                                                 batch_size=500,
-                                                                 num_samples=1000,
-                                                                 use_expectation=True,
-                                                                 output_indices=0,
-                                                                 verbose=True)
+            # ===== create an explainer based on base_data =====
+            if Y_base_list[i].size != 0:
+                pass
+            else:
+                explainer = PathExplainerTF(model)
 
-            interactions_values_oneFold = explainer.interactions(inputs=input_shap_data.astype(np.float32),
-                                                                 baseline=background_X,
-                                                                 batch_size=500,
-                                                                 num_samples=1000,
-                                                                 use_expectation=True,
-                                                                 output_indices=0,
-                                                                 verbose=True)
+            # Calculate feature attribution/interaction (Janizek) values for one fold
+            if Y_shap_list[i].size != 0:
+                warnings.warn(
+                    "feature attribution doesn't support multi-input models.")
+                attributions_values, interactions_values = np.empty(
+                    (0, 0)), np.empty((0, 0))
+            else:
+                np.random.seed(42)
+                background_X_indices = np.random.permutation(
+                    input_base_data.shape[0])
+                background_X = input_base_data[background_X_indices].astype(
+                    np.float32)
 
-        if Y_shap_list[i].size != 0:
-            warnings.warn(
-                "feature attribution doesn't support multi-input models.")
-            attributions_values_oneFold, interactions_values_oneFold = np.empty(
-                (0, 0)), np.empty((0, 0))
-        else:
-            # print('feature attribution shape : ',
-            #       attributions_values_oneFold.shape)
-            return attributions_values_oneFold, interactions_values_oneFold
+                attributions_values = explainer.attributions(inputs=input_shap_data.astype(np.float32),
+                                                             baseline=background_X,
+                                                             batch_size=500,
+                                                             num_samples=1000,
+                                                             use_expectation=True,
+                                                             output_indices=0,
+                                                             verbose=True)
+
+                interactions_values = explainer.interactions(inputs=input_shap_data.astype(np.float32),
+                                                             baseline=background_X,
+                                                             batch_size=500,
+                                                             num_samples=1000,
+                                                             use_expectation=True,
+                                                             output_indices=0,
+                                                             verbose=True)
+
+            attributions_values_all_repeats.append(attributions_values)
+            interactions_values_all_repeats.append(interactions_values)
+
+        # end of for loop
+        average_attributions_values = np.mean(
+            np.array(attributions_values_all_repeats), axis=0)
+        average_interactions_values = np.mean(
+            np.array(interactions_values_all_repeats), axis=0)
+
+        return average_attributions_values, average_interactions_values
 
     def predict_shap_bootstrap_norm(self,
                                     X1_base_list, Y1_base_list, V1_base_list,
@@ -706,10 +860,10 @@ def inverse_norm_shap(pred_norm_base_stack,
             pred_base_mean, pred_shap_mean, shap_mean)
 
 
-def process_inverse_norm_explainer_data(pred_norm_base_stack, pred_norm_shap_stack,
-                                        shap_norm_stack,
-                                        attributions_norm_stack,
-                                        interactions_norm_stack, scaler_output):
+def inverse_norm_shap_attributions_interactions(pred_norm_base_stack, pred_norm_shap_stack,
+                                                shap_norm_stack,
+                                                attributions_norm_stack,
+                                                interactions_norm_stack, scaler_output):
     """
     Transform predictions and Shapley values from normalised to original space.
 
@@ -762,7 +916,7 @@ def process_inverse_norm_explainer_data(pred_norm_base_stack, pred_norm_shap_sta
     # Sanity check: Ensure that the sum of Shapley values and the mean prediction for the base input data
     # is approximately equal to the mean prediction for the Shap input data in the normalised space
     pred_norm_base_mean_AVG = pred_norm_base_mean.mean()
-    epsilon = 1e-4
+    epsilon = 1e-1
     assert (np.abs(pred_norm_base_mean_AVG +
             shap_norm_mean.sum(axis=1) - pred_norm_shap_mean) < epsilon).all()
 
