@@ -11,6 +11,7 @@ import tensorflow as tf
 from tensorflow import keras
 import warnings
 from utils.path_explainer_tf import PathExplainerTF
+from tqdm import tqdm
 
 
 def compute_X_Z_W_shap(model,
@@ -302,14 +303,14 @@ def compute_shap_attributions_interactions(model, X2_base_data, Z2_base_data, W2
                                                    num_samples=1000,
                                                    use_expectation=True,
                                                    output_indices=0,
-                                                   verbose=False)
+                                                   verbose=True)
         interactions = path_explainer.interactions(data,
                                                    background,
                                                    batch_size=500,
                                                    num_samples=1000,
                                                    use_expectation=True,
                                                    output_indices=0,
-                                                   verbose=False)
+                                                   verbose=True)
 
         return shap_values_all[0], attributions, interactions
 
@@ -377,12 +378,14 @@ def plot_shap_attributions_interactions(shap_values, attributions, interactions,
     axs[2].set_title("Interactions (diagonal)")
 
     # Scatter plot of attributions against summed interactions
+    # reshaped_attributions = np.reshape(attributions, -1)
+    # summed_interactions = np.reshape(np.sum(interactions, axis=-1), -1)
     reshaped_attributions = np.reshape(attributions[i_sample, :], -1)
     summed_interactions = np.reshape(
         np.sum(interactions[i_sample, :, :], axis=-1), -1)
 
-    print(reshaped_attributions)
-    print(summed_interactions)
+    # print(reshaped_attributions)
+    # print(summed_interactions)
     axs[3].scatter(reshaped_attributions, summed_interactions)
     axs[3].set(
         # xlim=[reshaped_attributions.min(), reshaped_attributions.max()],
@@ -676,6 +679,66 @@ class ModelExplainer:
 
         return averaged_shap_values
 
+    # def _attributions_interactions_for_one_fold(self,
+    #                                             X_base_list, Y_base_list, V_base_list,
+    #                                             X_shap_list, Y_shap_list, V_shap_list, i):
+    #     """Compute attributions and interactions for a specific fold."""
+    #     model = self._load_model(i)
+    #     input_base_data = self._prepare_input_data(X_base_list, V_base_list, i)
+    #     input_shap_data = self._prepare_input_data(X_shap_list, V_shap_list, i)
+
+    #     # Initialize an array to store SHAP values for each repeat
+    #     attributions_values_all_repeats = []
+    #     interactions_values_all_repeats = []
+
+    #     for _ in range(self.mc_repeat):
+
+    #         # ===== create an explainer based on base_data =====
+    #         if Y_base_list[i].size != 0:
+    #             pass
+    #         else:
+    #             explainer = PathExplainerTF(model)
+
+    #         # Calculate feature attribution/interaction (Janizek) values for one fold
+    #         if Y_shap_list[i].size != 0:
+    #             warnings.warn(
+    #                 "feature attribution doesn't support multi-input models.")
+    #             attributions_values, interactions_values = np.empty(
+    #                 (0, 0)), np.empty((0, 0))
+    #         else:
+    #             np.random.seed(42)
+    #             background_X_indices = np.random.permutation(
+    #                 input_base_data.shape[0])
+    #             background_X = input_base_data[background_X_indices].astype(
+    #                 np.float32)
+
+    #             attributions_values = explainer.attributions(inputs=input_shap_data.astype(np.float32),
+    #                                                          baseline=background_X,
+    #                                                          batch_size=500,
+    #                                                          num_samples=1000,
+    #                                                          use_expectation=True,
+    #                                                          output_indices=0,
+    #                                                          verbose=True)
+
+    #             interactions_values = explainer.interactions(inputs=input_shap_data.astype(np.float32),
+    #                                                          baseline=background_X,
+    #                                                          batch_size=500,
+    #                                                          num_samples=1000,
+    #                                                          use_expectation=True,
+    #                                                          output_indices=0,
+    #                                                          verbose=True)
+
+    #         attributions_values_all_repeats.append(attributions_values)
+    #         interactions_values_all_repeats.append(interactions_values)
+
+    #     # end of for loop
+    #     average_attributions_values = np.mean(
+    #         np.array(attributions_values_all_repeats), axis=0)
+    #     average_interactions_values = np.mean(
+    #         np.array(interactions_values_all_repeats), axis=0)
+
+    #     return average_attributions_values, average_interactions_values
+
     def _attributions_interactions_for_one_fold(self,
                                                 X_base_list, Y_base_list, V_base_list,
                                                 X_shap_list, Y_shap_list, V_shap_list, i):
@@ -688,53 +751,42 @@ class ModelExplainer:
         attributions_values_all_repeats = []
         interactions_values_all_repeats = []
 
-        for _ in range(self.mc_repeat):
+        # ===== create an explainer based on base_data =====
+        if Y_base_list[i].size != 0:
+            pass
+        else:
+            explainer = PathExplainerTF(model)
 
-            # ===== create an explainer based on base_data =====
-            if Y_base_list[i].size != 0:
-                pass
-            else:
-                explainer = PathExplainerTF(model)
+        # Calculate feature attribution/interaction (Janizek) values for one fold
+        if Y_shap_list[i].size != 0:
+            warnings.warn(
+                "feature attribution doesn't support multi-input models.")
+            attributions_values, interactions_values = np.empty(
+                (0, 0)), np.empty((0, 0))
+        else:
+            np.random.seed(42)
+            background_X_indices = np.random.permutation(
+                input_base_data.shape[0])
+            background_X = input_base_data[background_X_indices].astype(
+                np.float32)
 
-            # Calculate feature attribution/interaction (Janizek) values for one fold
-            if Y_shap_list[i].size != 0:
-                warnings.warn(
-                    "feature attribution doesn't support multi-input models.")
-                attributions_values, interactions_values = np.empty(
-                    (0, 0)), np.empty((0, 0))
-            else:
-                np.random.seed(42)
-                background_X_indices = np.random.permutation(
-                    input_base_data.shape[0])
-                background_X = input_base_data[background_X_indices].astype(
-                    np.float32)
+            attributions_values = explainer.attributions(inputs=input_shap_data.astype(np.float32),
+                                                         baseline=background_X,
+                                                         batch_size=500,
+                                                         num_samples=1000,
+                                                         use_expectation=True,
+                                                         output_indices=0,
+                                                         verbose=True)
 
-                attributions_values = explainer.attributions(inputs=input_shap_data.astype(np.float32),
-                                                             baseline=background_X,
-                                                             batch_size=500,
-                                                             num_samples=1000,
-                                                             use_expectation=True,
-                                                             output_indices=0,
-                                                             verbose=True)
+            interactions_values = explainer.interactions(inputs=input_shap_data.astype(np.float32),
+                                                         baseline=background_X,
+                                                         batch_size=500,
+                                                         num_samples=1000,
+                                                         use_expectation=True,
+                                                         output_indices=0,
+                                                         verbose=True)
 
-                interactions_values = explainer.interactions(inputs=input_shap_data.astype(np.float32),
-                                                             baseline=background_X,
-                                                             batch_size=500,
-                                                             num_samples=1000,
-                                                             use_expectation=True,
-                                                             output_indices=0,
-                                                             verbose=True)
-
-            attributions_values_all_repeats.append(attributions_values)
-            interactions_values_all_repeats.append(interactions_values)
-
-        # end of for loop
-        average_attributions_values = np.mean(
-            np.array(attributions_values_all_repeats), axis=0)
-        average_interactions_values = np.mean(
-            np.array(interactions_values_all_repeats), axis=0)
-
-        return average_attributions_values, average_interactions_values
+        return attributions_values, interactions_values
 
     def predict_shap_bootstrap_norm(self,
                                     X1_base_list, Y1_base_list, V1_base_list,
@@ -776,17 +828,37 @@ class ModelExplainer:
                                                                             X1_shap_list, Y1_shap_list, V1_shap_list, i)
                                            for i in range(self.k_folds * self.n_CVrepeats))
 
-        results_attributions_interactions = Parallel(n_jobs=-1)(delayed(self._attributions_interactions_for_one_fold)(X1_base_list, Y1_base_list, V1_base_list,
-                                                                                                                      X1_shap_list, Y1_shap_list, V1_shap_list, i)
-                                                                for i in range(self.k_folds * self.n_CVrepeats))
-
+        # Unpacking results
         predictions_base_list, predictions_base_mc_mean, predictions_base_mc_std = zip(
             *results_predict_base)
         predictions_shap_list, predictions_shap_mc_mean, predictions_shap_mc_std = zip(
             *results_predict_shap)
         shap_list = results_shap
-        attributions_list, interactions_list = zip(
-            *results_attributions_interactions)
+
+        # Calculating attributions and interactions
+        attributions_list, interactions_list = [], []
+        total_folds = self.k_folds * self.n_CVrepeats
+
+        # Loop with a progress bar
+        for i in tqdm(range(total_folds), desc="Processing Folds"):
+
+            results_attributions_interactions = Parallel(n_jobs=-1)(delayed(self._attributions_interactions_for_one_fold)(X1_base_list, Y1_base_list, V1_base_list,
+                                                                                                                          X1_shap_list, Y1_shap_list, V1_shap_list, i)
+                                                                    for _ in range(self.mc_repeat))
+
+            attributions_mc, interactions_mc = zip(
+                *results_attributions_interactions)
+            attributions_list.append(
+                np.mean(np.array(attributions_mc), axis=0))
+            interactions_list.append(
+                np.mean(np.array(interactions_mc), axis=0))
+
+        # results_attributions_interactions = Parallel(n_jobs=-1)(delayed(self._attributions_interactions_for_one_fold)(X1_base_list, Y1_base_list, V1_base_list,
+        #                                                                                                               X1_shap_list, Y1_shap_list, V1_shap_list, i)
+        #                                                         for i in range(self.k_folds * self.n_CVrepeats))
+
+        # attributions_list, interactions_list = zip(
+        #     *results_attributions_interactions)
 
         tf.keras.backend.clear_session()
 
@@ -843,7 +915,12 @@ def inverse_norm_shap(pred_norm_base_stack,
     # Sanity check: Ensure that the sum of Shapley values and the mean prediction for the base input data
     # is approximately equal to the mean prediction for the Shap input data in the normalised space
     pred_norm_base_mean_AVG = pred_norm_base_mean.mean()
-    epsilon = 1e-1
+    # print(pred_norm_base_mean_AVG)
+    # print(np.abs(pred_norm_base_mean_AVG +
+    #              shap_norm_mean.sum(axis=1) - pred_norm_shap_mean))
+    # -----<if epsilon is not passing assert: try to increase the mc repeats>-----
+    epsilon = np.abs(pred_norm_base_mean_AVG*0.1)  # 1e-1
+    # print(epsilon)
     assert (np.abs(pred_norm_base_mean_AVG +
             shap_norm_mean.sum(axis=1) - pred_norm_shap_mean) < epsilon).all()
 
@@ -916,7 +993,13 @@ def inverse_norm_shap_attributions_interactions(pred_norm_base_stack, pred_norm_
     # Sanity check: Ensure that the sum of Shapley values and the mean prediction for the base input data
     # is approximately equal to the mean prediction for the Shap input data in the normalised space
     pred_norm_base_mean_AVG = pred_norm_base_mean.mean()
-    epsilon = 1e-1
+
+    # print(pred_norm_base_mean_AVG)
+    # print(pred_norm_base_mean_AVG)
+
+    # print(np.abs(pred_norm_base_mean_AVG +
+    #              shap_norm_mean.sum(axis=1) - pred_norm_shap_mean))
+    epsilon = np.abs(pred_norm_base_mean_AVG*0.05)  # 1e-1
     assert (np.abs(pred_norm_base_mean_AVG +
             shap_norm_mean.sum(axis=1) - pred_norm_shap_mean) < epsilon).all()
 
@@ -1053,11 +1136,16 @@ def plot_shap_summary(shap_KFold_mean, feature_names, is_abs=True,
     shap_df = shap_df.sort_values(by='SHAP Value', ascending=False)
     shap_df = shap_df[shap_df['SHAP Value'] != 0]
 
-    # Plot SHAP values
+    # Assuming shap_df, figsize, palette, and title are defined
     plt.figure(figsize=figsize)
-    sns.barplot(x=shap_df['SHAP Value'], y=shap_df['Feature'], palette=palette)
-    plt.xlabel('Mean Absolute SHAP Value')
-    plt.title(title)
+    ax = sns.barplot(x=shap_df['SHAP Value'],
+                     y=shap_df['Feature'], palette=palette)
+    ax.set_xlabel('Mean Absolute SHAP Attribution Value')
+    ax.set_title(title)
+
+    # Set the aspect ratio here
+    ax.set_box_aspect(1)
+
     plt.tight_layout()
     plt.show()
 
@@ -1081,8 +1169,11 @@ def plot_interactions_summary(interactions_values, feature_names, is_abs=True,
         interactions_avg = interactions_values.mean(axis=0)
 
     # Filter non-zero rows and columns
-    non_zero_rows = np.any(interactions_avg != 0, axis=1)
-    non_zero_cols = np.any(interactions_avg != 0, axis=0)
+    # non_zero_rows = np.any(interactions_avg != 0, axis=1)
+    # non_zero_cols = np.any(interactions_avg != 0, axis=0)
+    threshold = 1e-5
+    non_zero_rows = np.any(np.abs(interactions_avg) > threshold, axis=1)
+    non_zero_cols = np.any(np.abs(interactions_avg) > threshold, axis=0)
     filtered_interactions = interactions_avg[non_zero_rows][:, non_zero_cols]
     filtered_labels = np.array(feature_names)[non_zero_rows]
 
@@ -1120,6 +1211,85 @@ def plot_interactions_summary(interactions_values, feature_names, is_abs=True,
     plt.title(title)
     plt.tight_layout()
     plt.show()
+
+
+def plot_interactions_summary_split(interactions_values, feature_names, is_abs=True,
+                                    title='Feature Importance', figsize=(12, 3), palette='twilight_shifted_r'):
+    """
+    Plots the interaction values in a descending order of importance.
+    Two subplots: one for diagonal (self-interactions) and one for non-diagonal interactions.
+    """
+
+    # Calculate average of interactions_values
+    if is_abs:
+        interactions_avg = np.abs(interactions_values).mean(axis=0)
+    else:
+        interactions_avg = interactions_values.mean(axis=0)
+
+    # Filter non-zero rows and columns
+    threshold = 1e-5
+    non_zero_rows = np.any(np.abs(interactions_avg) > threshold, axis=1)
+    non_zero_cols = np.any(np.abs(interactions_avg) > threshold, axis=0)
+    filtered_interactions = interactions_avg[non_zero_rows][:, non_zero_cols]
+    filtered_labels = np.array(feature_names)[non_zero_rows]
+
+    # Generate annotations
+    annotations = np.array([[f'({filtered_labels[i]},{filtered_labels[j]})'
+                             for j in range(filtered_interactions.shape[1])]
+                            for i in range(filtered_interactions.shape[0])], dtype=object)
+
+    # Diagonal (self-interactions)
+    diagonal_values = np.diag(filtered_interactions)
+    diagonal_annotations = [
+        f'({filtered_labels[i]},{filtered_labels[i]})' for i in range(len(diagonal_values))]
+    diagonal_df = pd.DataFrame(
+        {'Interactions Value': diagonal_values, 'Feature': diagonal_annotations})
+    diagonal_df = diagonal_df.sort_values(
+        by='Interactions Value', ascending=False)
+    diagonal_df = diagonal_df[diagonal_df['Interactions Value'] != 0]
+
+    # Non-diagonal interactions
+
+    def get_upper_triangle_mask(matrix):
+        """Return a mask for the upper triangle of a matrix, excluding the diagonal."""
+        mask_inverse = np.triu(np.ones_like(matrix, dtype=bool))
+        np.fill_diagonal(mask_inverse, False)
+        return mask_inverse
+
+    mask_inverse = get_upper_triangle_mask(filtered_interactions)
+
+    # Extract values using mask
+    non_diagonal_values = filtered_interactions[mask_inverse]
+    non_diagonal_annotations = annotations[mask_inverse]
+
+    non_diagonal_df = pd.DataFrame(
+        {'Interactions Value': non_diagonal_values, 'Feature': non_diagonal_annotations})
+    non_diagonal_df = non_diagonal_df.sort_values(
+        by='Interactions Value', ascending=False)
+    non_diagonal_df = non_diagonal_df[non_diagonal_df['Interactions Value'] != 0]
+
+    # Plotting
+    fig, axs = plt.subplots(1, 2, figsize=figsize)
+
+    # Diagonal plot
+    sns.barplot(x='Interactions Value', y='Feature',
+                data=diagonal_df, palette=palette, ax=axs[0])
+    axs[0].set_title('Diagonal (Self-Interactions)')
+    axs[0].set_xlabel('Mean Absolute Interactions Value')
+    axs[0].set_box_aspect(1)
+
+    # Non-diagonal plot
+    sns.barplot(x='Interactions Value', y='Feature',
+                data=non_diagonal_df.head(5), palette=palette, ax=axs[1])
+    axs[1].set_title('Non-Diagonal Interactions')
+    axs[1].set_xlabel('Mean Absolute Interactions Value')
+    axs[1].set_box_aspect(1)
+
+    # Overall layout adjustments
+    # plt.suptitle(title)
+    plt.tight_layout()
+    plt.show()
+
 
 # plot_interactions_summary(H1_interactions_X1_KFold_mean, compo_column, is_abs=True,
 #                           title='Interaction Importance - Hardness', figsize=(4, 4), palette='twilight_shifted_r')
