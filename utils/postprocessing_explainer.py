@@ -407,7 +407,8 @@ def plot_shap_attributions_interactions(shap_values, attributions, interactions,
     plt.show()
 
 
-def plot_interactions_heatmap(model_path_bo, interactions_values, sample_indices,
+def plot_interactions_heatmap(model_path_bo,
+                              interactions_values, sample_indices,
                               X1_shap_data, Y1_shap_data, V1_shap_data,
                               compo_column, specific_testing_column, specific_features_sel_column,
                               cmap, vmin, vmax, figsize,
@@ -1118,8 +1119,10 @@ def data_for_shap_force(X1_shap_data, Y1_shap_data, V1_shap_data,
 #     contribution_threshold=0.001)
 
 
-def plot_shap_summary(shap_KFold_mean, feature_names, is_abs=True,
-                      title='Feature Importance', figsize=(5, 5), palette='twilight_shifted_r'):
+def plot_shap_summary(model_path_bo,
+                      shap_KFold_mean, feature_names, is_abs,
+                      title, figsize, color_palette,
+                      save_flag, figname):
     """
     Plot SHAP values in descending order of importance.
     """
@@ -1139,15 +1142,20 @@ def plot_shap_summary(shap_KFold_mean, feature_names, is_abs=True,
     # Assuming shap_df, figsize, palette, and title are defined
     plt.figure(figsize=figsize)
     ax = sns.barplot(x=shap_df['SHAP Value'],
-                     y=shap_df['Feature'], palette=palette)
-    ax.set_xlabel('Mean Absolute SHAP Attribution Value')
+                     y=shap_df['Feature'], palette=color_palette)
+    ax.set_xlabel('Mean SHAP Attribution Value')
     ax.set_title(title)
 
     # Set the aspect ratio here
     ax.set_box_aspect(1)
 
     plt.tight_layout()
-    plt.show()
+    if save_flag:
+        plt.savefig(model_path_bo + figname + '.pdf', bbox_inches='tight')
+        plt.show()
+    else:
+        # plt.close(fig)
+        plt.show()
 
 # plot_shap_summary(H1_shap_X1_KFold_mean, compo_column, is_abs=True,
 #                   title='Feature Importance - Hardness', figsize=(4, 4), palette='twilight_shifted_r')
@@ -1156,65 +1164,67 @@ def plot_shap_summary(shap_KFold_mean, feature_names, is_abs=True,
 #                   title='Feature Importance - Corrosion', figsize=(4, 4), palette='twilight_shifted_r')
 
 
-def plot_interactions_summary(interactions_values, feature_names, is_abs=True,
-                              title='Feature Importance', figsize=(5, 5), palette='twilight_shifted_r'):
-    """
-    Plots the interaction values in a descending order of importance.
-    """
+# def plot_interactions_summary(interactions_values, feature_names, is_abs=True,
+#                               title='Feature Importance', figsize=(5, 5), palette='twilight_shifted_r'):
+#     """
+#     Plots the interaction values in a descending order of importance.
+#     """
 
-    # Calculate average of interactions_values
-    if is_abs:
-        interactions_avg = np.abs(interactions_values).mean(axis=0)
-    else:
-        interactions_avg = interactions_values.mean(axis=0)
+#     # Calculate average of interactions_values
+#     if is_abs:
+#         interactions_avg = np.abs(interactions_values).mean(axis=0)
+#     else:
+#         interactions_avg = interactions_values.mean(axis=0)
 
-    # Filter non-zero rows and columns
-    # non_zero_rows = np.any(interactions_avg != 0, axis=1)
-    # non_zero_cols = np.any(interactions_avg != 0, axis=0)
-    threshold = 1e-5
-    non_zero_rows = np.any(np.abs(interactions_avg) > threshold, axis=1)
-    non_zero_cols = np.any(np.abs(interactions_avg) > threshold, axis=0)
-    filtered_interactions = interactions_avg[non_zero_rows][:, non_zero_cols]
-    filtered_labels = np.array(feature_names)[non_zero_rows]
+#     # Filter non-zero rows and columns
+#     # non_zero_rows = np.any(interactions_avg != 0, axis=1)
+#     # non_zero_cols = np.any(interactions_avg != 0, axis=0)
+#     threshold = 1e-5
+#     non_zero_rows = np.any(np.abs(interactions_avg) > threshold, axis=1)
+#     non_zero_cols = np.any(np.abs(interactions_avg) > threshold, axis=0)
+#     filtered_interactions = interactions_avg[non_zero_rows][:, non_zero_cols]
+#     filtered_labels = np.array(feature_names)[non_zero_rows]
 
-    # Generate annotations
-    annotations = np.array([[f'({filtered_labels[i]},{filtered_labels[j]})'
-                             for j in range(filtered_interactions.shape[1])]
-                            for i in range(filtered_interactions.shape[0])], dtype=object)
+#     # Generate annotations
+#     annotations = np.array([[f'({filtered_labels[i]},{filtered_labels[j]})'
+#                              for j in range(filtered_interactions.shape[1])]
+#                             for i in range(filtered_interactions.shape[0])], dtype=object)
 
-    def get_upper_triangle_mask(matrix):
-        """Return a mask for the upper triangle of a matrix, excluding the diagonal."""
-        mask_inverse = np.triu(np.ones_like(matrix, dtype=bool))
-        np.fill_diagonal(mask_inverse, True)
-        return mask_inverse
+#     def get_upper_triangle_mask(matrix):
+#         """Return a mask for the upper triangle of a matrix, excluding the diagonal."""
+#         mask_inverse = np.triu(np.ones_like(matrix, dtype=bool))
+#         np.fill_diagonal(mask_inverse, True)
+#         return mask_inverse
 
-    mask_inverse = get_upper_triangle_mask(filtered_interactions)
+#     mask_inverse = get_upper_triangle_mask(filtered_interactions)
 
-    # Extract values using mask
-    filtered_interactions_masked = filtered_interactions[mask_inverse]
-    annotations_masked = annotations[mask_inverse]
+#     # Extract values using mask
+#     filtered_interactions_masked = filtered_interactions[mask_inverse]
+#     annotations_masked = annotations[mask_inverse]
 
-    # Organize into DataFrame
-    interactions_df = pd.DataFrame(
-        data={'Interactions Value': filtered_interactions_masked, 'Feature': annotations_masked})
+#     # Organize into DataFrame
+#     interactions_df = pd.DataFrame(
+#         data={'Interactions Value': filtered_interactions_masked, 'Feature': annotations_masked})
 
-    # Sort and filter
-    interactions_df = interactions_df.sort_values(
-        by='Interactions Value', ascending=False)
-    interactions_df = interactions_df[interactions_df['Interactions Value'] != 0]
+#     # Sort and filter
+#     interactions_df = interactions_df.sort_values(
+#         by='Interactions Value', ascending=False)
+#     interactions_df = interactions_df[interactions_df['Interactions Value'] != 0]
 
-    # Plot
-    plt.figure(figsize=figsize)
-    sns.barplot(x=interactions_df['Interactions Value'],
-                y=interactions_df['Feature'], palette=palette)
-    plt.xlabel('Mean Absolute Interactions Value')
-    plt.title(title)
-    plt.tight_layout()
-    plt.show()
+#     # Plot
+#     plt.figure(figsize=figsize)
+#     sns.barplot(x=interactions_df['Interactions Value'],
+#                 y=interactions_df['Feature'], palette=palette)
+#     plt.xlabel('Mean Absolute Interactions Value')
+#     plt.title(title)
+#     plt.tight_layout()
+#     plt.show()
 
 
-def plot_interactions_summary_split(interactions_values, feature_names, is_abs=True,
-                                    title='Feature Importance', figsize=(12, 3), palette='twilight_shifted_r'):
+def plot_interactions_summary_split(model_path_bo,
+                                    interactions_values, feature_names, is_abs,
+                                    title, figsize, color_palette,
+                                    save_flag, figname):
     """
     Plots the interaction values in a descending order of importance.
     Two subplots: one for diagonal (self-interactions) and one for non-diagonal interactions.
@@ -1273,23 +1283,26 @@ def plot_interactions_summary_split(interactions_values, feature_names, is_abs=T
 
     # Diagonal plot
     sns.barplot(x='Interactions Value', y='Feature',
-                data=diagonal_df, palette=palette, ax=axs[0])
+                data=diagonal_df, palette=color_palette, ax=axs[0])
     axs[0].set_title('Diagonal (Self-Interactions)')
-    axs[0].set_xlabel('Mean Absolute Interactions Value')
+    axs[0].set_xlabel('Mean Interactions Value')
     axs[0].set_box_aspect(1)
 
     # Non-diagonal plot
     sns.barplot(x='Interactions Value', y='Feature',
-                data=non_diagonal_df.head(5), palette=palette, ax=axs[1])
+                data=non_diagonal_df.head(5), palette=color_palette, ax=axs[1])
     axs[1].set_title('Non-Diagonal Interactions')
-    axs[1].set_xlabel('Mean Absolute Interactions Value')
+    axs[1].set_xlabel('Mean Interactions Value')
     axs[1].set_box_aspect(1)
 
-    # Overall layout adjustments
-    # plt.suptitle(title)
     plt.tight_layout()
-    plt.show()
-
+    # plt.suptitle(title)
+    if save_flag:
+        plt.savefig(model_path_bo + figname + '.pdf', bbox_inches='tight')
+        plt.show()
+    else:
+        # plt.close(fig)
+        plt.show()
 
 # plot_interactions_summary(H1_interactions_X1_KFold_mean, compo_column, is_abs=True,
 #                           title='Interaction Importance - Hardness', figsize=(4, 4), palette='twilight_shifted_r')
