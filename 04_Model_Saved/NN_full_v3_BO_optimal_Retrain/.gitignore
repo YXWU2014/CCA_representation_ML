@@ -1,0 +1,4 @@
+# Ignore everything under archive/
+SHAP_force/*
+SHAP_force_NNH_Fig3/*
+ 
