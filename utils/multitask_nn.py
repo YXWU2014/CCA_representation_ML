@@ -816,8 +816,8 @@ def plot_R2_avg(model_path_bo, H_scores, C_scores, ymin, ymax, x_labels=None,
     ax.set_ylabel(r'$\mathrm{R^2_{<hardness, corrosion>}}$', fontsize=12)
     ax.set_title(r'$R^2$ score (test data) for model comparisons', fontsize=12)
     ax.set_xticks(x_pos)
-    ax.set_xticklabels(x_labels, fontsize=10)
-    ax.tick_params(axis='y', which='major', labelsize=10)
+    ax.set_xticklabels(x_labels, fontsize=11.5)
+    ax.tick_params(axis='y', which='major', labelsize=12)
     ax.set_box_aspect(1)
     ax.set_ylim([ymin, ymax])
 
