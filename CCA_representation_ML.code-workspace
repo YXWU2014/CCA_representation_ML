@@ -3,5 +3,10 @@
     {
       "path": "."
     }
-  ]
+  ],
+  // "settings": {
+  //   "python.pythonPath": "./anaconda3/envs/tf-env/bin/python",
+  //   "python.terminal.activateEnvironment": true,
+  //   "jupyter.defaultKernel": "./anaconda3/envs/tf-env/bin/python"
+  // }
 }
