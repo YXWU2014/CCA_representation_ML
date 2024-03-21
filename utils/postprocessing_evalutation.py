@@ -130,7 +130,8 @@ def create_empty_arrays(arr_list):
 # Function to prepare test datasets and corresponding lists for evaluation
 
 
-def prepare_data_for_eval(X1, Y1, V1, X2, Z2, W2,
+def prepare_data_for_eval(X1, Y1, V1, 
+                          X2, Z2, W2,
                           X1_test_KFold, Y1_test_KFold, V1_test_KFold,
                           X2_test_KFold, Z2_test_KFold, W2_test_KFold,
                           k_folds, n_CVrepeats,
