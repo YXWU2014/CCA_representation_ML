@@ -27,7 +27,6 @@ The training algorithm operates iteratively, alternating between data types (har
 <img src="Fig_Alg.png" width="500">
 
 
-
 ## Implementation Details
 
-The project is implemented using TensorFlow and Keras, with Bayesian Optimisation facilitated by the GPyOpt library for hyperparameter tuning.
+The project is implemented using [TensorFlow](https://github.com/tensorflow/tensorflow), with Bayesian Optimisation for hyperparameter tuning by the [GPyOpt](https://github.com/SheffieldML/GPyOpt), and feature attribution by [gradient-based explainer](https://github.com/suinleelab/path_explain).
