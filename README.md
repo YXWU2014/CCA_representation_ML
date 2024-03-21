@@ -8,8 +8,7 @@ These networks are fine-tuned for the unique attributes of each task. The primar
 
 This repository contains the complete workflow: exploratory data analysis, data preparation, model compilation, training, evaluation, and explainability steps.
 
-
-![Fig_2_MTL](Fig_2_MTL.png)  
+<img src="Fig_2_MTL.png" width="500">
 
 
 ## Methodology
@@ -25,7 +24,7 @@ The training algorithm operates iteratively, alternating between data types (har
 - **Model Explainability:** Implements a Shapley value-based framework for local explainability of model predictions.
 - All above features are unified in one model.
 
-![Fig_Alg](Fig_Alg.png)  
+<img src="Fig_Alg.png" width="500">
 
 
 
