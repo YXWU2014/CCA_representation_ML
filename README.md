@@ -21,6 +21,8 @@ The training algorithm operates iteratively, alternating between data types (har
 - **Hyperparameter Optimization:** Utilises Bayesian Optimisation for efficient hyperparameter selection, optimising model performance based on \(R^{2}\) score.
 - **Model Explainability:** Implements a Shapley value-based framework for local explainability of model predictions.
 
+- all above features are unified in one model
+
 ## Implementation Details
 
-The project is implemented using TensorFlow and Keras, with Bayesian Optimisation facilitated by the GPyOpt library for hyperparameter tuning. The training and evaluation procedure is encapsulated within a function, optimising model architecture and training procedures to achieve high performance.
+The project is implemented using TensorFlow and Keras, with Bayesian Optimisation facilitated by the GPyOpt library for hyperparameter tuning. 
