@@ -15,11 +15,8 @@ The training algorithm operates iteratively, alternating between data types (har
 ## Key Features
 
 - **Shared and Task-Specific Networks:** Leverages shared representations to improve learning efficiency and reduce overfitting.
-
 - **Model Ensemble:** Employs ensemble learning for handling heterogeneous small datasets.
-
 - **Hyperparameter Optimization:** Utilises Bayesian Optimisation for efficient hyperparameter selection (subnetwork configurations), optimising model performance based on \(R^{2}\) score.
-
 - **Model Explainability:** Implements a Shapley value-based framework for local explainability of model predictions.
 
 - All above features are unified in one model.
