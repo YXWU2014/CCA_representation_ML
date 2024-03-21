@@ -8,6 +8,10 @@ These networks are fine-tuned for the unique attributes of each task. The primar
 
 This repository contains the complete workflow: exploratory data analysis, data preparation, model compilation, training, evaluation, and explainability steps.
 
+
+![Fig_2_MTL](Fig_2_MTL.png)  
+
+
 ## Methodology
 
 The training algorithm operates iteratively, alternating between data types (hardness/corrosion) to update the weights in both shared and task-specific networks. This method allows separate yet intrinsically linked models for hardness and corrosion to share weights in the hidden layers.
