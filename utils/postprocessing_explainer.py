@@ -4,6 +4,7 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.cm import get_cmap
 from sklearn.metrics import r2_score
 from tabulate import tabulate
 from joblib import Parallel, delayed
@@ -1118,6 +1119,55 @@ def data_for_shap_force(X1_shap_data, Y1_shap_data, V1_shap_data,
 #     text_rotation=45,
 #     contribution_threshold=0.001)
 
+
+
+def plot_stacked_shap(model_path_bo, categories, contributions, num_contributions_to_show=10,
+                          datatype = 'hardness', 
+                          save_flag=False, figname='none',
+                         width=0.5, figsize=(10, 6), colormap='RdBu', legend_loc ='best', fontsize=14):
+        
+        bars = np.arange(len(categories))  # the x locations for the bars
+        bottom_array = np.zeros(len(categories))
+
+        cmap = get_cmap(colormap, len(contributions))  # Get the colormap
+        colors = [cmap(i) for i in range(len(contributions))]  # Generate colors
+
+        fig, ax = plt.subplots(figsize=figsize)
+        
+        # Loop through each contribution and stack them with specified colors
+        for i, (label, data) in enumerate(contributions):
+            if i < num_contributions_to_show:
+                ax.bar(bars, data, width, label=label, bottom=bottom_array, color=colors[i], alpha=0.75)
+            else:
+                ax.bar(bars, data, width, bottom=bottom_array, color=colors[i], alpha=0.75)
+            bottom_array += np.array(data)
+
+        y_ticks = ax.get_yticks()
+        y_tick_labels = [f"{int(y)}" if y != 0 else "Reference\n"+r'Fe$_{0.5}$Ni$_{0.5}$' for y in y_ticks]
+        ax.set_yticklabels(y_tick_labels, fontsize=fontsize)
+
+        ax.set_ylabel(f'Shapley feature attribution: {datatype}', fontsize=fontsize)
+        ax.set_xticks(bars)
+        ax.set_xticklabels(categories, rotation=45, ha="right", fontsize=fontsize)
+        ax.tick_params(axis='both', which='major', labelsize=fontsize)
+
+        # Only include specified number of contributions in the legend
+        handles, labels = ax.get_legend_handles_labels()
+        if legend_loc == 'upper right':
+         ax.legend(handles[:num_contributions_to_show], labels[:num_contributions_to_show], 
+              fontsize=fontsize, loc=legend_loc, bbox_to_anchor=(1.75, 1), borderaxespad=0.)
+        else:
+            ax.legend(handles[:num_contributions_to_show], labels[:num_contributions_to_show], 
+                fontsize=fontsize, loc=legend_loc)
+
+        ax.set_box_aspect(1)  
+        plt.tight_layout()  
+
+        if save_flag:
+            plt.savefig(model_path_bo + figname + '.pdf', bbox_inches='tight')
+            plt.show()
+        else:
+            plt.show()
 
 def plot_shap_summary(model_path_bo,
                       shap_KFold_mean, feature_names, is_abs,

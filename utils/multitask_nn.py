@@ -457,6 +457,13 @@ class MultiTaskNN:
         Returns:
         tuple: Returns tuples of training and validation losses, score losses, and R2 scores for both models.
         """
+        # clear TensorFlow session
+        tf.keras.backend.clear_session()
+ 
+        # Set seed for reproducibility
+        np.random.seed(42)
+        tf.random.set_seed(42)
+ 
         train_loss_H, train_loss_C = [], []
         val_loss_H, val_loss_C = [], []
 
@@ -772,6 +779,9 @@ def plot_R2_avg(model_path_bo, H_scores, C_scores, ymin, ymax, x_labels=None,
     H_scores and C_scores should be lists of score lists.
     x_labels should be a list of labels corresponding to the H-C pairs.
     """
+    np.random.seed(42)
+    tf.random.set_seed(42)
+
     if x_labels is None:
         x_labels = [f'Pair {i+1}' for i in range(len(H_scores))]
 
