@@ -8,7 +8,7 @@ The primary problem addressed is the training of sparsely labelled data, such as
 
 This repository contains the complete workflow: exploratory data analysis, data preparation, model compilation, training, evaluation, and explainability steps.
 
-<img src="Fig_2_MTL.png" width="500">
+<img src="Fig_3_MTL.png" width="500">
 
 ## Methodology
 
