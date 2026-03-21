@@ -1,4 +1,5 @@
 # Ignore everything under archive/
 archive/*
+__pycache__/
 
  
